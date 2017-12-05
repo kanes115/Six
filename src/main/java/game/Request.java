@@ -5,10 +5,6 @@ package game;
  */
 public class Request {
 
-    public int getId(){
-        return 1;
-    }
-
     Move getMove(){
         return null;
     }
