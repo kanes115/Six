@@ -5,6 +5,19 @@ package game;
  */
 public class CasualPosition implements Position {
 
+    private final Card card;
+    private final boolean isEmpty;
+
+    public CasualPosition(){
+        this.card = null;
+        this.isEmpty = true;
+    }
+
+    public CasualPosition(Card card){
+        this.card = card;
+        this.isEmpty = false;
+    }
+
     @Override
     public boolean putCard(Card card) {
         return false;
@@ -12,16 +25,28 @@ public class CasualPosition implements Position {
 
     @Override
     public Card getCard() {
-        return null;
+        return card;
     }
 
     @Override
+    public void removeCard() {}
+
+    @Override
     public boolean isEmpty() {
-        return false;
+        return isEmpty;
     }
 
     @Override
     public PositionType getPositionType() {
         return null;
     }
+
+    @Override
+    public String toString(){
+        if(this.isEmpty())
+            return "empty";
+        return card.toString();
+    }
+
+
 }

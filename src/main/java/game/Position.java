@@ -9,6 +9,8 @@ public interface Position {
 
     Card getCard();
 
+    void removeCard();
+
     boolean isEmpty();
 
     PositionType getPositionType();
