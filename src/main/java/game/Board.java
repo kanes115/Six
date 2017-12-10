@@ -1,5 +1,7 @@
 package game;
 
+import com.google.inject.Inject;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class Board {
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
 
-
+    @Inject
     public Board(CardShuffler shuffler){
         this.shuffler = shuffler;
         fillUpRows();
