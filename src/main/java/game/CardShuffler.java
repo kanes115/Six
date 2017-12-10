@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface CardShuffler {
 
-    List<Card> getCards();
+    List<Card> getNextCards(int n);
+    Card getNextCard();
 }
