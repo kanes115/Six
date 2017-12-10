@@ -5,11 +5,19 @@ package game;
  */
 public class Request {
 
+    private final boolean toExecute;
+    private final Move move;
+
+    public Request(Move move, boolean toExecute){
+        this.move = move;
+        this.toExecute = toExecute;
+    }
+
     Move getMove(){
-        return null;
+        return move;
     }
 
     boolean toExecute(){
-        return false;
+        return toExecute;
     }
 }
