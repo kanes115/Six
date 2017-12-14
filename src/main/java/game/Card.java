@@ -5,11 +5,19 @@ package game;
  */
 public class Card {
 
+    private Color color;
+    private Face face;
+
+    public Card(Color c, Face f){
+        this.color = c;
+        this.face = f;
+    }
+
     public Color getColor(){
-        return null;
+        return color;
     }
 
     public Face getFace(){
-        return null;
+        return face;
     }
 }
