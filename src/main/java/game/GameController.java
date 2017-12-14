@@ -8,45 +8,24 @@ public class GameController {
     private  MoveChecker checker;
     private ExecutedMovesStack movesStack;
     private Board board;
+    private State state;
 
-    public GameController(ExecutedMovesStack moveStack, MoveChecker checker, Board board){
+
+    public GameController(ExecutedMovesStack moveStack, MoveChecker checker, Board board, State state){
         this.checker = checker;
         this.movesStack = moveStack;
         this.board = board;
+        this.state = state;
     }
 
-    public  Observable<RequestResponse> handleRequest(Observable<Request> request){
-        return request.map(r -> nextBoard(r));
-    }
-
-    private  RequestResponse nextBoard(Request request) {
-        boolean isCorrect;
-        boolean wasExecuted;
-        Move move = request.getMove();
-        RequestResponse response;
-        boolean toExecute = request.toExecute();
-        if(checker.canMove(move) && toExecute){
-            isCorrect = true;
-            wasExecuted = true;
-            updateBoard(board,move);
-             response = new RequestResponse(board,request,isCorrect, wasExecuted );
+    public boolean tryMove(Move move){
+        if(checker.isCorrect(move)){
+            move.execute(board);
+            return true;
         }
-        else if(checker.canMove(move) && !toExecute){
-            isCorrect = true;
-            wasExecuted = false;
-             response = new RequestResponse(board, request, isCorrect, wasExecuted);
+        else {
+            return false;
         }
-        else{
-            isCorrect = false;
-            wasExecuted = false;
-            response = new RequestResponse(board, request, isCorrect, wasExecuted);
-        }
-        return response;
-
-    }
-
-    public Board updateBoard(Board board, Move move){
-        return board;
     }
 
 }
