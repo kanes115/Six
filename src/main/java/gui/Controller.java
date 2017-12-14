@@ -1,19 +1,42 @@
 package gui;
 
-import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.util.Duration;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 
 public class Controller {
 
     @FXML
-    private Button testButton;
+    private BorderPane borderPane;
 
     @FXML
-    public void testButtonOnAction() {
-        testButton.setText("Works!");
+    private TextField txtUsername;
+
+    @FXML
+    private Label lblInfo;
+
+    @FXML
+    public void btnNewGameOnAction() {
+
+    }
+
+    @FXML
+    public void btnRevertMoveOnAction() {
+    }
+
+    @FXML
+    public void btnHintOnAction() {
+
+    }
+
+    @FXML
+    public void btnPerformMoveOnAction() {
+
+    }
+
+    @FXML
+    public void initialize() {
+        borderPane.setCenter(new GamePane());
     }
 }
