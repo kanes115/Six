@@ -5,7 +5,7 @@ package game;
  */
 public interface Position {
 
-    boolean putCard(Card card);
+    void putCard(Card card);
 
     Card getCard();
 

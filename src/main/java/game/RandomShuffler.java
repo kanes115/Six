@@ -8,6 +8,11 @@ import java.util.List;
 public class RandomShuffler implements CardShuffler {
 
     @Override
+    public List<Card> getRestCards() {
+        return null;
+    }
+
+    @Override
     public List<Card> getNextCards(int n) {
         return null;
     }

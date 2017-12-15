@@ -19,8 +19,8 @@ public class CasualPosition implements Position {
     }
 
     @Override
-    public boolean putCard(Card card) {
-        return false;
+    public void putCard(Card card) {
+
     }
 
     @Override
