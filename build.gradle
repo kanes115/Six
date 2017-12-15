@@ -16,5 +16,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.0-alpha4'
     compile group: 'org.apache.http', name: 'entity', version: '4.0-alpha4'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
 
 }

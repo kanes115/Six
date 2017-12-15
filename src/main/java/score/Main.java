@@ -1,19 +1,20 @@
 package score;
 
 import com.google.gson.Gson;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import java.nio.charset.Charset;
-import java.util.List;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import static spark.Spark.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, SQLException {
         port(8080);
-        get("/hello", (req, res) -> "Hello World");
+        ScoreDB scoreDB = new ScoreDB();
+        scoreDB.resetDB();
         post("/score", (req, res) -> {
             Score score = new Gson().fromJson(req.body(), Score.class);
+            System.out.println(score.getName());
+            scoreDB.saveScore(score);
             return "thanks";
         });
     }

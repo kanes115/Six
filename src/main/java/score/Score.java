@@ -9,7 +9,6 @@ public class Score {
         this.score = score;
     }
 
-
     public String getName() {
         return name;
     }
