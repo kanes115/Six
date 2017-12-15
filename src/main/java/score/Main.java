@@ -17,5 +17,10 @@ public class Main {
             scoreDB.saveScore(score);
             return "thanks";
         });
+
+        get("/scores", (req, res) -> {
+            ScorePage sp = scoreDB.getScores();
+            return new Gson().toJson(sp);
+        });
     }
 }
