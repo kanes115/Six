@@ -30,6 +30,10 @@ public class Board {
         return rows.get(row).getPositions().get(col);
     }
 
+    public StackPosition getDeckPosition(){
+        return deck;
+    }
+
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
             rows.add(new Row(this.shuffler.getNextCards(6)));
