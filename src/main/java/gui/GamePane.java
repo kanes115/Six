@@ -4,6 +4,7 @@ import javafx.scene.layout.Pane;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.Random;
 
 public class GamePane extends Pane {
 
@@ -25,10 +26,11 @@ public class GamePane extends Pane {
     }
 
     private void initImageButtons() {
+        Random randomGenerator = new Random();
         for (int y = 0; y < CARDS_IN_COLUMN; y++)
             for (int x = 0; x < CARDS_IN_ROW; x++) {
                 ImageButton btn = new ImageButton(
-                        "/gui/cards/2_of_clubs.png",
+                        Cards.values()[randomGenerator.nextInt(53)].getPathToFilename(),
                         MARGIN_WIDTH+x*(IMAGE_BUTTON_WIDTH+MARGIN_WIDTH),
                         MARGIN_WIDTH+y*(IMAGE_BUTTON_HEIGHT+MARGIN_WIDTH),
                         IMAGE_BUTTON_WIDTH,
