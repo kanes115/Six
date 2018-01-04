@@ -15,7 +15,7 @@ public class Row {
     private List<CasualPosition> positions;
 
     public Row(List<Card> cards){
-        this.positions = cards.stream().map(CasualPosition::new).collect(Collectors.toList());
+        this.positions = cards.stream().map(card -> new CasualPosition(card, targetFace)).collect(Collectors.toList());
         this.isColorAssigned = false;
     }
 

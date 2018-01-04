@@ -43,9 +43,4 @@ public class StackPosition implements Position {
     public boolean isEmpty() {
         return cards.isEmpty();
     }
-
-    @Override
-    public PositionType getPositionType() {
-        return null;
-    }
 }
