@@ -30,7 +30,7 @@ public class GameController {
         isHard = true;
     }
 
-    public void getTime(){
+    public int getTime(){
         return timer.getTime();
     }
 
@@ -51,20 +51,18 @@ public class GameController {
             timer.stop();
             return board.hasTheSameColorInRow();
         }
-        else{
-            timer.stop();
-            return board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow();
-        }
+        timer.stop();
+        return board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow();
     }
 
-    public State gameState(){
+    public void updateGameState(){
         if(!isHard){
-            if(board.hasTheSameColorInRow()) return State.WON;
-            else return State.LOST;
+            if(board.hasTheSameColorInRow()) state = State.WON;
+            else state = State.LOST;
         }
         else{
-            if(board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow()) return State.WON;
-            else return State.LOST;
+            if(board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow()) state = State.WON;
+            else state = State.LOST;
         }
     }
 
