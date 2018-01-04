@@ -5,8 +5,8 @@ package game;
  */
 public class CasualPosition implements Position {
 
-    private final Card card;
-    private final boolean isEmpty;
+    private Card card;
+    private boolean isEmpty;
     private Face targetFace;
 
     public CasualPosition(Face targetFace){
@@ -23,7 +23,10 @@ public class CasualPosition implements Position {
 
     @Override
     public void putCard(Card card) {
-
+        if(isEmpty){
+            this.card = card;
+            isEmpty = false;
+        }
     }
 
     @Override
@@ -32,7 +35,12 @@ public class CasualPosition implements Position {
     }
 
     @Override
-    public void removeCard() {}
+    public void removeCard() {
+        if(!isEmpty) {
+            card = null;
+            isEmpty = true;
+        }
+    }
 
     @Override
     public boolean isEmpty() {
