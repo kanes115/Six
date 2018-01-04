@@ -16,7 +16,7 @@ public class GameController {
 
     public boolean tryMove(Move move){
         if(checker.isCorrect(move)){
-            move.execute(board);
+            move.execute();
             return true;
         }
         else {
