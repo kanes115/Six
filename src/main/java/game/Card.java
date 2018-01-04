@@ -20,4 +20,14 @@ public class Card {
     public Face getFace(){
         return face;
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(other.getClass() != this.getClass())
+            return false;
+        Card card = (Card) other;
+        return card.getColor() == this.getColor() &&
+                card.getFace() == this.getFace();
+
+    }
 }
