@@ -15,7 +15,13 @@ public class Row {
     private List<CasualPosition> positions;
 
     public Row(List<Card> cards){
-        this.positions = cards.stream().map(card -> new CasualPosition(card, targetFace)).collect(Collectors.toList());
+        if(cards.size() != 8)
+            throw new IllegalArgumentException("You have pass 8 cards to the row");
+        Face f = Face.TWO;
+        for(Card card: cards){
+            this.positions.add(new CasualPosition(card, f));
+            f = f.next();
+        }
         this.isColorAssigned = false;
     }
 
