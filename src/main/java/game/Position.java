@@ -13,6 +13,4 @@ public interface Position {
 
     boolean isEmpty();
 
-    PositionType getPositionType();
-
 }

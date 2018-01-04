@@ -7,15 +7,18 @@ public class CasualPosition implements Position {
 
     private final Card card;
     private final boolean isEmpty;
+    private Face targetFace;
 
-    public CasualPosition(){
+    public CasualPosition(Face targetFace){
         this.card = null;
         this.isEmpty = true;
+        this.targetFace = targetFace;
     }
 
-    public CasualPosition(Card card){
+    public CasualPosition(Card card, Face targetFace){
         this.card = card;
         this.isEmpty = false;
+        this.targetFace = targetFace;
     }
 
     @Override
@@ -37,15 +40,14 @@ public class CasualPosition implements Position {
     }
 
     @Override
-    public PositionType getPositionType() {
-        return null;
-    }
-
-    @Override
     public String toString(){
         if(this.isEmpty())
             return "empty";
         return card.toString();
+    }
+
+    public boolean cardFaceMatchPosition() {
+        return !this.isEmpty() && this.targetFace.equals(this.getCard().getFace());
     }
 
 
