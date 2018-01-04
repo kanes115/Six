@@ -11,4 +11,12 @@ class FaceTest extends Specification {
         !Face.JACK.isRemovable()
         Face.THREE.isRemovable()
     }
+
+    def "next() method returns the next face"(){
+        expect:
+        Face.THREE.next() == Face.FOUR
+        Face.FOUR.next() == Face.FIVE
+        Face.ACE.next() == Face.TWO
+        Face.SIX.next().next().next() == Face.NINE
+    }
 }

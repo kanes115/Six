@@ -12,7 +12,7 @@ public enum Face {
         return ordinal() < 4 || ordinal() == 11;
     }
 
-    public Face next(@NotNull Face f){
-        return values()[(f.ordinal() + 1) % 12];
+    public Face next(){
+        return values()[(this.ordinal() + 1) % 12];
     }
 }
