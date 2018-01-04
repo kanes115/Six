@@ -1,4 +1,6 @@
-package game;
+package game.Positions;
+
+import game.Card;
 
 /**
  * Created by Kanes on 05.12.2017.
@@ -9,7 +11,7 @@ public interface Position {
 
     Card getCard();
 
-    void removeCard();
+    Card removeCard();
 
     boolean isEmpty();
 

@@ -1,5 +1,9 @@
-package game;
+package game.Moves;
 
+
+import game.Card;
+import game.Positions.CasualPosition;
+import game.State;
 
 public class DeleteMove implements Move {
 

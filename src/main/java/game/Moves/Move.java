@@ -1,4 +1,6 @@
-package game;
+package game.Moves;
+
+import game.State;
 
 /**
  * Created by Kanes on 05.12.2017.

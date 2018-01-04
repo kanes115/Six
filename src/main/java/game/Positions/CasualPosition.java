@@ -1,4 +1,8 @@
-package game;
+package game.Positions;
+
+import game.Card;
+import game.Face;
+import game.Row;
 
 /**
  * Created by Kanes on 05.12.2017.
@@ -6,17 +10,20 @@ package game;
 public class CasualPosition implements Position {
 
     private Card card;
+    private Row row;
     private boolean isEmpty;
     private Face targetFace;
 
-    public CasualPosition(Face targetFace){
+    public CasualPosition(Face targetFace, Row row){
         this.card = null;
         this.isEmpty = true;
         this.targetFace = targetFace;
+        this.row = row;
     }
 
-    public CasualPosition(Card card, Face targetFace){
+    public CasualPosition(Card card, Face targetFace, Row row){
         this.card = card;
+        this.row = row;
         this.isEmpty = false;
         this.targetFace = targetFace;
     }
@@ -35,11 +42,14 @@ public class CasualPosition implements Position {
     }
 
     @Override
-    public void removeCard() {
+    public Card removeCard() {
         if(!isEmpty) {
+            Card tmp = card;
             card = null;
             isEmpty = true;
+            return tmp;
         }
+        return null;
     }
 
     @Override
@@ -59,4 +69,7 @@ public class CasualPosition implements Position {
     }
 
 
+    public Row getRow() {
+        return row;
+    }
 }
