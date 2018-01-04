@@ -9,7 +9,7 @@ public interface Position {
 
     Card getCard();
 
-    void removeCard();
+    Card removeCard();
 
     boolean isEmpty();
 
