@@ -1,5 +1,6 @@
 package game
 
+import game.Moves.Move
 import spock.lang.Specification
 
 /**

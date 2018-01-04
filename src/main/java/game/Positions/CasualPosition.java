@@ -1,4 +1,8 @@
-package game;
+package game.Positions;
+
+import game.Card;
+import game.Face;
+import game.Row;
 
 /**
  * Created by Kanes on 05.12.2017.

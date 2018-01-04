@@ -1,4 +1,6 @@
-package game;
+package game.Positions;
+
+import game.Card;
 
 import java.util.List;
 import java.util.Stack;
@@ -25,18 +27,14 @@ public class StackPosition implements Position {
         this.cards.addAll(cards);
     }
 
-    public void putCards(Stack<Card> cards){
-        this.cards.addAll(cards);
-    }
-
     @Override
     public Card getCard() {
         return this.cards.peek();
     }
 
     @Override
-    public void removeCard() {
-        this.cards.pop();
+    public Card removeCard() {
+        return this.cards.pop();
     }
 
     @Override

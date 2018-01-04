@@ -1,6 +1,8 @@
 package game;
 
 
+import game.Moves.Move;
+
 public class GameController {
 
     private  MoveChecker checker;

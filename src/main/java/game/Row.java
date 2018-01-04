@@ -1,7 +1,9 @@
 package game;
 
+import game.Positions.CasualPosition;
+import game.Positions.Position;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Kanes on 05.12.2017.
@@ -9,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Row {
 
-    private final boolean isColorAssigned;
+    private boolean isColorAssigned;
     private Color color = null;
 
     private List<CasualPosition> positions;
@@ -19,13 +21,21 @@ public class Row {
             throw new IllegalArgumentException("You have pass 8 cards to the row");
         Face f = Face.TWO;
         for(Card card: cards){
-            this.positions.add(new CasualPosition(card, f));
+            this.positions.add(new CasualPosition(card, f, this));
             f = f.next();
         }
         this.isColorAssigned = false;
     }
 
-    public void assignColor(Color color){ this.color = color; }
+    public void assignColor(Color color){
+        this.color = color;
+        isColorAssigned = true;
+    }
+
+    public void unAssignColor(){
+        this.color = null;
+        isColorAssigned = false;
+    }
 
     public boolean isColorAssigned(){
         return isColorAssigned;

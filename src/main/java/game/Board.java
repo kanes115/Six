@@ -1,6 +1,9 @@
 package game;
 
 import com.google.inject.Inject;
+import game.Positions.CasualPosition;
+import game.Positions.Position;
+import game.Positions.StackPosition;
 
 import java.util.LinkedList;
 import java.util.List;
