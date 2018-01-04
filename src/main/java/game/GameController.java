@@ -9,6 +9,7 @@ public class GameController {
     private Board board;
     private State state;
     private Timer timer;
+    private boolean isHard;
 
     public GameController(MoveChecker checker, Board board, State state,Timer timer){
         this.checker = checker;
@@ -19,7 +20,19 @@ public class GameController {
 
     public boolean tryMove(Move move){ return move.execute(board);}
 
-    public void startClock(){ timer.start();}
+    public void startEasy(){
+        timer.start();
+        isHard = false;
+    }
+
+    public void startHard(){
+        timer.start();
+        isHard = true;
+    }
+
+    public void getTime(){
+        return timer.getTime();
+    }
 
     public void startPreparing(){
         state = State.PREPARING;
@@ -33,8 +46,19 @@ public class GameController {
         return this.state;
     }
 
-    public State hasGameEnded(int option){
-        if(option == 1){
+    public boolean hasGameEnded(){
+        if(!isHard){
+            timer.stop();
+            return board.hasTheSameColorInRow();
+        }
+        else{
+            timer.stop();
+            return board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow();
+        }
+    }
+
+    public State gameState(){
+        if(!isHard){
             if(board.hasTheSameColorInRow()) return State.WON;
             else return State.LOST;
         }
@@ -43,7 +67,5 @@ public class GameController {
             else return State.LOST;
         }
     }
-
-
 
 }
