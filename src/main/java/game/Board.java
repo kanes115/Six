@@ -51,5 +51,18 @@ public class Board {
                 + rows.get(3).toString();
     }
 
+    public boolean hasTheSameColorInRow(){
+        for(Row row : rows){
+            if(row.isColorAssigned())
+                return false;
+            Face current = Face.TWO;
+            for(CasualPosition c : row.getPositions()){
+                if(!c.getCard().getFace().equals(current))
+                    return false;
+                current = current.next();
+            }
+        }
+        return true;
+    }
 
 }
