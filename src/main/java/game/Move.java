@@ -6,11 +6,11 @@ package game;
 
 public interface Move {
 
-    Position getStartPosition();
+    boolean execute();
 
-    Position getEndPosition();
+    void revert();
 
-    void execute(Board board);
+    boolean isMade();
 
-    void revert(Board board);
+    State inWhatStateAvailable();
 }
