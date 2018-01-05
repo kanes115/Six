@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.Queue;
 
-public class Controller {
+public class GameController {
 
     @FXML
     private BorderPane borderPane;
@@ -40,7 +40,7 @@ public class Controller {
         Queue<ImageButton> checkedImageButtons = gamePane.getCheckedImageButtons();
 
         if(checkedImageButtons.size() != GamePane.CARDS_IN_MOVE){
-            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart - nie można wykonąc ruchu", "Zaznacz dwie karty");
+            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart - nie można wykonać ruchu", "Zaznacz dwie karty");
             return;
         }
 
