@@ -15,35 +15,29 @@ public class GameController {
         this.state = state;
     }
 
+    public Board getBoard(){
+        return this.board;
+    }
+
     public boolean tryMove(Move move){
-//        if(move.inWhatStateAvailable() == this.state){
-//            move.execute();
-//            return true;
-//        }
-        return false;
+        return move.isMade();
     }
 
     public void startEasy(){
 //        timer.start();
         isHard = false;
+        state = State.INPROGRESS;
     }
 
     public void startHard(){
 //        timer.start();
         isHard = true;
+        state = State.INPROGRESS;
     }
 
 //    public int getTime(){
 //        return timer.getTime();
 //    }
-
-//    public void startPreparing(){
-//        state = State.PREPARING;
-//    }
-
-    public void startRound(){
-        state = State.INPROGRESS;
-    }
 
     public State getGameState(){
         return this.state;
@@ -52,22 +46,20 @@ public class GameController {
     public boolean hasGameEnded(){
         if(!isHard){
 //            timer.stop();
-//            return board.hasTheSameColorInRow();
+            return board.areAllCardsInPlace();
         }
 //        timer.stop();
-//        return board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow();
-        return true;
+        return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
     }
 
     public void updateGameState(){
         if(!isHard){
-//            if(board.hasTheSameColorInRow()) state = State.WON;
-//            else state = State.LOST;
+            if(board.areAllCardsInPlace()) state = State.WON;
+            else state = State.LOST;
         }
         else{
-            return;
-//            if(board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow()) state = State.WON;
-//            else state = State.LOST;
+            if(board.getDeckPosition().isEmpty() && board.areAllCardsInPlace()) state = State.WON;
+            else state = State.LOST;
         }
     }
 
