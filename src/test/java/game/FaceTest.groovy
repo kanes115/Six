@@ -6,10 +6,10 @@ class FaceTest extends Specification {
 
     def "Some cards are removable"(){
         expect:
-        Face.ACE.isRemovable()
-        !Face.EIGHT.isRemovable()
-        !Face.JACK.isRemovable()
-        Face.THREE.isRemovable()
+        Face.ACE.isUnnecessary()
+        !Face.EIGHT.isUnnecessary()
+        !Face.JACK.isUnnecessary()
+        Face.THREE.isUnnecessary()
     }
 
     def "next() method returns the next face"(){

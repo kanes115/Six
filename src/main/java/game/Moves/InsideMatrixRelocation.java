@@ -2,7 +2,6 @@ package game.Moves;
 
 import game.Card;
 import game.Positions.CasualPosition;
-import game.State;
 
 public class InsideMatrixRelocation implements Move {
 
@@ -10,8 +9,6 @@ public class InsideMatrixRelocation implements Move {
     private final CasualPosition to;
     private boolean isMade;
 
-    private Card savedFrom;
-    private Card savedTo;
     private boolean wasColorAssigned;
 
     public InsideMatrixRelocation(CasualPosition from, CasualPosition to){
@@ -24,9 +21,10 @@ public class InsideMatrixRelocation implements Move {
     public boolean execute() {
         if(from.isEmpty() || !to.isEmpty())
             return false;
-        savedFrom = from.getCard();
-        savedTo = to.getCard();
+        if(!to.getTargetFace().equals(from.getCard().getFace()))
+            return false;
         if(!to.getRow().isColorAssigned()){
+            Card savedFrom = from.getCard();
             justMove(from, to);
             to.getRow().assignColor(savedFrom.getColor());
             isMade = true;
@@ -57,11 +55,6 @@ public class InsideMatrixRelocation implements Move {
     @Override
     public boolean isMade() {
         return isMade;
-    }
-
-    @Override
-    public State inWhatStateAvailable() {
-        return State.PREPARING;
     }
 
     private void justMove(CasualPosition a, CasualPosition b){

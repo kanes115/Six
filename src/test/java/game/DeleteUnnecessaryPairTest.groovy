@@ -1,19 +1,19 @@
 package game
 
-import game.Moves.DeleteMove
+import game.Moves.DeleteUnnecessaryPair
 import game.Moves.Move
 import game.Positions.CasualPosition
 import spock.lang.Specification
 
 // Target face is not important here, Face.ACE chosen randomly
 
-class DeleteMoveTest extends Specification {
+class DeleteUnnecessaryPairTest extends Specification {
 
     def "Delete move removes cards in given positions if cards are removable and the same"(){
         given:
         CasualPosition pos1 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
         CasualPosition pos2 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
-        Move m = new DeleteMove(pos1, pos2, State.PREPARING)
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
         when:
         m.execute()
         then:
@@ -26,7 +26,7 @@ class DeleteMoveTest extends Specification {
         given:
         CasualPosition pos1 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
         CasualPosition pos2 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
-        Move m = new DeleteMove(pos1, pos2, State.PREPARING)
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
         when:
         m.execute()
         pos1.isEmpty()
@@ -43,7 +43,7 @@ class DeleteMoveTest extends Specification {
         given:
         CasualPosition pos1 = new CasualPosition(new Card(Color.CLUBS, Face.THREE), Face.ACE, null)
         CasualPosition pos2 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
-        Move m = new DeleteMove(pos1, pos2, State.PREPARING)
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
         when:
         !m.execute()
         !pos1.isEmpty()
@@ -60,7 +60,7 @@ class DeleteMoveTest extends Specification {
         given:
         CasualPosition pos1 = new CasualPosition(new Card(Color.CLUBS, Face.SIX), Face.ACE, null)
         CasualPosition pos2 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
-        Move m = new DeleteMove(pos1, pos2, State.PREPARING)
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
         when:
         !m.execute()
         !pos1.isEmpty()
@@ -77,7 +77,7 @@ class DeleteMoveTest extends Specification {
         given:
         CasualPosition pos1 = new CasualPosition(new Card(Color.CLUBS, Face.SIX), Face.ACE, null)
         CasualPosition pos2 = new CasualPosition(new Card(Color.CLUBS, Face.ACE), Face.ACE, null)
-        Move m = new DeleteMove(pos1, pos2, State.PREPARING)
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
         when:
         m.revert()
         then:

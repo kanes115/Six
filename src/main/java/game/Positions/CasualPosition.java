@@ -68,6 +68,10 @@ public class CasualPosition implements Position {
         return !this.isEmpty() && this.targetFace.equals(this.getCard().getFace());
     }
 
+    public Face getTargetFace(){
+        return targetFace;
+    }
+
 
     public Row getRow() {
         return row;

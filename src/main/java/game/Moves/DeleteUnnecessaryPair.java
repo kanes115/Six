@@ -2,35 +2,33 @@ package game.Moves;
 
 
 import game.Card;
-import game.Positions.CasualPosition;
-import game.State;
+import game.Positions.Position;
 
-public class DeleteMove implements Move {
+// Assumptions: it is possible to delete any pair of unnecessary cards (ace - five)
+// laying on any position (but on top)
 
-    private final CasualPosition pos1;
-    private final CasualPosition pos2;
+public class DeleteUnnecessaryPair implements Move {
+
+    private final Position pos1;
+    private final Position pos2;
 
     private Card savedPos1;
     private Card savedPos2;
 
-    private State state;
     private boolean isMade;
 
-    public DeleteMove(CasualPosition pos1, CasualPosition pos2, State state){
+    public DeleteUnnecessaryPair(Position pos1, Position pos2){
         this.pos1 = pos1;
         this.pos2 = pos2;
-        this.state = state;
         this.isMade = false;
     }
 
     @Override
     public boolean execute() {
-        if(state != State.PREPARING)
-            return false;
         if(pos1.isEmpty() || pos2.isEmpty())
             return false;
-        if(!pos1.getCard().getFace().isRemovable() ||
-                !pos2.getCard().getFace().isRemovable())
+        if(!pos1.getCard().getFace().isUnnecessary() ||
+                !pos2.getCard().getFace().isUnnecessary())
             return false;
         if(!pos1.getCard().equals(pos2.getCard()))
             return false;
@@ -51,11 +49,6 @@ public class DeleteMove implements Move {
         pos1.putCard(savedPos1);
         pos2.putCard(savedPos2);
         isMade = false;
-    }
-
-    @Override
-    public State inWhatStateAvailable() {
-        return State.PREPARING;
     }
 
     @Override

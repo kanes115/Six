@@ -5,7 +5,7 @@ import game.Card;
 import java.util.List;
 import java.util.Stack;
 
-public class StackPosition implements Position {
+public abstract class StackPosition implements Position {
 
     private Stack<Card> cards;
 
