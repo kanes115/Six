@@ -51,4 +51,14 @@ public class Board {
     }
 
 
+
+    public boolean areAllCardsInPlace(){
+      for(Row row : rows){
+          if(!row.hasTheSameColorInRow() || !row.hasFacesInOrder()){
+              return false;
+          }
+      }
+      return true;
+    }
+
 }
