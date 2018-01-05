@@ -1,7 +1,7 @@
 package game.Moves;
 
 import game.Board;
-import game.Positions.StackPosition;
+import game.Positions.Position;
 
 public class DeleteDuplicate implements Move {
 
@@ -10,7 +10,7 @@ public class DeleteDuplicate implements Move {
     // and looks for the duplicate in matrix.
     // if found and the card is not UNNECESSARY - it removes
     // a card from deck or rejected (for unnecessary cards use DeleteUnnecessaryPair)
-    public DeleteDuplicate(StackPosition pos, Board board){
+    public DeleteDuplicate(Position pos, Board board){
 
     }
 
