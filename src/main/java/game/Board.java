@@ -29,6 +29,7 @@ public class Board {
 
     public Row getRowInColor(Color color){
         for(Row r : rows) {
+            if(!r.isColorAssigned()) return null;
             if (r.getColor() == color) return r;
         }
         return null;

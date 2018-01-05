@@ -4,7 +4,6 @@ import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
 
-import java.util.List;
 
 public class DeleteDuplicate implements Move {
 
@@ -34,7 +33,7 @@ public class DeleteDuplicate implements Move {
         Row row = board.getRowInColor(color);
 
         for(CasualPosition position : row.getPositions()){
-            if(position.getCard().getFace() == face){
+            if(!position.isEmpty()  && position.getCard().getFace() == face){
                 if(position.cardFaceMatchPosition()){
                     pos1.removeCard();
                     isMade = true;
@@ -42,6 +41,7 @@ public class DeleteDuplicate implements Move {
                 }
             }
         }
+        isMade = false;
         return false;
     }
 
