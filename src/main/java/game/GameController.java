@@ -16,7 +16,13 @@ public class GameController {
         this.timer = timer;
     }
 
-    public boolean tryMove(Move move){ return move.execute(board);}
+    public boolean tryMove(Move move){
+        if(move.inWhatStateAvailable() == this.state){
+            move.execute();
+            return true;
+        }
+        return false;
+    }
 
     public void startEasy(){
         timer.start();
