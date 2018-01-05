@@ -23,6 +23,10 @@ public class Board {
         fillUpRows();
     }
 
+    public List <Row> getRows(){
+        return this.rows;
+    }
+
     public void removeCards(CasualPosition one, CasualPosition two){
         rows.forEach(r -> r.removeCard(one));
         rows.forEach(r -> r.removeCard(two));
