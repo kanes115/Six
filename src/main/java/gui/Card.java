@@ -4,7 +4,7 @@ package gui;
  * Created by michaello on 15.12.17.
  */
 
-public enum Cards {
+public enum Card {
     CARD_2_OF_CLUBS("2_of_clubs.png"),
     CARD_3_OF_CLUBS("3_of_clubs.png"),
     CARD_4_OF_CLUBS("4_of_clubs.png"),
@@ -63,7 +63,7 @@ public enum Cards {
     private String pathToFilename;
 
 
-    Cards(String filename) {
+    Card(String filename) {
         this.pathToFilename = PATH_TO_CARDS + filename;
     }
 
