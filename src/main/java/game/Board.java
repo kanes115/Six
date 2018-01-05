@@ -27,6 +27,13 @@ public class Board {
         return this.rows;
     }
 
+    public Row getRowInColor(Color color){
+        for(Row r : rows) {
+            if (r.getColor() == color) return r;
+        }
+        return null;
+    }
+
     public void removeCards(CasualPosition one, CasualPosition two){
         rows.forEach(r -> r.removeCard(one));
         rows.forEach(r -> r.removeCard(two));
