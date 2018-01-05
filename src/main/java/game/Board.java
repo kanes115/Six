@@ -1,9 +1,7 @@
 package game;
 
 import com.google.inject.Inject;
-import game.Positions.CasualPosition;
-import game.Positions.Position;
-import game.Positions.StackPosition;
+import game.Positions.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +14,8 @@ public class Board {
 
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
-    private StackPosition deck = new StackPosition();
+    private StackPosition deck = new DeckPosition();
+    private StackPosition rejected = new RejectedPosition();
 
     @Inject
     public Board(CardShuffler shuffler){

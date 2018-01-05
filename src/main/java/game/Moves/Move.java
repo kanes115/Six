@@ -13,6 +13,4 @@ public interface Move {
     void revert();
 
     boolean isMade();
-
-    State inWhatStateAvailable();
 }
