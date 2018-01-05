@@ -5,14 +5,12 @@ import game.Moves.Move;
 
 public class GameController {
 
-    private  MoveChecker checker;
     private Board board;
     private State state;
     private Timer timer;
     private boolean isHard;
 
-    public GameController(MoveChecker checker, Board board, State state,Timer timer){
-        this.checker = checker;
+    public GameController(Board board, State state,Timer timer){
         this.board = board;
         this.state = state;
         this.timer = timer;

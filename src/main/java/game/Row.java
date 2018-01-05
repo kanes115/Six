@@ -60,4 +60,25 @@ public class Row {
     public String toString(){
         return positions.stream().map(CasualPosition::toString).reduce("", (a, b) -> a + b);
     }
+
+    public boolean hasTheSameColorInRow(){
+        if(!this.isColorAssigned())
+            return false;
+        for(CasualPosition c : this.getPositions()){
+            if(!c.getCard().getColor().equals(this.getColor()))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean hasFacesInOrder(){
+        Face current = Face.TWO;
+        for(CasualPosition c : this.getPositions()){
+            if(c.isEmpty()) return false;
+            if(!c.getCard().getFace().equals(current))
+                return false;
+            current = current.next();
+        }
+        return true;
+    }
 }
