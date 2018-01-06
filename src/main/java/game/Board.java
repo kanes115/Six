@@ -48,6 +48,8 @@ public class Board {
         return deck;
     }
 
+    public StackPosition getRejectedPosition() { return rejected;}
+
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
             rows.add(new Row(this.shuffler.getNextCards(6)));

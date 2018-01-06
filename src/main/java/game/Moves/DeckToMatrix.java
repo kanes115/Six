@@ -37,6 +37,10 @@ public class DeckToMatrix implements Move {
 
     @Override
     public boolean execute() {
+        if(!board.getRejectedPosition().isEmpty()){
+            return false;
+        }
+
         if(!isToRejectedStack){
             CasualPosition cas1 = (CasualPosition) cas;
             Color color = deck.getCard().getColor();
