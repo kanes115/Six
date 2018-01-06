@@ -73,4 +73,19 @@ public class Board {
       return true;
     }
 
+    public boolean areAllRowsAssigned(){
+        for(Row row : rows){
+            if(!row.isColorAssigned()) return false;
+        }
+        return true;
+    }
+
+    public Row getFirstRowWithEmptyPosition(){
+        for(Row row : this.rows){
+            if(row.hasEmptyPostion()) return row;
+        }
+        return null;
+    }
+
+
 }

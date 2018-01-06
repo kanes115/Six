@@ -81,4 +81,20 @@ public class Row {
         }
         return true;
     }
+
+    public boolean hasEmptyPostion(){
+        for(CasualPosition c : this.getPositions()){
+            if(c.isEmpty()) return true;
+        }
+        return false;
+    }
+
+    public CasualPosition getFirstEmptyPosition(){
+        for(CasualPosition c : this.getPositions()){
+            if(c.isEmpty()) return c;
+        }
+        return null;
+    }
+
+
 }
