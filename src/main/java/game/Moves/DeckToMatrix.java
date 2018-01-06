@@ -1,13 +1,10 @@
 package game.Moves;
 
-import game.Board;
-import game.Color;
-import game.Face;
+import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.DeckPosition;
 import game.Positions.Position;
 import game.Positions.RejectedPosition;
-import game.Row;
 
 public class DeckToMatrix implements Move {
 
@@ -28,20 +25,21 @@ public class DeckToMatrix implements Move {
     // It relocates a card from deck top to matrix.
     // It does it only if the card is moved to it's FINAL PLACE
     // or if it's the first free place
-    public DeckToMatrix(DeckPosition deck, CasualPosition cas){
+    public DeckToMatrix(DeckPosition deck, CasualPosition cas, Board board){
         this.deck = deck;
         this.cas = cas;
         this.isToRejectedStack = false;
         this.isMade = false;
+        this.board = board;
     }
 
     @Override
     public boolean execute() {
-        if(!board.getRejectedPosition().isEmpty()){
-            return false;
-        }
 
         if(!isToRejectedStack){
+            if(!board.getRejectedPosition().isEmpty()){
+                return false;
+            }
             CasualPosition cas1 = (CasualPosition) cas;
             Color color = deck.getCard().getColor();
             Face face = deck.getCard().getFace();
@@ -86,6 +84,21 @@ public class DeckToMatrix implements Move {
                     }
                 }
             }
+        }else{
+            //gdy sa na planszy wolne miejsca a my na stosik odrzuconych to false
+            if(board.hasFreePositions()){
+                isMade = false;
+                return false;
+            }
+            else{
+                //casual zla nazwa - ma byc rej
+                Card card = deck.getCard();
+                deck.removeCard();
+                cas.putCard(card);
+                isMade = true;
+                return true;
+            }
+
         }
         return false;
     }

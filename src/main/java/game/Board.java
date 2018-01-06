@@ -82,6 +82,13 @@ public class Board {
         return true;
     }
 
+    public boolean hasFreePositions(){
+        for(Row row : rows){
+            if(row.hasEmptyPostion()) return true;
+        }
+        return false;
+    }
+
     public Row getFirstRowWithEmptyPosition(){
         for(Row row : this.rows){
             if(row.hasEmptyPostion()) return row;
