@@ -23,6 +23,18 @@ public class Board {
         fillUpRows();
     }
 
+    public List <Row> getRows(){
+        return this.rows;
+    }
+
+    public Row getRowInColor(Color color){
+        for(Row r : rows) {
+            if(!r.isColorAssigned()) return null;
+            if (r.getColor() == color) return r;
+        }
+        return null;
+    }
+
     public void removeCards(CasualPosition one, CasualPosition two){
         rows.forEach(r -> r.removeCard(one));
         rows.forEach(r -> r.removeCard(two));
@@ -35,6 +47,8 @@ public class Board {
     public StackPosition getDeckPosition(){
         return deck;
     }
+
+    public StackPosition getRejectedPosition() { return rejected;}
 
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
@@ -60,5 +74,27 @@ public class Board {
       }
       return true;
     }
+
+    public boolean areAllRowsAssigned(){
+        for(Row row : rows){
+            if(!row.isColorAssigned()) return false;
+        }
+        return true;
+    }
+
+    public boolean hasFreePositions(){
+        for(Row row : rows){
+            if(row.hasEmptyPostion()) return true;
+        }
+        return false;
+    }
+
+    public Row getFirstRowWithEmptyPosition(){
+        for(Row row : this.rows){
+            if(row.hasEmptyPostion()) return row;
+        }
+        return null;
+    }
+
 
 }
