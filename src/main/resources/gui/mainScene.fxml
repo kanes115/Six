@@ -8,13 +8,28 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.fxcontrollers.GamePaneController">
    <top>
       <ToolBar prefHeight="40.0" BorderPane.alignment="CENTER">
         <items>
           <Button mnemonicParsing="false" onAction="#btnNewGameOnAction" text="Nowa gra" />
             <Button mnemonicParsing="false" onAction="#btnRevertMoveOnAction" text="Cofnij ruch" />
             <Button mnemonicParsing="false" onAction="#btnHintOnAction" text="Podpowiedź" />
+            <Button mnemonicParsing="false" onAction="#btnDeckToMatrixOnAction" text="DeckToMatrix">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#btnDeleteDuplicateOnAction" text="DeleteDuplicate">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#btnDeleteUnnecessaryPairOnAction" text="DeleteUnnecessary">
+                <font>
+                    <Font name="System Bold" size="12.0" />
+                </font>
+            </Button>
             <Button mnemonicParsing="false" onAction="#btnPerformMoveOnAction" text="Wykonaj ruch">
                <font>
                   <Font name="System Bold" size="12.0" />

@@ -1,5 +1,10 @@
-package gui;
+package gui.fxcontrollers;
 
+import gui.Card;
+import gui.EmptyImageViewCard;
+import gui.GamePane;
+import gui.buttons.ImageButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -9,7 +14,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.Queue;
 
-public class GameController {
+public class GamePaneController {
 
     @FXML
     private BorderPane borderPane;
@@ -19,6 +24,18 @@ public class GameController {
 
     @FXML
     private Label lblInfo;
+
+    @FXML
+    public void btnDeckToMatrixOnAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void btnDeleteDuplicateOnAction(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void btnDeleteUnnecessaryPairOnAction(ActionEvent actionEvent) {
+    }
 
     @FXML
     public void btnNewGameOnAction() {

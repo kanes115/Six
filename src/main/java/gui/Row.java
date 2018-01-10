@@ -1,5 +1,7 @@
 package gui;
 
+import gui.buttons.ImageButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,5 +24,9 @@ public class Row {
 
     public void setColorChoosen(boolean colorChoosen) {
         isColorChoosen = colorChoosen;
+    }
+
+    public List<ImageButton> getCards() {
+        return cards;
     }
 }
