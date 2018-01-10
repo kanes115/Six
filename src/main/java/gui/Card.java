@@ -63,7 +63,7 @@ public enum Card {
     CARD_ACE_OF_SPADES(new game.Card(Color.SPADES, Face.ACE), "ace_of_spades.png"),
     //TODO
     // Waiting for change empty card representation in model
-    CARD_EMPTY(null, "empty.png");
+    CARD_EMPTY(null, "back.png");
 
     private static final String PATH_TO_CARDS = "/gui/cards/";
     private String pathToFilename;
