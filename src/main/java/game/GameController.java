@@ -1,74 +1,81 @@
 package game;
 
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import game.Moves.Move;
+
+import javax.inject.Inject;
 
 public class GameController {
 
     private Board board;
     private State state;
-//    private Timer timer;
+    private ITimer timer;
     private boolean isHard;
 
-    public GameController(Board board, State state){
-        this.board = board;
-        this.state = state;
+    @Inject
+    public GameController(ITimer timer, boolean isHard){
+        this.timer = timer;
+        Injector injector = Guice.createInjector(new BoardModule());
+        this.board = injector.getInstance(Board.class);
+        this.state = State.INPROGRESS;
+        this.isHard = isHard;
+        if (isHard)
+            startHard();
+        else
+            startEasy();
+    }
+
+    public Board getBoard(){
+        return this.board;
     }
 
     public boolean tryMove(Move move){
-//        if(move.inWhatStateAvailable() == this.state){
-//            move.execute();
-//            return true;
-//        }
-        return false;
+        boolean res = move.execute();
+        if (hasGameEnded())
+            updateGameState();
+        return res;
     }
 
-    public void startEasy(){
-//        timer.start();
-        isHard = false;
-    }
-
-    public void startHard(){
-//        timer.start();
-        isHard = true;
-    }
-
-//    public int getTime(){
-//        return timer.getTime();
-//    }
-
-//    public void startPreparing(){
-//        state = State.PREPARING;
-//    }
-
-    public void startRound(){
-        state = State.INPROGRESS;
+    public long getTime(){
+        return timer.getTimeLong();
     }
 
     public State getGameState(){
         return this.state;
     }
 
-    public boolean hasGameEnded(){
+    private boolean hasGameEnded(){
         if(!isHard){
-//            timer.stop();
-//            return board.hasTheSameColorInRow();
+            timer.stop();
+            return board.areAllCardsInPlace();
         }
-//        timer.stop();
-//        return board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow();
-        return true;
+        timer.stop();
+        return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
     }
 
-    public void updateGameState(){
+    private void updateGameState(){
         if(!isHard){
-//            if(board.hasTheSameColorInRow()) state = State.WON;
-//            else state = State.LOST;
+            if(board.areAllCardsInPlace()) state = State.WON;
+            else state = State.LOST;
         }
         else{
-            return;
-//            if(board.getDeckPosition().isEmpty() && board.hasTheSameColorInRow()) state = State.WON;
-//            else state = State.LOST;
+            if(board.getDeckPosition().isEmpty() && board.areAllCardsInPlace()) state = State.WON;
+            else state = State.LOST;
         }
+    }
+
+    private void startEasy(){
+        timer.start();
+        isHard = false;
+        state = State.INPROGRESS;
+    }
+
+    private void startHard(){
+        timer.start();
+        isHard = true;
+        state = State.INPROGRESS;
     }
 
 }
