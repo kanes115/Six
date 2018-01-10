@@ -3,6 +3,10 @@ package game.Moves;
 import game.*;
 import game.Positions.*;
 
+// TODO: Change name!!! But do it at the end of the project not to affect GUI team work
+// Note that the name is not relevant right now, it should be something like
+// InvolvingStackMove
+
 public class DeckToMatrix implements Move {
 
     private  Position deck;
@@ -12,6 +16,8 @@ public class DeckToMatrix implements Move {
     private boolean isFromDeckStack;
     private boolean isMade;
     private Board board;
+
+
     // It moves a card from deck to rejected stack.
     public DeckToMatrix(DeckPosition deck, RejectedPosition rej, Board board){
         this.deck = deck;
@@ -36,6 +42,7 @@ public class DeckToMatrix implements Move {
         this.board = board;
     }
 
+    // Moves a card from Rejected Stack to casual position if possible
     public DeckToMatrix(RejectedPosition rej, CasualPosition cas, Board board){
         this.deck = deck;
         this.cas = cas;
@@ -46,6 +53,7 @@ public class DeckToMatrix implements Move {
         this.board = board;
     }
 
+    // TODO REFACTOR THIS METHOD
     @Override
     public boolean execute() {
 
@@ -122,7 +130,7 @@ public class DeckToMatrix implements Move {
 
     @Override
     public void revert() {
-
+        //TODO
     }
 
     @Override

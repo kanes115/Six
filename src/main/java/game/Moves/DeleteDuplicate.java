@@ -11,6 +11,8 @@ public class DeleteDuplicate implements Move {
     private Card card1;
     private Board board;
     private boolean isMade;
+
+
     // this move takes a position from deck or rejected
     // and looks for the duplicate in matrix.
     // if found and the card is not UNNECESSARY - it removes
