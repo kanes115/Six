@@ -1,16 +1,15 @@
 package game.Moves;
 
 import game.*;
-import game.Positions.CasualPosition;
-import game.Positions.DeckPosition;
-import game.Positions.Position;
-import game.Positions.RejectedPosition;
+import game.Positions.*;
 
 public class DeckToMatrix implements Move {
 
     private  Position deck;
     private  Position cas;
     private boolean isToRejectedStack;
+    private boolean isFromRejectedStack;
+    private boolean isFromDeckStack;
     private boolean isMade;
     private Board board;
     // It moves a card from deck to rejected stack.
@@ -18,6 +17,8 @@ public class DeckToMatrix implements Move {
         this.deck = deck;
         this.cas = rej;
         this.isToRejectedStack = true;
+        this.isFromRejectedStack = false;
+        this.isFromDeckStack = false;
         this.isMade = false;
         this.board = board;
     }
@@ -28,6 +29,18 @@ public class DeckToMatrix implements Move {
     public DeckToMatrix(DeckPosition deck, CasualPosition cas, Board board){
         this.deck = deck;
         this.cas = cas;
+        this.isFromDeckStack = true;
+        this.isToRejectedStack = false;
+        this.isFromRejectedStack = false;
+        this.isMade = false;
+        this.board = board;
+    }
+
+    public DeckToMatrix(RejectedPosition rej, CasualPosition cas, Board board){
+        this.deck = deck;
+        this.cas = cas;
+        this.isFromRejectedStack = true;
+        this.isFromDeckStack = false;
         this.isToRejectedStack = false;
         this.isMade = false;
         this.board = board;
@@ -36,10 +49,13 @@ public class DeckToMatrix implements Move {
     @Override
     public boolean execute() {
 
-        if(!isToRejectedStack){
-            if(!board.getRejectedPosition().isEmpty()){
+        if(isFromDeckStack) {
+            if (!board.getRejectedPosition().isEmpty()) {
                 return false;
             }
+        }
+
+        if(isFromRejectedStack || isFromDeckStack ){
             CasualPosition cas1 = (CasualPosition) cas;
             Color color = deck.getCard().getColor();
             Face face = deck.getCard().getFace();
@@ -84,7 +100,7 @@ public class DeckToMatrix implements Move {
                     }
                 }
             }
-        }else{
+        }if(isToRejectedStack){
             //gdy sa na planszy wolne miejsca a my na stosik odrzuconych to false
             if(board.hasFreePositions()){
                 isMade = false;
@@ -102,6 +118,7 @@ public class DeckToMatrix implements Move {
         }
         return false;
     }
+
 
     @Override
     public void revert() {
