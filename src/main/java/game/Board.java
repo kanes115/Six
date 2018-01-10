@@ -1,6 +1,7 @@
 package game;
 
 import com.google.inject.Inject;
+import game.Positions.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,12 +14,25 @@ public class Board {
 
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
-    private StackPosition deck = new StackPosition();
+    private StackPosition deck = new DeckPosition();
+    private StackPosition rejected = new RejectedPosition();
 
     @Inject
     public Board(CardShuffler shuffler){
         this.shuffler = shuffler;
         fillUpRows();
+    }
+
+    public List <Row> getRows(){
+        return this.rows;
+    }
+
+    public Row getRowInColor(Color color){
+        for(Row r : rows) {
+            if(!r.isColorAssigned()) return null;
+            if (r.getColor() == color) return r;
+        }
+        return null;
     }
 
     public void removeCards(CasualPosition one, CasualPosition two){
@@ -34,6 +48,8 @@ public class Board {
         return deck;
     }
 
+    public StackPosition getRejectedPosition() { return rejected;}
+
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
             rows.add(new Row(this.shuffler.getNextCards(6)));
@@ -46,6 +62,38 @@ public class Board {
                 + rows.get(1).toString() + '\n'
                 + rows.get(2).toString() + '\n'
                 + rows.get(3).toString();
+    }
+
+
+
+    public boolean areAllCardsInPlace(){
+      for(Row row : rows){
+          if(!row.hasTheSameColorInRow() || !row.hasFacesInOrder()){
+              return false;
+          }
+      }
+      return true;
+    }
+
+    public boolean areAllRowsAssigned(){
+        for(Row row : rows){
+            if(!row.isColorAssigned()) return false;
+        }
+        return true;
+    }
+
+    public boolean hasFreePositions(){
+        for(Row row : rows){
+            if(row.hasEmptyPostion()) return true;
+        }
+        return false;
+    }
+
+    public Row getFirstRowWithEmptyPosition(){
+        for(Row row : this.rows){
+            if(row.hasEmptyPostion()) return row;
+        }
+        return null;
     }
 
 

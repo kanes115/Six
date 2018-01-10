@@ -1,11 +1,13 @@
 package game;
 
+import game.Moves.Move;
+
 /**
  * Created by aga on 10.12.17.
  */
 public class MoveChecker {
 
-    private  Move move;
+    private Move move;
     private  Board board;
 
     public MoveChecker(Move move){
