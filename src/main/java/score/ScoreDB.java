@@ -35,8 +35,8 @@ public class ScoreDB {
         preparedStatement.close();
     }
 
-    public ScorePage getScores() throws SQLException {
-        String query = "SELECT name, score FROM SCORE ORDER BY SCORE DESC LIMIT 10";
+    public ScorePage getScoresPage(int page) throws SQLException {
+        String query = "SELECT name, score FROM SCORE ORDER BY SCORE DESC LIMIT 10 OFFSET " + 10*(page+1);
         Statement statement = connection.createStatement();
         ResultSet set = statement.executeQuery(query);
         List<Score> scores = new LinkedList<Score>();
@@ -44,10 +44,12 @@ public class ScoreDB {
             scores.add(new Score(set.getString("name"), set.getLong("score")));
         }
 
-        ScorePage sp = new ScorePage(0, 10, null, "/page/0", scores.size()==10?"/page/1":null, scores);
+        ScorePage sp = new ScorePage(page, 10, null, "/page/"+page, scores.size()==10?"/page/"+(page+1):"/page/"+page, scores);
         return sp;
+    }
 
-
+    public ScorePage getScores() throws SQLException {
+        return getScoresPage(0);
     }
 
 

@@ -42,6 +42,8 @@ public class RandomShuffler implements CardShuffler {
 
     @Override
     public Card getNextCard() {
+        if (cardsDispensed == deck.size())
+            return null;
         Card card = deck.get(cardsDispensed);
         cardsDispensed++;
         return card;
