@@ -1,5 +1,6 @@
-package gui;
+package gui.fxcontrollers;
 
+import gui.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
