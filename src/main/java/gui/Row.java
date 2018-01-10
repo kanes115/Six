@@ -1,5 +1,7 @@
 package gui;
 
+import gui.buttons.ImageButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
