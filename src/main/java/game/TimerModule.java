@@ -1,6 +1,8 @@
 package game;
 
 import com.google.inject.AbstractModule;
+import hints.ITimer;
+import hints.NormalTimer;
 
 import java.time.Clock;
 

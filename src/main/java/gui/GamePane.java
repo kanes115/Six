@@ -1,5 +1,6 @@
 package gui;
 
+import gui.buttons.ImageButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -38,7 +39,7 @@ public class GamePane extends Pane {
             Row row = new Row();
             for (int x = 0; x < CARDS_IN_ROW; x++) {
                 ImageButton btn = new ImageButton(
-                        Card.values()[randomGenerator.nextInt(53)],
+                        Card.values()[randomGenerator.nextInt(53)], row,
                         MARGIN_WIDTH+x*(IMAGE_BUTTON_WIDTH+MARGIN_WIDTH),
                         MARGIN_WIDTH+y*(IMAGE_BUTTON_HEIGHT+MARGIN_WIDTH),
                         IMAGE_BUTTON_WIDTH,
