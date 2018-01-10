@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.Queue;
 
-public class GameController {
+public class GamePaneController {
 
     @FXML
     private BorderPane borderPane;

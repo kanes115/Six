@@ -13,9 +13,25 @@ public class ImageButton extends Button {
     private static final String STYLE_PRESSED = "-fx-background-color: grey; -fx-padding: 0;";
 
     private Card card;
+    private Row row;
 
-    public ImageButton(Card card, double layoutX, double layoutY, double width, double height) {
+//    public ImageButton(Card card, double layoutX, double layoutY, double width, double height) {
+//        this.card = card;
+//        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(card.getPathToFilename())));
+//        imageView.setFitWidth(width);
+//        imageView.setFitHeight(height);
+//        setGraphic(imageView);
+//        setStyle(STYLE_NORMAL);
+//
+//        setOnMousePressed(e -> setStyle(STYLE_PRESSED));
+//        setOnMouseReleased(e -> setStyle(STYLE_NORMAL));
+//        setLayoutX(layoutX);
+//        setLayoutY(layoutY);
+//    }
+
+    public ImageButton(Card card, Row row, double layoutX, double layoutY, double width, double height) {
         this.card = card;
+        this.row = row;
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(card.getPathToFilename())));
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
@@ -34,6 +50,10 @@ public class ImageButton extends Button {
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public Row getRow() {
+        return row;
     }
 
     public void move(double toX, double toY) {

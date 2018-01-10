@@ -23,4 +23,8 @@ public class Row {
     public void setColorChoosen(boolean colorChoosen) {
         isColorChoosen = colorChoosen;
     }
+
+    public List<ImageButton> getCards() {
+        return cards;
+    }
 }
