@@ -41,6 +41,7 @@ public class GamePaneController {
     public void btnNewGameOnAction() {
 
     }
+
     @FXML
     public void btnRevertMoveOnAction() {
     }
@@ -106,5 +107,4 @@ public class GamePaneController {
         secondButton.setGraphic(firstImage);
         secondButton.setCard(firstCard);
     }
-
 }
