@@ -1,18 +1,30 @@
 package game;
 
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import game.Moves.Move;
+
+import javax.inject.Inject;
 
 public class GameController {
 
     private Board board;
     private State state;
-//    private Timer timer;
+    private ITimer timer;
     private boolean isHard;
 
-    public GameController(Board board, State state){
-        this.board = board;
-        this.state = state;
+    @Inject
+    public GameController(ITimer timer, boolean isHard){
+        this.timer = timer;
+        Injector injector = Guice.createInjector(new BoardModule());
+        this.board = injector.getInstance(Board.class);
+        this.state = State.INPROGRESS;
+        this.isHard = isHard;
+        if (isHard)
+            startHard();
+        else
+            startEasy();
     }
 
     public Board getBoard(){
@@ -20,39 +32,30 @@ public class GameController {
     }
 
     public boolean tryMove(Move move){
-        return move.isMade();
+        boolean res = move.execute();
+        if (hasGameEnded())
+            updateGameState();
+        return res;
     }
 
-    public void startEasy(){
-//        timer.start();
-        isHard = false;
-        state = State.INPROGRESS;
+    public long getTime(){
+        return timer.getTimeLong();
     }
-
-    public void startHard(){
-//        timer.start();
-        isHard = true;
-        state = State.INPROGRESS;
-    }
-
-//    public int getTime(){
-//        return timer.getTime();
-//    }
 
     public State getGameState(){
         return this.state;
     }
 
-    public boolean hasGameEnded(){
+    private boolean hasGameEnded(){
         if(!isHard){
-//            timer.stop();
+            timer.stop();
             return board.areAllCardsInPlace();
         }
-//        timer.stop();
+        timer.stop();
         return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
     }
 
-    public void updateGameState(){
+    private void updateGameState(){
         if(!isHard){
             if(board.areAllCardsInPlace()) state = State.WON;
             else state = State.LOST;
@@ -61,6 +64,18 @@ public class GameController {
             if(board.getDeckPosition().isEmpty() && board.areAllCardsInPlace()) state = State.WON;
             else state = State.LOST;
         }
+    }
+
+    private void startEasy(){
+        timer.start();
+        isHard = false;
+        state = State.INPROGRESS;
+    }
+
+    private void startHard(){
+        timer.start();
+        isHard = true;
+        state = State.INPROGRESS;
     }
 
 }
