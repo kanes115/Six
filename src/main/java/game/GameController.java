@@ -4,6 +4,7 @@ package game;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import game.Moves.Move;
+import hints.ITimer;
 
 import javax.inject.Inject;
 
