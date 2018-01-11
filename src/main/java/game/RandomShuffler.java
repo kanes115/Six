@@ -33,9 +33,10 @@ public class RandomShuffler implements CardShuffler {
         return cards;
     }
 
+    //TODO check correctness
     @Override
     public List<Card> getNextCards(int n) {
-        List<Card> cards = deck.subList(cardsDispensed, cardsDispensed + n + 1);
+        List<Card> cards = deck.subList(cardsDispensed, cardsDispensed + n);
         cardsDispensed += n;
         return cards;
     }
