@@ -52,7 +52,7 @@ public class Board {
 
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
-            rows.add(new Row(this.shuffler.getNextCards(6)));
+            rows.add(new Row(this.shuffler.getNextCards(8)));
         deck.putCards(this.shuffler.getRestCards());
     }
 

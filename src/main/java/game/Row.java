@@ -18,8 +18,8 @@ public class Row {
     private List<CasualPosition> positions = new ArrayList<>();
 
     public Row(List<Card> cards){
-        if(cards.size() != 6)
-            throw new IllegalArgumentException("You have pass 6 cards to the row " + cards.size()) ;
+        if(cards.size() != 8)
+            throw new IllegalArgumentException("You have pass 8 cards to the row " + cards.size()) ;
         Face f = Face.TWO;
         for(Card card: cards){
             this.positions.add(new CasualPosition(card, f, this));

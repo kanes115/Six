@@ -20,7 +20,7 @@ public class GamePane extends Pane {
     private static final double MARGIN_WIDTH = 10;
     private static final double IMAGE_BUTTON_HEIGHT = 145;
     private static final int CARDS_IN_COLUMN = 4;
-    private static final int CARDS_IN_ROW = 6;
+    private static final int CARDS_IN_ROW = 8;
     private static final double PREF_WIDTH = CARDS_IN_ROW * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH);
     private static final double PREF_HEIGHT = CARDS_IN_COLUMN * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH);
 
@@ -38,6 +38,10 @@ public class GamePane extends Pane {
 
     public List<GameButton> getCheckedImageButtons() {
         return checkedImageButtons;
+    }
+
+    public List<Row> getGuiRows() {
+        return guiRows;
     }
 
     private void initImageButtons() {
@@ -65,13 +69,13 @@ public class GamePane extends Pane {
     private void initDeckAndRejectedStack() {
 
         GameController gameController = GamePaneController.getGameController();
-        deck = new StackButton(gameController.getBoard().getDeckPosition(), MARGIN_WIDTH + 9 * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+        deck = new StackButton(gameController.getBoard().getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW +2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                 MARGIN_WIDTH +  (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
         deck.setOnAction(e -> checkImageButton(deck));
         deck.setText("Talia");
         getChildren().add(deck);
 
-        rejectedCards = new StackButton(gameController.getBoard().getRejectedPosition(), MARGIN_WIDTH + 9 * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+        rejectedCards = new StackButton(gameController.getBoard().getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW +2)  * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                 MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT+ MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
         rejectedCards.setOnAction(e -> checkImageButton(rejectedCards));
         rejectedCards.setText("Odrzucone");
