@@ -1,20 +1,33 @@
 package gui.fxcontrollers;
 
-import gui.Card;
-import gui.EmptyImageViewCard;
+import game.GameController;
+import game.Moves.DeleteUnnecessaryPair;
+import game.Moves.Move;
 import gui.GamePane;
+import gui.ImagePathsFactory;
+import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
+import hints.NormalTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class GamePaneController {
+
+    private static GameController gameController;
+
+    public static GameController getGameController() {
+        return gameController;
+    }
 
     @FXML
     private BorderPane borderPane;
@@ -35,11 +48,34 @@ public class GamePaneController {
 
     @FXML
     public void btnDeleteUnnecessaryPairOnAction(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+
+        if(checkedImageButtons.size() != 2){
+            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart - nie można wykonać ruchu", "Zaznacz dwie karty");
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        ImageButton first = (ImageButton) checkedImageButtons.remove();
+        ImageButton second = (ImageButton) checkedImageButtons.remove();
+
+        Move move = new DeleteUnnecessaryPair(second.getPosition(), first.getPosition());
+        if (gameController.tryMove(move)){
+            reloadImage(second);
+            reloadImage(first);
+
+        }else {
+            //TODO Dialog message should be provided by module game (optional feature)
+            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+        }
+
+        second.setChecked(false);
+        first.setChecked(false);
     }
 
     @FXML
     public void btnNewGameOnAction() {
-
+        initialize();
     }
 
     @FXML
@@ -53,32 +89,16 @@ public class GamePaneController {
 
     @FXML
     public void btnPerformMoveOnAction() {
-        GamePane gamePane = (GamePane) borderPane.getCenter();
-        Queue<ImageButton> checkedImageButtons = gamePane.getCheckedImageButtons();
 
-        if(checkedImageButtons.size() != GamePane.CARDS_IN_MOVE){
-            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart - nie można wykonać ruchu", "Zaznacz dwie karty");
-            return;
-        }
 
-        ImageButton endButton = checkedImageButtons.poll();
-        ImageButton startButton = checkedImageButtons.poll();
-
-        //Only for demonstration - in future it will be checked in game module
-        if(startButton.getCard().equals(endButton.getCard())){
-            setEmptyCard(startButton);
-            setEmptyCard(endButton);
-        }else{
-            swapCard(startButton,endButton);
-        }
-
-        startButton.setChecked(false);
-        endButton.setChecked(false);
     }
 
     @FXML
     public void initialize() {
+        gameController = new GameController(new NormalTimer(),false);
+        System.out.println(gameController.getTime());
         borderPane.setCenter(new GamePane());
+
     }
 
     private void showAlertDialog(String title, String header, String content){
@@ -90,21 +110,23 @@ public class GamePaneController {
         alert.showAndWait();
     }
 
-
-    private void setEmptyCard(ImageButton  button) {
-        button.setGraphic(EmptyImageViewCard.getEmptyCardImage());
-        button.setCard(Card.CARD_EMPTY);
+    private  List<GameButton> getListCard(){
+        GamePane gamePane = (GamePane) borderPane.getCenter();
+        return gamePane.getCheckedImageButtons();
     }
 
-    //Just for demonstration
-    private void swapCard(ImageButton firstButton, ImageButton secondButton) {
-        Node firstImage = firstButton.getGraphic();
-        Card firstCard = firstButton.getCard();
+    private void reloadImage(ImageButton button){
+        String imageUrl = ImagePathsFactory.getPathToCardImage(button.getPosition());
 
-        firstButton.setGraphic(secondButton.getGraphic());
-        firstButton.setCard(secondButton.getCard());
-
-        secondButton.setGraphic(firstImage);
-        secondButton.setCard(firstCard);
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageUrl)));
+        imageView.setFitWidth(button.getWidth());
+        imageView.setFitHeight(button.getHeight());
+        button.setGraphic(imageView);
     }
+
+    private void clearList(List<GameButton> checkedImageButtons) {
+        checkedImageButtons.clear();
+    }
+
+
 }
