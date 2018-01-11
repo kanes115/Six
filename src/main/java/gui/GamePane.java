@@ -66,13 +66,13 @@ public class GamePane extends Pane {
 
         GameController gameController = GamePaneController.getGameController();
         deck = new StackButton(gameController.getBoard().getDeckPosition(), MARGIN_WIDTH + 9 * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + 1 * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
+                MARGIN_WIDTH +  (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
         deck.setOnAction(e -> checkImageButton(deck));
         deck.setText("Talia");
         getChildren().add(deck);
 
         rejectedCards = new StackButton(gameController.getBoard().getRejectedPosition(), MARGIN_WIDTH + 9 * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + 3 * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
+                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT+ MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
         rejectedCards.setOnAction(e -> checkImageButton(rejectedCards));
         rejectedCards.setText("Odrzucone");
         getChildren().add(rejectedCards);
