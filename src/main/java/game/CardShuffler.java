@@ -11,4 +11,5 @@ public interface CardShuffler {
     List<Card> getRestCards();
     List<Card> getNextCards(int n);
     Card getNextCard();
+    void saveDeck();
 }

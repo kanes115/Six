@@ -55,6 +55,15 @@ class RandomShufflerTest extends Specification {
             notAllCards.size() == 103
             empty.size() == 0
     }
+    def "getNextCards"(){
+        given:
+            RandomShuffler randomShuffler = new RandomShuffler()
+        when:
+            List<Card> cards = randomShuffler.getNextCards(8)
+        then:
+            cards.size()==8
+    }
+
 
 
 }
