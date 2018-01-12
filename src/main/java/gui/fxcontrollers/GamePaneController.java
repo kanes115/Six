@@ -133,7 +133,7 @@ public class GamePaneController {
 
         ImageButton first = (ImageButton) checkedImageButtons.remove();
         ImageButton second = (ImageButton) checkedImageButtons.remove();
-        Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition());
+        Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition(), getGameController().getBoard());
 
         if (gameController.tryMove(move)) {
             reloadImage(second);
