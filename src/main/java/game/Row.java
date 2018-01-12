@@ -67,8 +67,7 @@ public class Row {
     //It also checks whether all positions are filled
     // needs renaming - not done not to break the api
     public boolean hasTheSameColorInRow() {
-        return this.isColorAssigned() &&
-                this.getPositions()
+        return this.getPositions()
                         .stream()
                         .allMatch(c -> c.isEmpty()
                                 || !c.getCard().getColor().equals(this.getColor()));
