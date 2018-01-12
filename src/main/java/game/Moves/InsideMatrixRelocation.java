@@ -12,6 +12,7 @@ public class InsideMatrixRelocation implements Move {
     private boolean isMade;
 
     private boolean wasColorAssigned;
+    private String errorMsg = "";
 
     public InsideMatrixRelocation(CasualPosition from, CasualPosition to, Board board){
         this.from = from;
@@ -60,6 +61,11 @@ public class InsideMatrixRelocation implements Move {
     @Override
     public boolean isMade() {
         return isMade;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMsg;
     }
 
     private void justMove(CasualPosition a, CasualPosition b){

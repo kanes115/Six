@@ -16,6 +16,7 @@ public class DeleteUnnecessaryPair implements Move {
     private Card savedPos2;
 
     private boolean isMade;
+    private String errorMsg = "";
 
     public DeleteUnnecessaryPair(Position pos1, Position pos2){
         this.pos1 = pos1;
@@ -54,5 +55,10 @@ public class DeleteUnnecessaryPair implements Move {
     @Override
     public boolean isMade() {
         return this.isMade;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMsg;
     }
 }

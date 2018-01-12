@@ -41,7 +41,6 @@ public class Board {
         rows.forEach(r -> r.removeCard(two));
     }
 
-    //deprecated !!!
     public CasualPosition getPositionAt(int row, int col){
         if(row < 0 || row > 3 || col < 0 || col > 5)
             throw new IllegalArgumentException("Indexes out of bounds");

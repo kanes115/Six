@@ -39,11 +39,13 @@ public class GameController {
         return this.board;
     }
 
-    public boolean tryMove(Move move){
+    public MoveResponse tryMove(Move move){
         boolean res = move.execute();
         if (hasGameEnded())
             updateGameState();
-        return res;
+        if(!res)
+            return new MoveResponse(move.getErrorMessage());
+        return new MoveResponse();
     }
 
     public long getTime(){
