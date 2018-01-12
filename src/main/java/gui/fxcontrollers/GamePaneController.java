@@ -215,7 +215,9 @@ public class GamePaneController {
 
 
     private void reloadAllImages() {
-        reloadImage(getGamePane().getRejectedCards());
+        if(!getGamePane().getRejectedCards().getStackPosition().isEmpty()) {
+            reloadImage(getGamePane().getRejectedCards());
+        }
 
         List<Row> rows = getGamePane().getGuiRows();
         for (Row row:rows){
