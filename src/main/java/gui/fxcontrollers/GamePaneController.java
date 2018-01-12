@@ -46,7 +46,6 @@ public class GamePaneController {
     public void btnDeckToMatrixOnAction(ActionEvent actionEvent) {
         LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
         if (!checkNumberOfChoosenCards(checkedImageButtons, 2)) {
-            clearList(checkedImageButtons);
             return;
         }
         Move move;
@@ -58,7 +57,9 @@ public class GamePaneController {
         if (gameController.tryMove(move)) {
             //TODO consider another implementation (observer)
             reloadAllImages();
-            getGamePane().getCardFromStack().setImage(null);
+            GamePane gamePane = getGamePane();
+            gamePane.getCardFromStack().setImage(null);
+
             clearWholeList(checkedImageButtons);
         }else {
             showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
@@ -87,6 +88,7 @@ public class GamePaneController {
             //TODO consider another implementation (observer)
             reloadAllImages();
             getGamePane().getCardFromStack().setImage(null);
+            clearWholeList(checkedImageButtons);
         }else {
             showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
         }
@@ -133,6 +135,13 @@ public class GamePaneController {
             clearList(checkedImageButtons);
             return;
         }
+
+        if (!checkButtonType(ImageButton.class, checkedImageButtons.get(0), checkedImageButtons.get(1))) {
+            showAlertDialog("Błędny ruch", "Zaznaczone karty muszą być brane z planszy", null);
+            clearList(checkedImageButtons);
+            return;
+        }
+
 
         ImageButton first = (ImageButton) checkedImageButtons.remove();
         ImageButton second = (ImageButton) checkedImageButtons.remove();
@@ -198,7 +207,7 @@ public class GamePaneController {
         return (GamePane) borderPane.getCenter();
     }
 
-    private void reloadImage(ImageButton button) {
+    private void reloadImage(GameButton button) {
         String imageUrl = ImagePathsFactory.getPathToCardImage(button.getPosition());
 
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageUrl)));
@@ -209,6 +218,8 @@ public class GamePaneController {
 
 
     private void reloadAllImages() {
+        reloadImage(getGamePane().getRejectedCards());
+
         List<Row> rows = getGamePane().getGuiRows();
         for (Row row:rows){
             List<ImageButton> cards = row.getCards();
@@ -228,6 +239,9 @@ public class GamePaneController {
     }
 
     private void clearWholeList(List<GameButton> checkedImageButtons) {
+        for (int i=0;i <checkedImageButtons.size(); i++){
+            checkedImageButtons.get(i).setChecked(false);
+        }
         checkedImageButtons.clear();
     }
 
@@ -244,7 +258,7 @@ public class GamePaneController {
 
     private boolean checkButtonType(Class<?> buttonType, GameButton... buttons) {
         for (GameButton button : buttons) {
-            if (buttonType != button.getClass()) {
+            if (button.getClass() != buttonType) {
                 return false;
             }
         }

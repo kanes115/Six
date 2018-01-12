@@ -1,5 +1,7 @@
 package gui;
 
+import game.Board;
+import game.Card;
 import game.GameController;
 import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
@@ -53,6 +55,10 @@ public class GamePane extends Pane {
         return cardFromStack;
     }
 
+    public StackButton getRejectedCards() {
+        return rejectedCards;
+    }
+
     private void initImageButtons() {
         cardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                 MARGIN_WIDTH,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
@@ -83,18 +89,18 @@ public class GamePane extends Pane {
     }
 
     private void initDeckAndRejectedStack() {
+        Board board = GamePaneController.getGameController().getBoard();
 
-        GameController gameController = GamePaneController.getGameController();
-        deck = new StackButton(gameController.getBoard().getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+        deck = new StackButton(board.getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                 MARGIN_WIDTH + (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
         deck.setOnAction(e -> getCardFromStack(deck));
         deck.setText("Talia");
         getChildren().add(deck);
 
-        rejectedCards = new StackButton(gameController.getBoard().getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
+        rejectedCards = new StackButton(board.getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, ImagePathsFactory.getPathToCardImage((Card) null)); //load empty image
         rejectedCards.setOnAction(e -> checkImageButton(rejectedCards));
-        rejectedCards.setText("Odrzucone");
+
         getChildren().add(rejectedCards);
     }
 
