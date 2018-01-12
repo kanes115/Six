@@ -5,8 +5,10 @@ import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
 import gui.buttons.StackButton;
 import gui.fxcontrollers.GamePaneController;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -29,6 +31,9 @@ public class GamePane extends Pane {
     private StackButton rejectedCards;
     private StackButton deck;
 
+    //a picture card displayed when user clicked deck or rejected cards stack
+    private ImageView cardFromStack;
+
     public GamePane() {
         super();
         setPrefSize(PREF_WIDTH, PREF_HEIGHT);
@@ -44,11 +49,22 @@ public class GamePane extends Pane {
         return guiRows;
     }
 
+    public ImageView getCardFromStack() {
+        return cardFromStack;
+    }
+
     private void initImageButtons() {
+        cardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
+
         List<game.Row> gameRows = GamePaneController.getGameController().getBoard().getRows();
-        initEmptyImageView();
         for (int y = 0; y < CARDS_IN_COLUMN; y++) {
-            Row row = new Row();
+            ImageView colorImage = initImageView(MARGIN_WIDTH + (CARDS_IN_ROW) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                    MARGIN_WIDTH + y * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH),
+                    IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT);
+
+            Row row = new Row(colorImage);
+
 
             for (int x = 0; x < CARDS_IN_ROW; x++) {
                 ImageButton btn = new ImageButton(gameRows.get(y).getPositions().get(x), row,
@@ -69,24 +85,35 @@ public class GamePane extends Pane {
     private void initDeckAndRejectedStack() {
 
         GameController gameController = GamePaneController.getGameController();
-        deck = new StackButton(gameController.getBoard().getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW +2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH +  (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
-        deck.setOnAction(e -> checkImageButton(deck));
+        deck = new StackButton(gameController.getBoard().getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
+        deck.setOnAction(e -> getCardFromStack(deck));
         deck.setText("Talia");
         getChildren().add(deck);
 
-        rejectedCards = new StackButton(gameController.getBoard().getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW +2)  * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT+ MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
+        rejectedCards = new StackButton(gameController.getBoard().getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
         rejectedCards.setOnAction(e -> checkImageButton(rejectedCards));
         rejectedCards.setText("Odrzucone");
         getChildren().add(rejectedCards);
     }
 
-    private void initEmptyImageView() {
-        ImageView emptyCardView = new ImageView(new Image(getClass().getResourceAsStream("/gui/icon.jpg")));
-        emptyCardView.setFitWidth(IMAGE_BUTTON_WIDTH);
-        emptyCardView.setFitHeight(IMAGE_BUTTON_HEIGHT);
-        EmptyImageViewCard.setEmptyCardImage(emptyCardView);
+    private ImageView initImageView(double layoutX, double layoutY, double width, double height) {
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+        imageView.setLayoutX(layoutX);
+        imageView.setLayoutY(layoutY);
+        getChildren().add(imageView);
+        return imageView;
+    }
+
+    private void getCardFromStack(StackButton btn) {
+        if(checkedImageButtons.isEmpty()){
+            checkImageButton(btn);
+            String imageURL = ImagePathsFactory.getPathToCardImage(btn.getPosition().getCard());
+            cardFromStack.setImage(new Image(getClass().getResourceAsStream(imageURL)));
+        }
     }
 
     private void checkImageButton(GameButton btn) {
