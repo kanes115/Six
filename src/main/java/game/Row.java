@@ -58,28 +58,27 @@ public class Row {
 
     @Override
     public String toString(){
-        return positions.stream().map(CasualPosition::toString).reduce("", (a, b) -> a + b);
+        return positions
+                .stream()
+                .map(CasualPosition::toString).reduce("", (a, b) -> a + b);
     }
 
-    public boolean hasTheSameColorInRow(){
-        if(!this.isColorAssigned())
-            return false;
-        for(CasualPosition c : this.getPositions()){
-            if(!c.getCard().getColor().equals(this.getColor()))
-                return false;
-        }
-        return true;
+    //It also checks whether all positions are filled
+    // needs renaming - not done not to break the api
+    public boolean hasTheSameColorInRow() {
+        return this.isColorAssigned() &&
+                this.getPositions()
+                        .stream()
+                        .allMatch(c -> !c.isEmpty()
+                                || !c.getCard().getColor().equals(this.getColor()));
     }
 
+    //It also checks whether all positions are filled
+    // needs renaming - not done not to break the api
     public boolean hasFacesInOrder(){
-        Face current = Face.TWO;
-        for(CasualPosition c : this.getPositions()){
-            if(c.isEmpty()) return false;
-            if(!c.getCard().getFace().equals(current))
-                return false;
-            current = current.next();
-        }
-        return true;
+        return this.getPositions()
+                .stream()
+                .allMatch(CasualPosition::cardFaceMatchPosition);
     }
 
     public boolean hasEmptyPostion(){
