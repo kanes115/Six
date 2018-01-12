@@ -1,11 +1,14 @@
 package gui.fxcontrollers;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import game.GameController;
 import game.Moves.*;
 import game.Positions.CasualPosition;
 import game.Positions.DeckPosition;
 import game.Positions.Position;
 import game.Positions.RejectedPosition;
+import game.TimerModule;
 import gui.GamePane;
 import gui.ImagePathsFactory;
 import gui.Row;
@@ -171,7 +174,7 @@ public class GamePaneController {
 
     @FXML
     public void initialize() {
-        gameController = new GameController(new NormalTimer(), false);
+        gameController = new GameController(false);
         System.out.println(gameController.getTime());
         borderPane.setCenter(new GamePane());
 

@@ -5,19 +5,17 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import game.Moves.Move;
 import hints.ITimer;
+import hints.NormalTimer;
 
-import javax.inject.Inject;
 
 public class GameController {
 
     private Board board;
     private State state;
-    private ITimer timer;
+    private ITimer timer = new NormalTimer();
     private boolean isHard;
 
-    @Inject
-    public GameController(ITimer timer, boolean isHard){
-        this.timer = timer;
+    public GameController(boolean isHard){
         Injector injector = Guice.createInjector(new BoardModule());
         this.board = injector.getInstance(Board.class);
         this.state = State.INPROGRESS;
