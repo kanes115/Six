@@ -26,9 +26,17 @@ public class Main {
 
         get("/page/:num", (req, res) -> {
             int page = Integer.parseInt(req.params(":num"));
-
-
             return new Gson().toJson(scoreDB.getScoresPage(page));
+        });
+
+        post("/deck", (req, res) -> {
+            scoreDB.saveDeck(req.body());
+            return req.body();
+        });
+
+        get("/deck", (req, res) -> {
+            String deck = scoreDB.getRandomDeck();
+            return deck;
         });
     }
 }

@@ -14,5 +14,4 @@ public interface Position {
     Card removeCard();
 
     boolean isEmpty();
-
 }
