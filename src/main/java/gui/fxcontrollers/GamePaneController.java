@@ -1,10 +1,11 @@
 package gui.fxcontrollers;
 
 import game.GameController;
-import game.Moves.DeleteDuplicate;
-import game.Moves.DeleteUnnecessaryPair;
-import game.Moves.InsideMatrixRelocation;
-import game.Moves.Move;
+import game.Moves.*;
+import game.Positions.CasualPosition;
+import game.Positions.DeckPosition;
+import game.Positions.Position;
+import game.Positions.RejectedPosition;
 import gui.GamePane;
 import gui.ImagePathsFactory;
 import gui.Row;
@@ -21,7 +22,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-import javax.smartcardio.Card;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,8 +41,27 @@ public class GamePaneController {
 
     @FXML
     public void btnDeckToMatrixOnAction(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+        if (!checkNumberOfChoosenCards(checkedImageButtons, 2)) {
+            clearList(checkedImageButtons);
+            return;
+        }
+        Move move;
+        if((move = initializeDeckToMatrixMove(checkedImageButtons)) == null){
+            showAlertDialog("Błędny ruch", "Nie mozna zainicjalizowac ruchu", null);
+            return;
+        }
 
+        if (gameController.tryMove(move)) {
+            //TODO consider another implementation (observer)
+            reloadAllImages();
+            getGamePane().getCardFromStack().setImage(null);
+            clearWholeList(checkedImageButtons);
+        }else {
+            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+        }
     }
+
 
     @FXML
     public void btnDeleteDuplicateOnAction(ActionEvent actionEvent) {
@@ -205,6 +224,10 @@ public class GamePaneController {
         }
     }
 
+    private void clearWholeList(List<GameButton> checkedImageButtons) {
+        checkedImageButtons.clear();
+    }
+
     private boolean checkNumberOfChoosenCards(List<GameButton> buttons, int expectedNumber) {
         if (expectedNumber == buttons.size()) return true;
         if (expectedNumber == 2) {
@@ -223,6 +246,24 @@ public class GamePaneController {
             }
         }
         return true;
+    }
+
+    private Move initializeDeckToMatrixMove(LinkedList<GameButton> checkedImageButtons) {
+        GameButton first = checkedImageButtons.get(0);
+        GameButton second = checkedImageButtons.get(1);
+
+        Position firstPosition = first.getPosition();
+        Position secondPosition = second.getPosition();
+
+        Move move = null;
+        if(firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition){
+            move = new DeckToMatrix((DeckPosition) firstPosition, (RejectedPosition)secondPosition, getGameController().getBoard());
+        }else if(firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition){
+            move = new DeckToMatrix((DeckPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+        }else if(firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
+            move = new DeckToMatrix((RejectedPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+        }
+        return move;
     }
 
 }
