@@ -3,6 +3,7 @@ package game;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,11 +15,11 @@ public class Row {
     private boolean isColorAssigned;
     private Color color = null;
 
-    private List<CasualPosition> positions;
+    private List<CasualPosition> positions = new LinkedList<>();
 
     public Row(List<Card> cards){
         if(cards.size() != 8)
-            throw new IllegalArgumentException("You have pass 8 cards to the row");
+            throw new IllegalArgumentException("You have to pass 8 cards to the row");
         Face f = Face.TWO;
         for(Card card: cards){
             this.positions.add(new CasualPosition(card, f, this));

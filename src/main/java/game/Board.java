@@ -40,7 +40,10 @@ public class Board {
         rows.forEach(r -> r.removeCard(two));
     }
 
+    //deprecated !!!
     public Position getPositionAt(int row, int col){
+        if(row < 0 || row > 3 || col < 0 || col > 5)
+            throw new IllegalArgumentException("Indexes out of bounds");
         return rows.get(row).getPositions().get(col);
     }
 
@@ -52,7 +55,7 @@ public class Board {
 
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
-            rows.add(new Row(this.shuffler.getNextCards(6)));
+            rows.add(new Row(this.shuffler.getNextCards(8)));
         deck.putCards(this.shuffler.getRestCards());
     }
 
