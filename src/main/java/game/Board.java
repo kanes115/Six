@@ -101,7 +101,11 @@ public class Board {
     }
 
     public List<Color> getAssignedColors(){
-        return rows.stream().map(Row::getColor).distinct().collect(Collectors.toList());
+        return rows.stream()
+                .filter(Row::isColorAssigned)
+                .map(Row::getColor)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 
