@@ -5,6 +5,7 @@ import game.Positions.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Kanes on 05.12.2017.
@@ -97,6 +98,10 @@ public class Board {
             if(row.hasEmptyPostion()) return row;
         }
         return null;
+    }
+
+    public List<Color> getAssignedColors(){
+        return rows.stream().map(Row::getColor).distinct().collect(Collectors.toList());
     }
 
 
