@@ -53,7 +53,8 @@ public class GameController {
             return board.areAllCardsInPlace();
         }
         timer.stop();
-        return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
+        return false;
+//        return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
     }
 
     private void updateGameState(){

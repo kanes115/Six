@@ -70,7 +70,7 @@ public class Row {
         return this.isColorAssigned() &&
                 this.getPositions()
                         .stream()
-                        .allMatch(c -> !c.isEmpty()
+                        .allMatch(c -> c.isEmpty()
                                 || !c.getCard().getColor().equals(this.getColor()));
     }
 

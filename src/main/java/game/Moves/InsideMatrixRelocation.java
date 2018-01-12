@@ -28,9 +28,9 @@ public class InsideMatrixRelocation implements Move {
             return false;
         if(!to.getRow().isColorAssigned()){
             Card savedFrom = from.getCard();
+            if(board.getAssignedColors().contains(from.getCard().getColor()))
+                return false;
             justMove(from, to);
-            if(board.getAssignedColors().contains(to.getCard().getColor()))
-                    return false;
             to.getRow().assignColor(savedFrom.getColor());
             isMade = true;
             wasColorAssigned = false;
