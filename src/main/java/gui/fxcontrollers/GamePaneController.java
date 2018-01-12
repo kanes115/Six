@@ -54,7 +54,9 @@ public class GamePaneController {
         if (gameController.tryMove(move)) {
             //TODO consider another implementation (observer)
             reloadAllImages();
-            getGamePane().getCardFromStack().setImage(null);
+            GamePane gamePane = getGamePane();
+            gamePane.getCardFromStack().setImage(null);
+
             clearWholeList(checkedImageButtons);
         }else {
             showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
@@ -202,7 +204,7 @@ public class GamePaneController {
         return (GamePane) borderPane.getCenter();
     }
 
-    private void reloadImage(ImageButton button) {
+    private void reloadImage(GameButton button) {
         String imageUrl = ImagePathsFactory.getPathToCardImage(button.getPosition());
 
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageUrl)));
@@ -213,6 +215,8 @@ public class GamePaneController {
 
 
     private void reloadAllImages() {
+        reloadImage(getGamePane().getRejectedCards());
+
         List<Row> rows = getGamePane().getGuiRows();
         for (Row row:rows){
             List<ImageButton> cards = row.getCards();
