@@ -30,4 +30,11 @@ public class Card {
                 card.getFace() == this.getFace();
 
     }
+
+    @Override
+    public int hashCode() {
+        int result = color.hashCode();
+        result = 31 * result + face.hashCode();
+        return result;
+    }
 }

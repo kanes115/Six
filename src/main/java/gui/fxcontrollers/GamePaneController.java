@@ -1,45 +1,162 @@
 package gui.fxcontrollers;
 
-import gui.Card;
-import gui.EmptyImageViewCard;
+import game.GameController;
+import game.Moves.*;
+import game.Positions.CasualPosition;
+import game.Positions.DeckPosition;
+import game.Positions.Position;
+import game.Positions.RejectedPosition;
 import gui.GamePane;
+import gui.ImagePathsFactory;
+import gui.Row;
+import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
+import gui.buttons.StackButton;
+import hints.NormalTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GamePaneController {
 
+    private static GameController gameController;
     @FXML
     private BorderPane borderPane;
-
     @FXML
     private TextField txtUsername;
-
     @FXML
     private Label lblInfo;
 
-    @FXML
-    public void btnDeckToMatrixOnAction(ActionEvent actionEvent) {
+    public static GameController getGameController() {
+        return gameController;
     }
 
     @FXML
+    public void btnDeckToMatrixOnAction(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+        if (!checkNumberOfChoosenCards(checkedImageButtons, 2)) {
+            clearList(checkedImageButtons);
+            return;
+        }
+        Move move;
+        if((move = initializeDeckToMatrixMove(checkedImageButtons)) == null){
+            showAlertDialog("Błędny ruch", "Nie mozna zainicjalizowac ruchu", null);
+            return;
+        }
+
+        if (gameController.tryMove(move)) {
+            //TODO consider another implementation (observer)
+            reloadAllImages();
+            getGamePane().getCardFromStack().setImage(null);
+            clearWholeList(checkedImageButtons);
+        }else {
+            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+        }
+    }
+
+
+    @FXML
     public void btnDeleteDuplicateOnAction(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+        if (!checkNumberOfChoosenCards(checkedImageButtons, 1)) {
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        if (!checkButtonType(StackButton.class, checkedImageButtons.get(0))) {
+            showAlertDialog("Błędny ruch", "Zaznaczona karta musi byc z talli lub stosu kart odrzuconych", null);
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        GameButton button = checkedImageButtons.get(0);
+        Move move = new DeleteDuplicate(button.getPosition(), gameController.getBoard());
+
+        if (gameController.tryMove(move)) {
+            //TODO consider another implementation (observer)
+            reloadAllImages();
+            getGamePane().getCardFromStack().setImage(null);
+        }else {
+            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+        }
+
     }
 
     @FXML
     public void btnDeleteUnnecessaryPairOnAction(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+
+        if (!checkNumberOfChoosenCards(checkedImageButtons, 2)) {
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        if (!checkButtonType(ImageButton.class, checkedImageButtons.get(0), checkedImageButtons.get(1))) {
+            showAlertDialog("Błędny ruch", "Zaznaczone karty muszą być brane z planszy", null);
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        ImageButton first = (ImageButton) checkedImageButtons.remove();
+        ImageButton second = (ImageButton) checkedImageButtons.remove();
+
+        Move move = new DeleteUnnecessaryPair(second.getPosition(), first.getPosition());
+        if (gameController.tryMove(move)) {
+            reloadImage(second);
+            reloadImage(first);
+
+        } else {
+            //TODO Dialog message should be provided by module game (optional feature)
+            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+        }
+
+        second.setChecked(false);
+        first.setChecked(false);
+    }
+
+    @FXML
+    public void btnInsideMatrixRelocationOnAction(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+
+        if (!checkNumberOfChoosenCards(checkedImageButtons, 2)) {
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        ImageButton first = (ImageButton) checkedImageButtons.remove();
+        ImageButton second = (ImageButton) checkedImageButtons.remove();
+        Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition());
+
+        if (gameController.tryMove(move)) {
+            reloadImage(second);
+            reloadImage(first);
+
+            game.Row gameRow = second.getPosition().getRow();
+            gui.Row guiRow = second.getRow();
+            if (!guiRow.isColorChoosen() && gameRow.isColorAssigned()) {
+                guiRow.getColorImage().setImage(new Image(getClass().getResourceAsStream("/gui/cards/" + gameRow.getColor().name().toLowerCase() + ".png")));
+                guiRow.setColorChoosen(true);
+            }
+
+        } else {
+            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+        }
+
+        second.setChecked(false);
+        first.setChecked(false);
     }
 
     @FXML
     public void btnNewGameOnAction() {
-
+        initialize();
     }
 
     @FXML
@@ -51,37 +168,16 @@ public class GamePaneController {
 
     }
 
-    @FXML
-    public void btnPerformMoveOnAction() {
-        GamePane gamePane = (GamePane) borderPane.getCenter();
-        Queue<ImageButton> checkedImageButtons = gamePane.getCheckedImageButtons();
-
-        if(checkedImageButtons.size() != GamePane.CARDS_IN_MOVE){
-            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart - nie można wykonać ruchu", "Zaznacz dwie karty");
-            return;
-        }
-
-        ImageButton endButton = checkedImageButtons.poll();
-        ImageButton startButton = checkedImageButtons.poll();
-
-        //Only for demonstration - in future it will be checked in game module
-        if(startButton.getCard().equals(endButton.getCard())){
-            setEmptyCard(startButton);
-            setEmptyCard(endButton);
-        }else{
-            swapCard(startButton,endButton);
-        }
-
-        startButton.setChecked(false);
-        endButton.setChecked(false);
-    }
 
     @FXML
     public void initialize() {
+        gameController = new GameController(new NormalTimer(), false);
+        System.out.println(gameController.getTime());
         borderPane.setCenter(new GamePane());
+
     }
 
-    private void showAlertDialog(String title, String header, String content){
+    private void showAlertDialog(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -90,21 +186,84 @@ public class GamePaneController {
         alert.showAndWait();
     }
 
-
-    private void setEmptyCard(ImageButton  button) {
-        button.setGraphic(EmptyImageViewCard.getEmptyCardImage());
-        button.setCard(Card.CARD_EMPTY);
+    private List<GameButton> getListCard() {
+        GamePane gamePane = getGamePane();
+        return gamePane.getCheckedImageButtons();
     }
 
-    //Just for demonstration
-    private void swapCard(ImageButton firstButton, ImageButton secondButton) {
-        Node firstImage = firstButton.getGraphic();
-        Card firstCard = firstButton.getCard();
-
-        firstButton.setGraphic(secondButton.getGraphic());
-        firstButton.setCard(secondButton.getCard());
-
-        secondButton.setGraphic(firstImage);
-        secondButton.setCard(firstCard);
+    private GamePane getGamePane(){
+        return (GamePane) borderPane.getCenter();
     }
+
+    private void reloadImage(ImageButton button) {
+        String imageUrl = ImagePathsFactory.getPathToCardImage(button.getPosition());
+
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageUrl)));
+        imageView.setFitWidth(button.getWidth());
+        imageView.setFitHeight(button.getHeight());
+        button.setGraphic(imageView);
+    }
+
+
+    private void reloadAllImages() {
+        List<Row> rows = getGamePane().getGuiRows();
+        for (Row row:rows){
+            List<ImageButton> cards = row.getCards();
+            for(ImageButton card : cards){
+                reloadImage(card);
+            }
+        }
+    }
+
+    private void clearList(List<GameButton> checkedImageButtons) {
+        for (int i=0; i<checkedImageButtons.size(); i++){
+            if (checkedImageButtons.get(i) instanceof ImageButton){
+                checkedImageButtons.get(i).setChecked(false);
+                checkedImageButtons.remove(i);
+            }
+        }
+    }
+
+    private void clearWholeList(List<GameButton> checkedImageButtons) {
+        checkedImageButtons.clear();
+    }
+
+    private boolean checkNumberOfChoosenCards(List<GameButton> buttons, int expectedNumber) {
+        if (expectedNumber == buttons.size()) return true;
+        if (expectedNumber == 2) {
+            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart", "Zaznacz dwie kartyss");
+        } else if (expectedNumber == 1) {
+            showAlertDialog("Błędny ruch", "Nie zaznaczono jednej karty", "Zaznacz wyłącznie jedną kartę");
+        }
+        clearList(buttons);
+        return false;
+    }
+
+    private boolean checkButtonType(Class<?> buttonType, GameButton... buttons) {
+        for (GameButton button : buttons) {
+            if (buttonType != button.getClass()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Move initializeDeckToMatrixMove(LinkedList<GameButton> checkedImageButtons) {
+        GameButton first = checkedImageButtons.get(0);
+        GameButton second = checkedImageButtons.get(1);
+
+        Position firstPosition = first.getPosition();
+        Position secondPosition = second.getPosition();
+
+        Move move = null;
+        if(firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition){
+            move = new DeckToMatrix((DeckPosition) firstPosition, (RejectedPosition)secondPosition, getGameController().getBoard());
+        }else if(firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition){
+            move = new DeckToMatrix((DeckPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+        }else if(firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
+            move = new DeckToMatrix((RejectedPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+        }
+        return move;
+    }
+
 }

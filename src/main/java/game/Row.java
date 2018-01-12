@@ -20,7 +20,7 @@ public class Row {
     public Row(List<Card> cards){
         if(cards.size() != 8)
             throw new IllegalArgumentException("You have to pass 8 cards to the row");
-        Face f = Face.TWO;
+        Face f = Face.SIX;
         for(Card card: cards){
             this.positions.add(new CasualPosition(card, f, this));
             f = f.next();
