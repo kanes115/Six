@@ -1,15 +1,43 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Kanes on 05.12.2017.
+ * Created by jkret on 12/01/2018.
  */
+public abstract class CardShuffler {
+    protected List<Card> deck;
+    protected int cardsDispensed;
 
-public interface CardShuffler {
+    public CardShuffler() {
+        this.deck = new ArrayList<>();
+        this.cardsDispensed = 0;
+    }
 
-    List<Card> getRestCards();
-    List<Card> getNextCards(int n);
-    Card getNextCard();
-    void saveDeck();
+    public List<Card> getRestCards() {
+        List<Card> cards = deck.subList(cardsDispensed, deck.size());
+        cardsDispensed = deck.size() - 1;
+        return cards;
+    }
+
+    public List<Card> getNextCards(int n) {
+        List<Card> cards = deck.subList(cardsDispensed, cardsDispensed + n);
+        cardsDispensed += n;
+        return cards;
+    }
+
+    public Card getNextCard() {
+        if (cardsDispensed == deck.size())
+            return null;
+        Card card = deck.get(cardsDispensed);
+        cardsDispensed++;
+        return card;
+    }
+
+    public List<Card> getDeck() {
+        return deck;
+    }
+
+    public abstract void saveDeck();
 }

@@ -9,15 +9,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import score.ScorePage;
 
 import java.util.List;
 
-public class WinningDeckShuffler implements CardShuffler {
-
-    List<Card> deck;
-
+public class WinningDeckShuffler extends CardShuffler {
     public WinningDeckShuffler() {
+        super();
         HttpClient httpClient = new DefaultHttpClient();
         Gson gson = new Gson();
 
@@ -25,30 +22,15 @@ public class WinningDeckShuffler implements CardShuffler {
             HttpGet request = new HttpGet("http://localhost:8080/deck");
             HttpResponse response = httpClient.execute(request);
             System.out.println(response.getStatusLine());
-            this.deck = gson.fromJson(EntityUtils.toString(response.getEntity()), new TypeToken<List<Card>>(){}.getType());
+            this.deck = gson.fromJson(EntityUtils.toString(response.getEntity()), new TypeToken<List<Card>>() {
+            }.getType());
         } catch (Exception e) {
             System.err.println(e.getMessage());
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
     }
-    @Override
-    public List<Card> getRestCards() {
-        return null;
-    }
 
-    @Override
-    public List<Card> getNextCards(int n) {
-        return null;
-    }
-
-    @Override
-    public Card getNextCard() {
-        return null;
-    }
-
-    @Override
     public void saveDeck() {
-
     }
 }
