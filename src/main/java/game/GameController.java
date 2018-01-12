@@ -17,7 +17,16 @@ public class GameController {
 
     public GameController(boolean isHard){
         Injector injector = Guice.createInjector(new BoardModule());
-        this.board = injector.getInstance(Board.class);
+        Board someBoard = injector.getInstance(Board.class);
+        initialize(someBoard, isHard);
+    }
+
+    public GameController(CardShuffler shuffler, boolean isHard){
+        initialize(new Board(shuffler), isHard);
+    }
+
+    private void initialize(Board board, boolean isHard){
+        this.board = board;
         this.state = State.INPROGRESS;
         this.isHard = isHard;
         if (isHard)
