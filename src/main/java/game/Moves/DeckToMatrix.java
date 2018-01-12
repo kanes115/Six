@@ -16,6 +16,7 @@ public class DeckToMatrix implements Move {
     private boolean isFromDeckStack;
     private boolean isMade;
     private Board board;
+    private String errorMsg = "";
 
 
     // It moves a card from deck to rejected stack.
@@ -136,6 +137,11 @@ public class DeckToMatrix implements Move {
     @Override
     public boolean isMade() {
         return this.isMade;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMsg;
     }
 
 }

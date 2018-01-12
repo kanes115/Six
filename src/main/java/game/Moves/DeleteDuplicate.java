@@ -11,6 +11,7 @@ public class DeleteDuplicate implements Move {
     private Card card1;
     private Board board;
     private boolean isMade;
+    private String errorMsg = "";
 
 
     // this move takes a position from deck or rejected
@@ -58,6 +59,11 @@ public class DeleteDuplicate implements Move {
     @Override
     public boolean isMade() {
         return this.isMade;
+    }
+
+    @Override
+    public String getErrorMessage() {
+        return errorMsg;
     }
 
 }
