@@ -1,23 +1,18 @@
 package gui.fxcontrollers;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import game.GameController;
-import game.MoveChecker;
 import game.MoveResponse;
 import game.Moves.*;
 import game.Positions.CasualPosition;
 import game.Positions.DeckPosition;
 import game.Positions.Position;
 import game.Positions.RejectedPosition;
-import game.TimerModule;
 import gui.GamePane;
 import gui.ImagePathsFactory;
 import gui.Row;
 import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
 import gui.buttons.StackButton;
-import hints.NormalTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -282,11 +277,11 @@ public class GamePaneController {
 
         Move move = null;
         if(firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition){
-            move = new DeckToMatrix((DeckPosition) firstPosition, (RejectedPosition)secondPosition, getGameController().getBoard());
+            move = new FromStack((DeckPosition) firstPosition, (RejectedPosition)secondPosition);
         }else if(firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition){
-            move = new DeckToMatrix((DeckPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+            move = new FromStack((DeckPosition) firstPosition, (CasualPosition) secondPosition);
         }else if(firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
-            move = new DeckToMatrix((RejectedPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+            move = new FromStack((RejectedPosition) firstPosition, (CasualPosition) secondPosition);
         }
         return move;
     }

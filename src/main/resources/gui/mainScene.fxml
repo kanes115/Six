@@ -13,7 +13,7 @@
           <Button mnemonicParsing="false" onAction="#btnNewGameOnAction" text="Nowa gra" />
             <Button mnemonicParsing="false" onAction="#btnRevertMoveOnAction" text="Cofnij ruch" />
             <Button mnemonicParsing="false" onAction="#btnHintOnAction" text="Podpowiedź" />
-            <Button mnemonicParsing="false" onAction="#btnDeckToMatrixOnAction" text="DeckToMatrix">
+            <Button mnemonicParsing="false" onAction="#btnDeckToMatrixOnAction" text="FromStack">
                 <font>
                     <Font name="System Bold" size="12.0" />
                 </font>
