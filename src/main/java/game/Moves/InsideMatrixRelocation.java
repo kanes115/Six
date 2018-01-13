@@ -14,10 +14,10 @@ public class InsideMatrixRelocation implements Move {
     private boolean wasColorAssigned;
     private String errorMsg = "";
 
-    public InsideMatrixRelocation(CasualPosition from, CasualPosition to, Board board){
+    public InsideMatrixRelocation(CasualPosition from, CasualPosition to){
         this.from = from;
         this.to = to;
-        this.board = board;
+        this.board = from.getRow().getBoard();
         this.isMade = false;
     }
 

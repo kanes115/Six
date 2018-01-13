@@ -13,12 +13,13 @@ import java.util.stream.Collectors;
 
 public class Row {
 
+    private final Board board;
     private boolean isColorAssigned;
     private Color color = null;
 
     private List<CasualPosition> positions = new LinkedList<>();
 
-    public Row(List<Card> cards){
+    public Row(List<Card> cards, Board board){
         if(cards.size() != 8)
             throw new IllegalArgumentException("You have to pass 8 cards to the row");
         Face f = Face.SIX;
@@ -27,6 +28,7 @@ public class Row {
             f = f.next();
         }
         checkIfCompleted();
+        this.board = board;
     }
 
     private void checkIfCompleted() {
@@ -107,5 +109,7 @@ public class Row {
         return null;
     }
 
-
+    public Board getBoard() {
+        return board;
+    }
 }
