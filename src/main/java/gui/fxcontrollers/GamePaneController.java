@@ -145,10 +145,11 @@ public class GamePaneController {
 
 
         ImageButton first =  (ImageButton) checkedImageButtons.get(0);
-        ImageButton  second = (ImageButton) checkedImageButtons.get(1);
-        Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition());
+        ImageButton second = (ImageButton)  checkedImageButtons.get(1);
 
+        Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition());
         MoveResponse response = gameController.tryMove(move);
+
         if (response.wasOk()) {
             reloadImage(second);
             reloadImage(first);
@@ -168,6 +169,40 @@ public class GamePaneController {
 
     }
 
+    @FXML
+    public void btnAssignColorOnCard(ActionEvent actionEvent) {
+        LinkedList<GameButton> checkedImageButtons = (LinkedList<GameButton>) getListCard();
+        if (!checkNumberOfChoosenCards(checkedImageButtons, 1)) {
+            clearList(checkedImageButtons);
+            return;
+        }
+
+        if (!checkButtonType(ImageButton.class, checkedImageButtons.get(0))) {
+            showAlertDialog("Błędny ruch", "Zaznaczona karta musi być brana z planszy", null);
+            clearList(checkedImageButtons);
+            return;
+        }
+        ImageButton first =  (ImageButton) checkedImageButtons.get(0);
+        Move move = new AssignColorOnCard(first.getPosition());
+        MoveResponse response = gameController.tryMove(move);
+
+        if (response.wasOk()) {
+            reloadImage(first);
+
+            game.Row gameRow = first.getPosition().getRow();
+            gui.Row guiRow = first.getRow();
+            if (!guiRow.isColorChoosen() && gameRow.isColorAssigned()) {
+                guiRow.getColorImage().setImage(new Image(getClass().getResourceAsStream("/gui/cards/" + gameRow.getColor().name().toLowerCase() + ".png")));
+                guiRow.setColorChoosen(true);
+            }
+
+        } else {
+            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+        }
+
+        clearList(checkedImageButtons);
+        checkFinishGameStatus();
+    }
 
     @FXML
     public void btnNewGameOnAction() {
@@ -300,5 +335,4 @@ public class GamePaneController {
         return move;
 
     }
-
 }
