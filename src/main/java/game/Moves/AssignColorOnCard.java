@@ -24,6 +24,8 @@ public class AssignColorOnCard implements Move {
             return error("This card is already in assigned row");
         if(board.getAssignedColors().contains(pos.getCard().getColor()))
             return error("This card has a row specified already");
+        if(!pos.cardFaceMatchPosition())
+            return error("This card's face does not match this column");
         pos.getRow().assignColor(pos.getCard().getColor());
         return true;
     }
