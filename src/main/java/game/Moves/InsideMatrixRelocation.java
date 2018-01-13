@@ -17,7 +17,7 @@ public class InsideMatrixRelocation implements Move {
     public InsideMatrixRelocation(CasualPosition from, CasualPosition to){
         this.from = from;
         this.to = to;
-        this.board = from.getRow().getBoard();
+        this.board = from.getBoard();
         this.isMade = false;
     }
 

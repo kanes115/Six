@@ -15,8 +15,8 @@ public class Board {
 
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
-    private StackPosition deck = new DeckPosition();
-    private StackPosition rejected = new RejectedPosition();
+    private StackPosition deck = new DeckPosition(this);
+    private StackPosition rejected = new RejectedPosition(this);
 
     @Inject
     public Board(CardShuffler shuffler){

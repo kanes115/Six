@@ -7,7 +7,7 @@ import game.Row;
 /**
  * Created by Kanes on 05.12.2017.
  */
-public class CasualPosition implements Position {
+public class CasualPosition extends Position {
 
     private Card card;
     private Row row;
@@ -15,6 +15,7 @@ public class CasualPosition implements Position {
     private Face targetFace;
 
     public CasualPosition(Face targetFace, Row row){
+        super(row.getBoard());
         this.card = null;
         this.isEmpty = true;
         this.targetFace = targetFace;
@@ -22,6 +23,7 @@ public class CasualPosition implements Position {
     }
 
     public CasualPosition(Card card, Face targetFace, Row row){
+        super(row.getBoard());
         this.card = card;
         this.row = row;
         this.isEmpty = false;

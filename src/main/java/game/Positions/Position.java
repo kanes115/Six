@@ -1,17 +1,28 @@
 package game.Positions;
 
+import game.Board;
 import game.Card;
 
 /**
  * Created by Kanes on 05.12.2017.
  */
-public interface Position {
+public abstract class Position {
 
-    void putCard(Card card);
+    private final Board board;
 
-    Card getCard();
+    public Position(Board board){
+        this.board = board;
+    }
 
-    Card removeCard();
+    public abstract void putCard(Card card);
 
-    boolean isEmpty();
+    public abstract Card getCard();
+
+    public abstract Card removeCard();
+
+    public abstract boolean isEmpty();
+
+    public Board getBoard(){
+       return this.board;
+    }
 }

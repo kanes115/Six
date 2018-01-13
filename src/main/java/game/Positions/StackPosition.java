@@ -1,19 +1,22 @@
 package game.Positions;
 
+import game.Board;
 import game.Card;
 
 import java.util.List;
 import java.util.Stack;
 
-public abstract class StackPosition implements Position {
+public abstract class StackPosition extends Position {
 
     private Stack<Card> cards;
 
-    public StackPosition(Stack<Card> cards){
+    public StackPosition(Stack<Card> cards, Board board){
+        super(board);
         this.cards = cards;
     }
 
-    public StackPosition(){
+    public StackPosition(Board board){
+        super(board);
         cards = new Stack<>();
     }
 
