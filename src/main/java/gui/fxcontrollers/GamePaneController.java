@@ -282,11 +282,11 @@ public class GamePaneController {
 
         Move move = null;
         if(firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition){
-            move = new DeckToMatrix((DeckPosition) firstPosition, (RejectedPosition)secondPosition, getGameController().getBoard());
+            move = new DeckToMatrix((DeckPosition) firstPosition, (RejectedPosition)secondPosition);
         }else if(firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition){
-            move = new DeckToMatrix((DeckPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+            move = new DeckToMatrix((DeckPosition) firstPosition, (CasualPosition) secondPosition);
         }else if(firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
-            move = new DeckToMatrix((RejectedPosition) firstPosition, (CasualPosition) secondPosition, getGameController().getBoard());
+            move = new DeckToMatrix((RejectedPosition) firstPosition, (CasualPosition) secondPosition);
         }
         return move;
     }

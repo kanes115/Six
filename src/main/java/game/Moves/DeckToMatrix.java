@@ -2,6 +2,8 @@ package game.Moves;
 
 import game.*;
 import game.Positions.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 
 // TODO: Change name!!! But do it at the end of the project not to affect GUI team work
 // Note that the name is not relevant right now, it should be something like
@@ -9,129 +11,118 @@ import game.Positions.*;
 
 public class DeckToMatrix implements Move {
 
-    private  Position deck;
-    private  Position cas;
-    private boolean isToRejectedStack;
-    private boolean isFromRejectedStack;
-    private boolean isFromDeckStack;
-    private boolean isMade;
+    private Position from;
+    private Position to;
+    private boolean isMade = false;
     private Board board;
     private String errorMsg = "";
 
 
-    // It moves a card from deck to rejected stack.
-    public DeckToMatrix(DeckPosition deck, RejectedPosition rej, Board board){
-        this.deck = deck;
-        this.cas = rej;
-        this.isToRejectedStack = true;
-        this.isFromRejectedStack = false;
-        this.isFromDeckStack = false;
-        this.isMade = false;
-        this.board = board;
+    // It moves a card from stack to rejected stack.
+    public DeckToMatrix(DeckPosition deck, RejectedPosition rej){
+        this.from = deck;
+        this.to = rej;
+        this.board = deck.getBoard();
     }
 
-    // It relocates a card from deck top to matrix.
+    // It relocates a card from stack top to matrix.
     // It does it only if the card is moved to it's FINAL PLACE
     // or if it's the first free place
-    public DeckToMatrix(DeckPosition deck, CasualPosition cas, Board board){
-        this.deck = deck;
-        this.cas = cas;
-        this.isFromDeckStack = true;
-        this.isToRejectedStack = false;
-        this.isFromRejectedStack = false;
-        this.isMade = false;
-        this.board = board;
+    public DeckToMatrix(DeckPosition deck, CasualPosition cas){
+        this.from = deck;
+        this.to = cas;
+        this.board = deck.getBoard();
     }
 
     // Moves a card from Rejected Stack to casual position if possible
-    public DeckToMatrix(RejectedPosition rej, CasualPosition cas, Board board){
-        this.deck = deck;
-        this.cas = cas;
-        this.isFromRejectedStack = true;
-        this.isFromDeckStack = false;
-        this.isToRejectedStack = false;
-        this.isMade = false;
-        this.board = board;
+    public DeckToMatrix(RejectedPosition rej, CasualPosition cas){
+        this.from = rej;
+        this.to = cas;
+        this.board = rej.getBoard();
     }
 
-    // TODO REFACTOR THIS METHOD
+
     @Override
     public boolean execute() {
-
-        if(isFromDeckStack) {
-            if (!board.getRejectedPosition().isEmpty()) {
-                return false;
-            }
+        if(from.getClass() == DeckPosition.class && to.getClass() == CasualPosition.class){
+            if(!board.getRejectedPosition().isEmpty())
+                return error("Rejected stack is not empty");
+            return moveStackCasual();
         }
 
-        if(isFromRejectedStack || isFromDeckStack ){
-            CasualPosition cas1 = (CasualPosition) cas;
-            Color color = deck.getCard().getColor();
-            Face face = deck.getCard().getFace();
-            if(!cas1.isEmpty()){
-                isMade = false;
-                return false;
-            }
-            if(board.areAllRowsAssigned()){
-                if(cas1.getTargetFace() == face && cas1.getRow().getColor() == color){
-                    return true;
-                }
-                if(board.getFirstRowWithEmptyPosition().getColor() == cas1.getRow().getColor()){
-                    if(board.getFirstRowWithEmptyPosition().getFirstEmptyPosition() == cas1 ){
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
-            }
-            if(!board.areAllRowsAssigned()){
-                if(!cas1.getRow().isColorAssigned()){
-                    for(Row row : board.getRows()){
-                        //moze byc kolor przypisany do innego Row
-                        if(row != cas1.getRow() && row.getColor() == color ) return false;
-                    }
-                    //set empty = false
-                    if(cas1.getTargetFace() == face){
-                        cas1.getRow().assignColor(color);
-                        cas1.putCard(deck.getCard());
-                        return true;
-                    }
-                    if(!board.getFirstRowWithEmptyPosition().isColorAssigned()){
-                        if(board.getFirstRowWithEmptyPosition().getFirstEmptyPosition() == cas1){
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-                else{
-                    if(cas1.getTargetFace() == face && cas1.getRow().getColor() == color){
-                        return true;
-                    }
-                }
-            }
-        }if(isToRejectedStack){
-            //gdy sa na planszy wolne miejsca a my na stosik odrzuconych to false
-            if(board.hasFreePositions()){
-                isMade = false;
-                return false;
-            }
-            else{
-                //casual zla nazwa - ma byc rej
-                Card card = deck.getCard();
-                deck.removeCard();
-                cas.putCard(card);
-                isMade = true;
-                return true;
-            }
-
+        if(from.getClass() == DeckPosition.class && to.getClass() == RejectedPosition.class){
+            if(board.hasFreePositions())
+                return error("There are free positions on the board");
+            return move(from, to);
         }
+        if(from.getClass() == RejectedPosition.class && to.getClass() == CasualPosition.class){
+            return moveStackCasual();
+        }
+        return error("Wrong positions");
+    }
+
+    private boolean moveStackCasual(){
+        StackPosition from = (StackPosition) this.from;
+        CasualPosition to = (CasualPosition) this.to;
+
+        if(!to.isEmpty())
+            return error("Destination position is occupied");
+
+        if(faceMatch(from, to) && to.getRow().isColorAssigned()){
+            if(colorMatch(from, to))
+                return move(from, to);
+            return maybeError("Color of this row is not the same as card's one");
+        }
+
+        if(to.getRow().isColorAssigned())
+            return maybeError("This face does not match");
+
+        if(faceMatch(from, to) && !to.getRow().isColorAssigned()){
+            Color colorToAssign = from.getCard().getColor();
+            if(board.getAssignedColors().contains(colorToAssign))
+                return maybeError("This color is already assigned to a row");
+            System.out.println("Assigning colo!!");
+            to.getRow().assignColor(colorToAssign);
+            return move(from, to);
+        }
+
+        return maybeError("unknown");
+    }
+
+    private boolean move(Position from, Position to) {
+        to.putCard(from.removeCard());
+        isMade = true;
+        return true;
+    }
+
+    private boolean faceMatch(StackPosition p, CasualPosition p2){
+        return p2.getTargetFace() == p.getCard().getFace();
+    }
+
+
+    private boolean colorMatch(StackPosition p, CasualPosition p2){
+        return p2.getRow().getColor() == p.getCard().getColor();
+    }
+
+    // Checks if it wasn't the first empty position
+    // otherwise returns an error with message `msg`
+    private boolean maybeError(String msg){
+        if(!board.hasFreePositions())
+            return error(msg);
+        if(board.getFirstRowWithEmptyPosition().getFirstEmptyPosition() == to)
+            return move(from, to);
+        return error(msg);
+    }
+
+    private boolean error(String msg) {
+        isMade = false;
+        errorMsg = msg;
         return false;
     }
 
-
     @Override
     public void revert() {
-        //TODO
+        throw new NotImplementedException();
     }
 
     @Override
@@ -143,5 +134,7 @@ public class DeckToMatrix implements Move {
     public String getErrorMessage() {
         return errorMsg;
     }
+
+
 
 }
