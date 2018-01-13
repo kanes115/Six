@@ -104,7 +104,7 @@ class BoardTest extends Specification {
 
         List<Card> row = new LinkedList<>()
         for(int i = 0; i < 8; i ++)
-            row << new Card(Color.CLUBS, Face.FOUR)
+            row << card
 
         shuffler.getNextCards(8) >> row
         return shuffler

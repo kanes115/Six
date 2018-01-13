@@ -1,6 +1,6 @@
 package Hints
 
-import ITimer
+import hints.ITimer
 import hints.NormalTimer
 import spock.lang.Specification
 

@@ -41,8 +41,7 @@ public class Board {
         rows.forEach(r -> r.removeCard(two));
     }
 
-    //deprecated !!!
-    public Position getPositionAt(int row, int col){
+    public CasualPosition getPositionAt(int row, int col){
         if(row < 0 || row > 3 || col < 0 || col > 5)
             throw new IllegalArgumentException("Indexes out of bounds");
         return rows.get(row).getPositions().get(col);
@@ -72,7 +71,7 @@ public class Board {
 
     public boolean areAllCardsInPlace(){
       for(Row row : rows){
-          if(!row.hasTheSameColorInRow() || !row.hasFacesInOrder()){
+          if(!row.completedDueToColor() || !row.completedDueToFaces()){
               return false;
           }
       }

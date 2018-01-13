@@ -1,5 +1,7 @@
 package game;
 
+import java.util.Random;
+
 /**
  * Created by Kanes on 05.12.2017.
  */
@@ -12,5 +14,11 @@ public enum Face {
 
     public Face next(){
         return values()[(this.ordinal() + 1) % 13];
+    }
+
+    // Test API
+    public static Face getRandomFace(){
+        Random generator = new Random();
+        return values()[Math.abs(generator.nextInt()) % 13];
     }
 }

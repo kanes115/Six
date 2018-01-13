@@ -1,5 +1,6 @@
 package gui
 
+import game.Card
 import javafx.scene.image.Image
 import spock.lang.Specification
 

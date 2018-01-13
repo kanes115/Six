@@ -5,6 +5,7 @@ import game.Positions.Position;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Kanes on 05.12.2017.
@@ -25,7 +26,11 @@ public class Row {
             this.positions.add(new CasualPosition(card, f, this));
             f = f.next();
         }
-        this.isColorAssigned = false;
+        checkIfCompleted();
+    }
+
+    private void checkIfCompleted() {
+        this.isColorAssigned = completedDueToColor() && completedDueToFaces();
     }
 
     public void assignColor(Color color){
@@ -64,19 +69,25 @@ public class Row {
                 .map(CasualPosition::toString).reduce("", (a, b) -> a + b);
     }
 
-    //It also checks whether all positions are filled
-    // needs renaming - not done not to break the api
-    public boolean hasTheSameColorInRow() {
-        return this.isColorAssigned() &&
-                this.getPositions()
+    //Checks whether in a row are cards of one color
+    public boolean completedDueToColor() {
+        List<Position> notEmptyPos = this.getPositions().stream()
+                .filter(p -> !p.isEmpty())
+                .collect(Collectors.toList());
+        if(notEmptyPos.isEmpty())
+            return false;
+        Color cardsColor = notEmptyPos
+                .get(0)
+                .getCard()
+                .getColor();
+        return this.getPositions()
                         .stream()
-                        .allMatch(c -> c.isEmpty()
-                                || !c.getCard().getColor().equals(this.getColor()));
+                        .allMatch(p -> !p.isEmpty()
+                                && p.getCard().getColor().equals(cardsColor));
     }
 
-    //It also checks whether all positions are filled
-    // needs renaming - not done not to break the api
-    public boolean hasFacesInOrder(){
+    //Checks whether in a row are cards with faces in 6 - king
+    public boolean completedDueToFaces(){
         return this.getPositions()
                 .stream()
                 .allMatch(CasualPosition::cardFaceMatchPosition);
