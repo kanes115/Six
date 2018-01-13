@@ -23,7 +23,7 @@ class BoardTest extends Specification {
         rest << new Card(Color.DIAMONDS, Face.ACE)
         rest << new Card(Color.DIAMONDS, Face.ACE)
 
-        CardShuffler shuffler = getOneCardShuffler(new Card(Color.DIAMONDS, Face.ACE), rest)
+        CardShuffler shuffler = getOneCardShuffler(new Card(Color.CLUBS, Face.FOUR), rest)
 
         when:
         def board = new Board(shuffler)

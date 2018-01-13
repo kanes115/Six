@@ -11,7 +11,7 @@ class RowTest extends Specification {
         for(int i = 0; i < 8; i++)
             rowCards << new Card(c, Face.getRandomFace())
         when:
-        def row = new Row(rowCards)
+        def row = new Row(rowCards, null)
         then:
         !row.isColorAssigned()
     }
@@ -26,7 +26,7 @@ class RowTest extends Specification {
             f = ++f
         }
         when:
-        def row = new Row(rowCards)
+        def row = new Row(rowCards, null)
         then:
         row.isColorAssigned()
     }

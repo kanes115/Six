@@ -39,7 +39,8 @@ class GameControllerTest extends Specification {
 
         then:
         Move m = new DeleteUnnecessaryPair(pos1, pos2)
-        gameController.tryMove(m)
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
         m.isMade()
         pos1.isEmpty()
         pos2.isEmpty()
@@ -60,7 +61,8 @@ class GameControllerTest extends Specification {
 
         then:
         Move m = new DeleteUnnecessaryPair(pos1, pos2)
-        !gameController.tryMove(m)
+        MoveResponse mr = gameController.tryMove(m)
+        !mr.wasOk()
         !m.isMade()
         !pos1.isEmpty()
         !pos2.isEmpty()
@@ -80,8 +82,9 @@ class GameControllerTest extends Specification {
         Color colorThatShouldBeAssigned = pos1.getCard().getColor()
 
         then:
-        Move m = new InsideMatrixRelocation(pos1, pos2, gameController.getBoard())
-        gameController.tryMove(m)
+        Move m = new InsideMatrixRelocation(pos1, pos2)
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
         m.isMade()
         pos1.isEmpty()
         !pos2.isEmpty()
@@ -107,8 +110,10 @@ class GameControllerTest extends Specification {
         pos3.putCard(notMovedCard)
 
         then:
-        gameController.tryMove(new InsideMatrixRelocation(pos1, pos2, gameController.getBoard()))
-        !gameController.tryMove(new InsideMatrixRelocation(pos3, pos4, gameController.getBoard()))
+        MoveResponse mr1 = gameController.tryMove(new InsideMatrixRelocation(pos1, pos2))
+        mr1.wasOk()
+        MoveResponse mr2 = gameController.tryMove(new InsideMatrixRelocation(pos3, pos4))
+        !mr2.wasOk()
         pos3.getCard().equals(notMovedCard)
         pos4.isEmpty()
     }
