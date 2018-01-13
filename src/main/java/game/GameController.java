@@ -25,6 +25,20 @@ public class GameController {
         initialize(new Board(shuffler), isHard);
     }
 
+    // This method allows to see the card at the top of `deck`
+    // if there's nothing on the rejected stack
+    public Card dragCard(){
+        if(getBoard().getRejectedPosition().isEmpty())
+            return getBoard().getDeckPosition().getCard();
+        else
+            return null;
+    }
+
+    // Tells whether one can use dragCard()
+    public boolean canBeDragged(){
+        return getBoard().getRejectedPosition().isEmpty();
+    }
+
     private void initialize(Board board, boolean isHard){
         this.board = board;
         this.state = State.INPROGRESS;
