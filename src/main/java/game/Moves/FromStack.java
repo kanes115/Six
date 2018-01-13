@@ -9,7 +9,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 // Note that the name is not relevant right now, it should be something like
 // InvolvingStackMove
 
-public class DeckToMatrix implements Move {
+public class FromStack implements Move {
 
     private Position from;
     private Position to;
@@ -19,7 +19,7 @@ public class DeckToMatrix implements Move {
 
 
     // It moves a card from stack to rejected stack.
-    public DeckToMatrix(DeckPosition deck, RejectedPosition rej){
+    public FromStack(DeckPosition deck, RejectedPosition rej){
         this.from = deck;
         this.to = rej;
         this.board = deck.getBoard();
@@ -28,14 +28,14 @@ public class DeckToMatrix implements Move {
     // It relocates a card from stack top to matrix.
     // It does it only if the card is moved to it's FINAL PLACE
     // or if it's the first free place
-    public DeckToMatrix(DeckPosition deck, CasualPosition cas){
+    public FromStack(DeckPosition deck, CasualPosition cas){
         this.from = deck;
         this.to = cas;
         this.board = deck.getBoard();
     }
 
     // Moves a card from Rejected Stack to casual position if possible
-    public DeckToMatrix(RejectedPosition rej, CasualPosition cas){
+    public FromStack(RejectedPosition rej, CasualPosition cas){
         this.from = rej;
         this.to = cas;
         this.board = rej.getBoard();
