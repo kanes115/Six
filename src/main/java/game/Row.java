@@ -22,13 +22,13 @@ public class Row {
     public Row(List<Card> cards, Board board){
         if(cards.size() != 8)
             throw new IllegalArgumentException("You have to pass 8 cards to the row");
+        this.board = board;
         Face f = Face.SIX;
         for(Card card: cards){
             this.positions.add(new CasualPosition(card, f, this));
             f = f.next();
         }
         checkIfCompleted();
-        this.board = board;
     }
 
     private void checkIfCompleted() {
