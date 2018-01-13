@@ -5,6 +5,7 @@ import game.Moves.DeleteUnnecessaryPair
 import game.Moves.InsideMatrixRelocation
 import game.Moves.Move
 import game.Positions.CasualPosition
+import game.Positions.StackPosition
 import hints.TestDeckShuffler
 import spock.lang.Specification
 
@@ -67,6 +68,42 @@ class GameControllerTest extends Specification {
         !m.isMade()
         !pos1.isEmpty()
         !pos2.isEmpty()
+    }
+
+    def "DeleteUnnecessaryPair: you can delete cards from stack position and casual one"(){
+        given:
+        GameController gameController = new GameController(new RandomShuffler(), false)
+        StackPosition pos1 = gameController.getBoard().getDeckPosition()
+        CasualPosition pos2 = gameController.getBoard().getPositionAt(0, 1)
+
+        when:
+        pos2.removeCard()
+        pos1.putCard(new Card(Color.CLUBS, Face.TWO))
+        pos2.putCard(new Card(Color.CLUBS, Face.TWO))
+
+        then:
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+        m.isMade()
+        pos2.isEmpty()
+    }
+
+    def "DeleteUnnecessaryPair: you can delete cards across stacks as well"(){
+        given:
+        GameController gameController = new GameController(new RandomShuffler(), false)
+        StackPosition pos1 = gameController.getBoard().getDeckPosition()
+        StackPosition pos2 = gameController.getBoard().getRejectedPosition()
+
+        when:
+        pos1.putCard(new Card(Color.CLUBS, Face.TWO))
+        pos2.putCard(new Card(Color.CLUBS, Face.TWO))
+
+        then:
+        Move m = new DeleteUnnecessaryPair(pos1, pos2)
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+        m.isMade()
     }
 
 
