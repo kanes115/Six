@@ -33,6 +33,12 @@ public class Row {
 
     private void checkIfCompleted() {
         this.isColorAssigned = completedDueToColor() && completedDueToFaces();
+        this.color = positions
+                .stream()
+                .filter(p -> !p.isEmpty())
+                .map(p -> p.getCard().getColor())
+                .findAny()
+                .get();
     }
 
     public void assignColor(Color color){
