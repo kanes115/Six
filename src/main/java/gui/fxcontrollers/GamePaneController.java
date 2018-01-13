@@ -7,8 +7,10 @@ import game.Positions.CasualPosition;
 import game.Positions.DeckPosition;
 import game.Positions.Position;
 import game.Positions.RejectedPosition;
+import game.State;
 import gui.GamePane;
 import gui.ImagePathsFactory;
+import gui.Main;
 import gui.Row;
 import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
@@ -28,6 +30,7 @@ import java.util.List;
 public class GamePaneController {
 
     private static GameController gameController;
+
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -46,7 +49,7 @@ public class GamePaneController {
             return;
         }
         Move move;
-        if((move = initializeDeckToMatrixMove(checkedImageButtons)) == null){
+        if ((move = initializeDeckToMatrixMove(checkedImageButtons)) == null) {
             showAlertDialog("Błędny ruch", "Nie mozna zainicjalizowac ruchu", null);
             return;
         }
@@ -58,9 +61,11 @@ public class GamePaneController {
             GamePane gamePane = getGamePane();
             gamePane.getCardFromStack().setImage(null);
             clearWholeList(checkedImageButtons);
-        }else {
+        } else {
             showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            clearList(checkedImageButtons);
         }
+        checkFinishGameStatus();
     }
 
 
@@ -88,9 +93,11 @@ public class GamePaneController {
             reloadAllImages();
             getGamePane().getCardFromStack().setImage(null);
             clearWholeList(checkedImageButtons);
-        }else {
+        } else {
             showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            clearList(checkedImageButtons);
         }
+        checkFinishGameStatus();
 
     }
 
@@ -103,14 +110,8 @@ public class GamePaneController {
             return;
         }
 
-        if (!checkButtonType(ImageButton.class, checkedImageButtons.get(0), checkedImageButtons.get(1))) {
-            showAlertDialog("Błędny ruch", "Zaznaczone karty muszą być brane z planszy", null);
-            clearList(checkedImageButtons);
-            return;
-        }
-
-        ImageButton first = (ImageButton) checkedImageButtons.remove();
-        ImageButton second = (ImageButton) checkedImageButtons.remove();
+        GameButton first = checkedImageButtons.get(0);
+        GameButton second = checkedImageButtons.get(1);
 
         Move move = new DeleteUnnecessaryPair(second.getPosition(), first.getPosition());
         MoveResponse response = gameController.tryMove(move);
@@ -118,13 +119,13 @@ public class GamePaneController {
         if (response.wasOk()) {
             reloadImage(second);
             reloadImage(first);
-
+            clearWholeList(checkedImageButtons);
         } else {
             showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            clearList(checkedImageButtons);
         }
+        checkFinishGameStatus();
 
-        second.setChecked(false);
-        first.setChecked(false);
     }
 
     @FXML
@@ -143,8 +144,8 @@ public class GamePaneController {
         }
 
 
-        ImageButton first = (ImageButton) checkedImageButtons.remove();
-        ImageButton second = (ImageButton) checkedImageButtons.remove();
+        ImageButton first =  (ImageButton) checkedImageButtons.get(0);
+        ImageButton  second = (ImageButton) checkedImageButtons.get(1);
         Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition());
 
         MoveResponse response = gameController.tryMove(move);
@@ -162,10 +163,11 @@ public class GamePaneController {
         } else {
             showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
+        clearList(checkedImageButtons);
+        checkFinishGameStatus();
 
-        second.setChecked(false);
-        first.setChecked(false);
     }
+
 
     @FXML
     public void btnNewGameOnAction() {
@@ -185,12 +187,11 @@ public class GamePaneController {
     @FXML
     public void initialize() {
         gameController = new GameController(false);
-        System.out.println(gameController.getTime());
-        borderPane.setCenter(new GamePane());
 
+        borderPane.setCenter(new GamePane());
     }
 
-    private void showAlertDialog(String title, String header, String content) {
+    public static void showAlertDialog(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -199,12 +200,27 @@ public class GamePaneController {
         alert.showAndWait();
     }
 
+    public static void checkFinishGameStatus() {
+        try {
+            if (getGameController().getGameState().equals(State.WON)) {
+                showAlertDialog("Wygrana", "Wygrałeś grę, Ave ty :D", null);
+                Main.replaceStage("introScene.fxml");
+
+            } else if (getGameController().getGameState().equals(State.LOST)) {
+                showAlertDialog("Przegrana", "Przegrałeś Grę,", null);
+                Main.replaceStage("introScene.fxml");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private List<GameButton> getListCard() {
         GamePane gamePane = getGamePane();
         return gamePane.getCheckedImageButtons();
     }
 
-    private GamePane getGamePane(){
+    private GamePane getGamePane() {
         return (GamePane) borderPane.getCenter();
     }
 
@@ -219,22 +235,20 @@ public class GamePaneController {
 
 
     private void reloadAllImages() {
-        if(!getGamePane().getRejectedCards().getStackPosition().isEmpty()) {
-            reloadImage(getGamePane().getRejectedCards());
-        }
+        reloadImage(getGamePane().getRejectedCards());
 
         List<Row> rows = getGamePane().getGuiRows();
-        for (Row row:rows){
+        for (Row row : rows) {
             List<ImageButton> cards = row.getCards();
-            for(ImageButton card : cards){
+            for (ImageButton card : cards) {
                 reloadImage(card);
             }
         }
     }
 
     private void clearList(List<GameButton> checkedImageButtons) {
-        for (int i=0; i<checkedImageButtons.size(); i++){
-            if (checkedImageButtons.get(i) instanceof ImageButton){
+        for (int i = 0; i < checkedImageButtons.size(); i++) {
+            if (checkedImageButtons.get(i) instanceof ImageButton) {
                 checkedImageButtons.get(i).setChecked(false);
                 checkedImageButtons.remove(i);
             }
@@ -242,7 +256,7 @@ public class GamePaneController {
     }
 
     private void clearWholeList(List<GameButton> checkedImageButtons) {
-        for (int i=0;i <checkedImageButtons.size(); i++){
+        for (int i = 0; i < checkedImageButtons.size(); i++) {
             checkedImageButtons.get(i).setChecked(false);
         }
         checkedImageButtons.clear();
@@ -251,9 +265,9 @@ public class GamePaneController {
     private boolean checkNumberOfChoosenCards(List<GameButton> buttons, int expectedNumber) {
         if (expectedNumber == buttons.size()) return true;
         if (expectedNumber == 2) {
-            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart", "Zaznacz dwie kartyss");
+            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart", "Zaznacz dwie karty");
         } else if (expectedNumber == 1) {
-            showAlertDialog("Błędny ruch", "Nie zaznaczono jednej karty", "Zaznacz wyłącznie jedną kartę");
+            showAlertDialog("Błędny ruch", "Nie zaznaczono dokładnie jednej karty", "Zaznacz wyłącznie jedną kartę");
         }
         clearList(buttons);
         return false;
@@ -276,14 +290,15 @@ public class GamePaneController {
         Position secondPosition = second.getPosition();
 
         Move move = null;
-        if(firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition){
-            move = new FromStack((DeckPosition) firstPosition, (RejectedPosition)secondPosition);
-        }else if(firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition){
+        if (firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition) {
+            move = new FromStack((DeckPosition) firstPosition, (RejectedPosition) secondPosition);
+        } else if (firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition) {
             move = new FromStack((DeckPosition) firstPosition, (CasualPosition) secondPosition);
-        }else if(firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
+        } else if (firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
             move = new FromStack((RejectedPosition) firstPosition, (CasualPosition) secondPosition);
         }
         return move;
+
     }
 
 }

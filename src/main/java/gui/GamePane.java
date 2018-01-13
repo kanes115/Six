@@ -115,10 +115,13 @@ public class GamePane extends Pane {
     }
 
     private void getCardFromStack(StackButton btn) {
-        if(checkedImageButtons.isEmpty()){
+
+        if(checkedImageButtons.isEmpty() && rejectedCards.getStackPosition().isEmpty()){
             checkImageButton(btn);
             String imageURL = ImagePathsFactory.getPathToCardImage(btn.getPosition().getCard());
             cardFromStack.setImage(new Image(getClass().getResourceAsStream(imageURL)));
+        }else if(!rejectedCards.getStackPosition().isEmpty()){
+            GamePaneController.showAlertDialog("Błąd", "Nie można pociągnąć karty z talii, kiedy na stosie odrzuconych znajduje się karta", null);
         }
     }
 

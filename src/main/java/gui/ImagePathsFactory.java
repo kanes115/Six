@@ -7,6 +7,7 @@ import game.Color;
 import game.Face;
 import game.Positions.Position;
 
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +84,12 @@ public class ImagePathsFactory {
     }
 
     public static String getPathToCardImage(Position position){
-        return PATH_TO_CARDS + paths.get(position.getCard());
+        try {
+            return PATH_TO_CARDS + paths.get(position.getCard());
+        }catch (EmptyStackException e){
+           System.out.println("Zignoruj wyjatek o pustym stosie, podobno gdzies na swiecie istnieje metoda która to naprawi, ale narazie to nie w tej krainie (branchu) :P");
+        }
+
+        return  PATH_TO_CARDS + paths.get(null);
     }
 }
