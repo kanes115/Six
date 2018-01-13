@@ -3,6 +3,8 @@ package gui.fxcontrollers;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import game.GameController;
+import game.MoveChecker;
+import game.MoveResponse;
 import game.Moves.*;
 import game.Positions.CasualPosition;
 import game.Positions.DeckPosition;
@@ -54,15 +56,15 @@ public class GamePaneController {
             return;
         }
 
-        if (gameController.tryMove(move)) {
+        MoveResponse response = gameController.tryMove(move);
+        if (response.wasOk()) {
             //TODO consider another implementation (observer)
             reloadAllImages();
             GamePane gamePane = getGamePane();
             gamePane.getCardFromStack().setImage(null);
-
             clearWholeList(checkedImageButtons);
         }else {
-            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
     }
 
@@ -81,16 +83,18 @@ public class GamePaneController {
             return;
         }
 
+
         GameButton button = checkedImageButtons.get(0);
         Move move = new DeleteDuplicate(button.getPosition(), gameController.getBoard());
 
-        if (gameController.tryMove(move)) {
+        MoveResponse response = gameController.tryMove(move);
+        if (response.wasOk()) {
             //TODO consider another implementation (observer)
             reloadAllImages();
             getGamePane().getCardFromStack().setImage(null);
             clearWholeList(checkedImageButtons);
         }else {
-            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
 
     }
@@ -114,13 +118,14 @@ public class GamePaneController {
         ImageButton second = (ImageButton) checkedImageButtons.remove();
 
         Move move = new DeleteUnnecessaryPair(second.getPosition(), first.getPosition());
-        if (gameController.tryMove(move)) {
+        MoveResponse response = gameController.tryMove(move);
+
+        if (response.wasOk()) {
             reloadImage(second);
             reloadImage(first);
 
         } else {
-            //TODO Dialog message should be provided by module game (optional feature)
-            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
 
         second.setChecked(false);
@@ -147,7 +152,8 @@ public class GamePaneController {
         ImageButton second = (ImageButton) checkedImageButtons.remove();
         Move move = new InsideMatrixRelocation(first.getPosition(), second.getPosition(), getGameController().getBoard());
 
-        if (gameController.tryMove(move)) {
+        MoveResponse response = gameController.tryMove(move);
+        if (response.wasOk()) {
             reloadImage(second);
             reloadImage(first);
 
@@ -159,7 +165,7 @@ public class GamePaneController {
             }
 
         } else {
-            showAlertDialog("Błędny ruch", "Coś nie poszlo", null);
+            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
 
         second.setChecked(false);
