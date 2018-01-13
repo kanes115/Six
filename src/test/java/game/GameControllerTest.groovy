@@ -125,6 +125,9 @@ class GameControllerTest extends Specification {
         CasualPosition pos1 = gameController.getBoard().getPositionAt(0, 0)
 
         when:
+        pos1.removeCard()
+        pos1.putCard(new Card(Color.CLUBS, Face.SIX))
+        gameController.getBoard().getRows().stream().forEach({it -> it.unAssignColor()})
         Color colorThatShouldBeAssigned = pos1.getCard().getColor()
         Move m = new AssignColorOnCard(pos1)
 
