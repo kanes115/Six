@@ -28,15 +28,14 @@ public class GameController {
     // This method allows to see the card at the top of `deck`
     // if there's nothing on the rejected stack
     public Card dragCard(){
-        if(getBoard().getRejectedPosition().isEmpty())
+        if(canBeDragged())
             return getBoard().getDeckPosition().getCard();
-        else
-            return null;
+        return null;
     }
 
     // Tells whether one can use dragCard()
     public boolean canBeDragged(){
-        return getBoard().getRejectedPosition().isEmpty();
+        return !getBoard().hasFreePositions() || getBoard().getRejectedPosition().isEmpty();
     }
 
     private void initialize(Board board, boolean isHard){
