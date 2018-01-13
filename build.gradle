@@ -19,9 +19,12 @@ dependencies {
     compile group: 'org.apache.http', name: 'entity', version: '4.0-alpha4'
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
     compile group: 'com.google.inject', name: 'guice', version: '4.1.0'
+    compile 'org.objenesis:objenesis:1.4'
+    compile "cglib:cglib:2.2"
     testCompile(
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.4',
             'org.spockframework:spock-core:1.0-groovy-2.4'
+
     )
 }
