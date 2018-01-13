@@ -80,7 +80,7 @@ public class GamePaneController {
 
 
         GameButton button = checkedImageButtons.get(0);
-        Move move = new DeleteDuplicate(button.getPosition(), gameController.getBoard());
+        Move move = new DeleteDuplicate(button.getPosition());
 
         MoveResponse response = gameController.tryMove(move);
         if (response.wasOk()) {
