@@ -3,6 +3,10 @@ package game.Moves;
 import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
+import game.Positions.RejectedPosition;
+import game.Positions.StackPosition;
+
+import java.util.Stack;
 
 
 public class DeleteDuplicate implements Move {
@@ -18,11 +22,13 @@ public class DeleteDuplicate implements Move {
     // and looks for the duplicate in matrix.
     // if found and the card is not UNNECESSARY - it removes
     // a card from deck or rejected (for unnecessary cards use DeleteUnnecessaryPair)
-    public DeleteDuplicate(Position pos, Board board){
+
+    public DeleteDuplicate(Position pos){
         this.pos1 = pos;
-        this.board = board;
+        this.board = pos.getBoard();
         isMade = false;
     }
+
 
     @Override
     public boolean execute() {
@@ -32,18 +38,21 @@ public class DeleteDuplicate implements Move {
             return false;
         }
         Color color = card1.getColor();
-        Face face = card1.getFace();
+
+        if(!board.getAssignedColors().contains(color)){
+            return false;
+        }
+
         Row row = board.getRowInColor(color);
 
         for(CasualPosition position : row.getPositions()){
-            if(!position.isEmpty()  && position.getCard().getFace() == face){
-                if(position.cardFaceMatchPosition()){
-                    pos1.removeCard();
-                    isMade = true;
-                    return true;
-                }
+            if(position.cardFaceMatchPosition() && position.getCard().equals(card1)){
+                pos1.removeCard();
+                isMade = true;
+                return true;
             }
         }
+
         isMade = false;
         return false;
     }
