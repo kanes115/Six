@@ -15,8 +15,8 @@ public class Board {
 
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
-    private StackPosition deck = new DeckPosition(this);
-    private StackPosition rejected = new RejectedPosition(this);
+    private DeckPosition deck = new DeckPosition(this);
+    private RejectedPosition rejected = new RejectedPosition(this);
 
     @Inject
     public Board(CardShuffler shuffler){
@@ -45,11 +45,11 @@ public class Board {
         return rows.get(row).getPositions().get(col);
     }
 
-    public StackPosition getDeckPosition(){
+    public DeckPosition getDeckPosition(){
         return deck;
     }
 
-    public StackPosition getRejectedPosition() { return rejected;}
+    public RejectedPosition getRejectedPosition() { return rejected;}
 
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)

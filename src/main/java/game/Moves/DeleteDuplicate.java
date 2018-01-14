@@ -34,13 +34,12 @@ public class DeleteDuplicate implements Move {
     public boolean execute() {
         card1 = pos1.getCard();
         if(card1.getFace().isUnnecessary()){
-            isMade = false;
-            return false;
+            return error("This card is unnecessary.");
         }
         Color color = card1.getColor();
 
         if(!board.getAssignedColors().contains(color)){
-            return false;
+            return error("There is no duplicate on the board.");
         }
 
         Row row = board.getRowInColor(color);
@@ -52,9 +51,7 @@ public class DeleteDuplicate implements Move {
                 return true;
             }
         }
-
-        isMade = false;
-        return false;
+        return error("There is no duplicate on the board.");
     }
 
     @Override
@@ -63,6 +60,12 @@ public class DeleteDuplicate implements Move {
             return;
         pos1.putCard(card1);
         isMade = false;
+    }
+
+    private boolean error(String msg) {
+        isMade = false;
+        errorMsg = msg;
+        return false;
     }
 
     @Override

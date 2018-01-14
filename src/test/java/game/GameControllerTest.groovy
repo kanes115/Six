@@ -1,10 +1,14 @@
 package game
 
 import game.Moves.AssignColorOnCard
+import game.Moves.DeleteDuplicate
 import game.Moves.DeleteUnnecessaryPair
+import game.Moves.FromStack
 import game.Moves.InsideMatrixRelocation
 import game.Moves.Move
 import game.Positions.CasualPosition
+import game.Positions.DeckPosition
+import game.Positions.RejectedPosition
 import game.Positions.StackPosition
 import hints.TestDeckShuffler
 import spock.lang.Specification
@@ -224,5 +228,177 @@ class GameControllerTest extends Specification {
         !mr.wasOk()
         !pos1.getRow().isColorAssigned()
     }
+
+    def "FromStack:You cannot move card from deck to matrix if rejected stack is not empty"(){
+        given:
+        GameController gameController = new GameController(new RandomShuffler(), false)
+        CasualPosition cas = gameController.getBoard().getPositionAt(0, 0)
+        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+
+        when:
+        rej.putCard(new Card(Color.CLUBS, Face.EIGHT))
+        Move m = new FromStack(deck, cas)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        !mr.wasOk()
+
+    }
+
+    def "FromStack:You can move card from deck to matrix if it is its final place"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(0, 0)
+        CasualPosition cas2 = gameController.getBoard().getPositionAt(0,1)
+        Card card = cas2.getCard()
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+
+        when:
+        cas2.removeCard()
+        deck.putCard(card)
+        Move m = new FromStack(deck, cas2)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
+    def "FromStack:You can move card from deck to matrix if it is first free position"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
+        CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+
+        when:
+        cas1.removeCard()
+        Move m = new FromStack(deck, cas1)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
+    def "FromStack: You cannot move card from deck to martrix if its not first free position and its not card's final place"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
+        CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        Card card = cas1.getCard()
+        cas1.removeCard()
+        cas2.removeCard()
+
+        when:
+        Move m = new FromStack(deck, cas2)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        !mr.wasOk()
+    }
+
+    def "FromStack: You can move from deck to rejected only if board doesn't have free positions"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+
+        when:
+        Move m = new FromStack(deck, rej)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
+    def "FromStack: You cannot move from deck to rejected if board have free positions"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        cas1.removeCard()
+
+        when:
+        Move m = new FromStack(deck, rej)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        !mr.wasOk()
+    }
+
+    def "DeleteDuplicate: You can remove duplicate from matrix only if the other card is on its final place"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        Card card = cas1.getCard()
+        CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
+        cas2.removeCard()
+        cas2.putCard(card)
+
+        when:
+        Move m = new DeleteDuplicate(cas2)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
+    def "DeleteDuplicate: You cannot remove duplicate if the other card is not on its final place"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
+        CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
+        Card card = cas1.getCard()
+        cas1.removeCard()
+        cas2.removeCard()
+        cas2.putCard(card)
+        Card card2 = cas3.getCard()
+        cas3.removeCard()
+        cas3.putCard(card)
+        cas1.putCard(card2)
+
+        when:
+        Move m = new DeleteDuplicate(cas2)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        !mr.wasOk()
+    }
+
+    def "DeleteDuplicate: You can remove duplicate from deck only if the other card is on its final place"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        Card card = cas1.getCard()
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        deck.putCard(card)
+
+        when:
+        Move m = new DeleteDuplicate(deck)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
+    def "DeleteDuplicate: You can remove duplicate from rejected only if the other card is on its final place"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        Card card = cas1.getCard()
+        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+        rej.putCard(card)
+
+        when:
+        Move m = new DeleteDuplicate(rej)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
+
+
+
+
+
+
+
 
 }
