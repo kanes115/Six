@@ -159,8 +159,8 @@ public class GamePaneController {
         MoveResponse response = gameController.tryMove(move);
 
         if (response.wasOk()) {
-            reloadImage(second);
-            reloadImage(first);
+            second.reloadImage();
+            first.reloadImage();
 
             game.Row gameRow = second.getPosition().getRow();
             gui.Row guiRow = second.getRow();
@@ -234,15 +234,6 @@ public class GamePaneController {
 
     private GamePane getGamePane() {
         return (GamePane) borderPane.getCenter();
-    }
-
-    private void reloadImage(GameButton button) {
-        String imageUrl = ImagePathsFactory.getPathToCardImage(button.getPosition());
-
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageUrl)));
-        imageView.setFitWidth(button.getWidth());
-        imageView.setFitHeight(button.getHeight());
-        button.setGraphic(imageView);
     }
 
 
