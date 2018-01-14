@@ -1,6 +1,7 @@
 package gui;
 
 import gui.dictionary.AppConstants;
+import gui.i18n.Codes_18n;
 import gui.i18n.I18n;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +22,7 @@ public class Main extends Application {
         I18n.setLocale(new Locale("pl"));
 
         Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE_URL));
-        primaryStage.setTitle("Szóstki");
+        primaryStage.setTitle(I18n.getString(Codes_18n.GAME_TITLE));
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image(AppConstants.APP_ICON_URL));

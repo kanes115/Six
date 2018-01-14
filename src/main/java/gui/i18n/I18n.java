@@ -40,7 +40,7 @@ public class I18n {
         try {
             value = resourceBundle.getString(code);
         } catch (MissingResourceException e) {
-            logger.debug(String.format("Cannot load transalated value for code: %s returned value to user: %s", code, code));
+            logger.debug(String.format("Cannot load from file %s with locale: %s transalated value for code: %s returned value to user: %s", resourceBundle.getBaseBundleName(), selectedLocale.getLanguage() , code, code));
             return code;
         }
         return value;

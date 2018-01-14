@@ -33,4 +33,6 @@ public interface Codes_18n {
 
     String SELECT_EXACTLY_ONE_CARD = "SELECT_EXACTLY_ONE_CARD";
 
+    String GAME_TITLE = "GAME_TITLE";
+
 }
