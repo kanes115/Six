@@ -1,5 +1,6 @@
 package gui;
 
+import gui.dictionary.AppConstants;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,17 +14,17 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/gui/introScene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE));
         primaryStage.setTitle("Szóstki");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui/icon.jpg")));
+        primaryStage.getIcons().add(new Image(AppConstants.APP_ICON_URL));
         rootStage = primaryStage;
         primaryStage.show();
     }
 
     public static void replaceStage(String fxmlDocName) throws Exception{
-        Parent root = FXMLLoader.load(Main.class.getResource("/gui/" + fxmlDocName));
+        Parent root = FXMLLoader.load(Main.class.getResource(AppConstants.GUI_PACKAGE_URL + fxmlDocName));
         rootStage.setScene(new Scene(root));
     }
 
