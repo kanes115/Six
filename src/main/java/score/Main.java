@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import static spark.Spark.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args){
         port(8080);
         ScoreDB scoreDB = new ScoreDB();
         //scoreDB.resetDB();
