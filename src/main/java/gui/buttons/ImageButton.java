@@ -1,9 +1,11 @@
 package gui.buttons;
 
 import game.Positions.CasualPosition;
+import gui.GuiTools;
 import gui.ImagePathsFactory;
 import gui.Row;
 import javafx.animation.TranslateTransition;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class ImageButton extends GameButton {
@@ -33,4 +35,12 @@ public class ImageButton extends GameButton {
         transition.setToY(toY);
         transition.play();
     }
+
+    @Override
+    public void reloadImage() {
+        String imageUrl = ImagePathsFactory.getPathToCardImage(getPosition());
+        ImageView imageView = GuiTools.createImageView(getWidth(), getHeight(), imageUrl);
+        setGraphic(imageView);
+    }
+
 }
