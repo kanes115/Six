@@ -1,6 +1,7 @@
 package gui;
 
 import gui.dictionary.AppConstants;
+import gui.i18n.I18n;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,12 +9,17 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+
 public class Main extends Application {
 
     private static Stage rootStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        I18n.setLocale(new Locale("pl"));
+
         Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE_URL));
         primaryStage.setTitle("Szóstki");
         primaryStage.setScene(new Scene(root));

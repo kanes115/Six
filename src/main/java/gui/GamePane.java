@@ -3,6 +3,8 @@ package gui;
 import game.Board;
 import gui.buttons.*;
 import gui.fxcontrollers.GamePaneController;
+import gui.i18n.Codes_18n;
+import gui.i18n.I18n;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -108,7 +110,7 @@ public class GamePane extends Pane {
     private void getCardFromStack(StackButton btn) {
 
         if(!GamePaneController.getGameController().canBeDragged()){
-            GuiTools.showAlertDialog("Błąd", "Nie można pociągnąć karty z talii i nie wiem czemu (brak info z modelu)", null);
+            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE),  I18n.getString(Codes_18n.CANNOT_TAKE_CARD_FROM_DECK), null);
         }else{
             chooseCardButton(btn);
             btn.setChecked(true);

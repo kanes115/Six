@@ -8,6 +8,8 @@ import gui.Main;
 import gui.MoveExecutor;
 import gui.buttons.ButtonList;
 import gui.dictionary.AppConstants;
+import gui.i18n.Codes_18n;
+import gui.i18n.I18n;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -35,9 +37,9 @@ public class GamePaneController {
         try {
             if (getGameController().getGameState().equals(State.WON) || (getGameController().getGameState().equals(State.LOST))) {
                 if (getGameController().getGameState().equals(State.LOST)) {
-                    GuiTools.showAlertDialog("Przegrana", "Przegrałeś Grę,", null);
+                    GuiTools.showAlertDialog(I18n.getString(Codes_18n.DEFEAT), I18n.getString(Codes_18n.YOU_LOST_GAME), null);
                 } else {
-                    GuiTools.showAlertDialog("Wygrana", "Wygrałeś grę, Ave ty :D", null);
+                    GuiTools.showAlertDialog(I18n.getString(Codes_18n.VICTORY), I18n.getString(Codes_18n.YOU_WIN_GAME), null);
                 }
                 Main.replaceStage(AppConstants.INTRO_STAGE_URL);
             }
@@ -49,7 +51,7 @@ public class GamePaneController {
 
     @FXML
     public void btnDeckToMatrixOnAction(ActionEvent actionEvent) {
-        if (!checkNumberOfChoosenCards(cardsChosenByUser, 2)) {
+        if (!checkNumberOfChosenCards(cardsChosenByUser, 2)) {
             return;
         }
         moveExecutor.performFromStackMove();
@@ -58,7 +60,7 @@ public class GamePaneController {
 
     @FXML
     public void btnDeleteDuplicateOnAction(ActionEvent actionEvent) {
-        if (!checkNumberOfChoosenCards(cardsChosenByUser, 1)) {
+        if (!checkNumberOfChosenCards(cardsChosenByUser, 1)) {
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -68,7 +70,7 @@ public class GamePaneController {
 
     @FXML
     public void btnDeleteUnnecessaryPairOnAction(ActionEvent actionEvent) {
-        if (!checkNumberOfChoosenCards(cardsChosenByUser, 2)) {
+        if (!checkNumberOfChosenCards(cardsChosenByUser, 2)) {
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -79,7 +81,7 @@ public class GamePaneController {
 
     @FXML
     public void btnInsideMatrixRelocationOnAction(ActionEvent actionEvent) {
-        if (!checkNumberOfChoosenCards(cardsChosenByUser, 2)) {
+        if (!checkNumberOfChosenCards(cardsChosenByUser, 2)) {
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -89,7 +91,7 @@ public class GamePaneController {
 
     @FXML
     public void btnAssignColorOnCard(ActionEvent actionEvent) {
-        if (!checkNumberOfChoosenCards(cardsChosenByUser, 1)) {
+        if (!checkNumberOfChosenCards(cardsChosenByUser, 1)) {
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -121,12 +123,12 @@ public class GamePaneController {
         moveExecutor = new MoveExecutor(cardsChosenByUser, gamePane, gameController);
     }
 
-    private boolean checkNumberOfChoosenCards(ButtonList buttons, int expectedNumber) {
+    private boolean checkNumberOfChosenCards(ButtonList buttons, int expectedNumber) {
         if (expectedNumber == buttons.size()) return true;
         if (expectedNumber == 2) {
-            GuiTools.showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart", "Zaznacz dwie karty");
+            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), I18n.getString(Codes_18n.REQUIRED_TWO_CARDS), I18n.getString(Codes_18n.SELECT_TWO_CARDS));
         } else if (expectedNumber == 1) {
-            GuiTools.showAlertDialog("Błędny ruch", "Nie zaznaczono dokładnie jednej karty", "Zaznacz wyłącznie jedną kartę");
+            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), I18n.getString(Codes_18n.REQUIRED_EXACTLY_ONE_CARD), I18n.getString(Codes_18n.SELECT_EXACTLY_ONE_CARD));
         }
         buttons.clearWholeListExceptDeckButton();
         return false;
