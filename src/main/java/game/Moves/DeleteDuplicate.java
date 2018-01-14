@@ -3,11 +3,6 @@ package game.Moves;
 import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
-import game.Positions.RejectedPosition;
-import game.Positions.StackPosition;
-
-import java.util.Stack;
-
 
 public class DeleteDuplicate implements Move {
 
@@ -69,12 +64,6 @@ public class DeleteDuplicate implements Move {
             return;
         pos1.putCard(card1);
         isMade = false;
-    }
-
-    private boolean error(String msg) {
-        isMade = false;
-        errorMsg = msg;
-        return false;
     }
 
     @Override
