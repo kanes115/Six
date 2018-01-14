@@ -3,6 +3,7 @@ package hints;
 import game.Board;
 import game.GameController;
 import game.Positions.CasualPosition;
+import game.Positions.Position;
 import game.Row;
 
 import java.util.LinkedList;
@@ -17,25 +18,30 @@ public class Hints {
         this.board = board;
     }
 
-    public List<CasualPosition[]> getUnnecessaryDups() {
+    public List<Position[]> getUnnecessaryDups() {
         List<Row> rows = board.getRows();
-        List<CasualPosition[]> dups = new LinkedList<>();
+        List<Position[]> dups = new LinkedList<>();
         Row row = rows.get(0);
         for (CasualPosition position : row.getPositions()) {
             for (int i = 1; i < 4; i++) {
                 Row checkRow = rows.get(i);
                 for(CasualPosition position1 : checkRow.getPositions()) {
                     if (position.getCard().equals(position1.getCard()) && position.getCard().getFace().isUnnecessary()) {
-                        dups.add(new CasualPosition[] {position, position1});
+                        dups.add(new Position[] {position, position1});
                     }
                 }
+            }
+            if(!board.getRejectedPosition().isEmpty() && position.getCard().getFace().isUnnecessary() && board.getRejectedPosition().getCard().equals(position.getCard())) {
+                dups.add(new Position[] {position, board.getRejectedPosition()});
+            } else if (position.getCard().getFace().isUnnecessary() && board.getDeckPosition().getCard().equals(position.getCard())) {
+                dups.add(new Position[] {position, board.getDeckPosition()});
             }
         }
         return dups;
     }
 
-    public List<CasualPosition> showActionable() {
-        List<CasualPosition> actionable = new LinkedList<>();
+    public List<Position> showActionable() {
+        List<Position> actionable = new LinkedList<>();
         board.getRows().forEach(row -> {
             row.getPositions().forEach(casualPosition -> {
                 if (casualPosition.isEmpty()) {
@@ -46,6 +52,11 @@ public class Hints {
                             }
                         });
                     });
+                    if (!board.getRejectedPosition().isEmpty() && casualPosition.getTargetFace() == board.getRejectedPosition().getCard().getFace() && (!row.isColorAssigned() || row.getColor() == board.getRejectedPosition().getCard().getColor())) {
+                        actionable.add(board.getRejectedPosition());
+                    } else if (casualPosition.getTargetFace() == board.getDeckPosition().getCard().getFace() && (!row.isColorAssigned() || row.getColor() == board.getDeckPosition().getCard().getColor())) {
+                        actionable.add(board.getDeckPosition());
+                    }
                 }
             });
         });
