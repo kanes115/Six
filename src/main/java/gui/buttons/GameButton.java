@@ -1,16 +1,16 @@
 package gui.buttons;
 
 import game.Positions.Position;
+import gui.GuiTools;
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 /**
  * Created by michaello on 10.01.18.
  */
-public class GameButton extends Button {
+public abstract class GameButton extends Button {
     static final String STYLE_NORMAL = "-fx-background-color: white; -fx-padding: 0;";
     static final String STYLE_PRESSED = "-fx-background-color: grey; -fx-padding: 0;";
 
@@ -18,9 +18,8 @@ public class GameButton extends Button {
 
     public GameButton(Position position, double layoutX, double layoutY, double width, double height, String imageUrl) {
         this.position = position;
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageUrl)));
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
+        ImageView imageView = GuiTools.createImageView(width, height, imageUrl);
+
         setGraphic(imageView);
         setStyle(STYLE_NORMAL);
 
@@ -41,4 +40,6 @@ public class GameButton extends Button {
         transition.setToY(scale);
         transition.play();
     }
+
+    abstract public void reloadImage();
 }

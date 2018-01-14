@@ -1,21 +1,23 @@
 package gui.buttons;
 
 import game.Positions.CasualPosition;
+import gui.GuiTools;
 import gui.ImagePathsFactory;
 import gui.Row;
 import javafx.animation.TranslateTransition;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-public class ImageButton extends GameButton {
+public class CardButton extends GameButton {
 
     private Row row;
 
-    public ImageButton(CasualPosition position, Row row, double layoutX, double layoutY, double width, double height, String imageURL) {
+    public CardButton(CasualPosition position, Row row, double layoutX, double layoutY, double width, double height, String imageURL) {
         super(position, layoutX, layoutY, width, height, imageURL);
         this.row = row;
     }
 
-    public ImageButton(CasualPosition position, Row row, double layoutX, double layoutY, double width, double height) {
+    public CardButton(CasualPosition position, Row row, double layoutX, double layoutY, double width, double height) {
         this(position, row, layoutX, layoutY, width, height, ImagePathsFactory.getPathToCardImage(position.getCard()));
     }
 
@@ -33,4 +35,12 @@ public class ImageButton extends GameButton {
         transition.setToY(toY);
         transition.play();
     }
+
+    @Override
+    public void reloadImage() {
+        String imageUrl = ImagePathsFactory.getPathToCardImage(getPosition());
+        ImageView imageView = GuiTools.createImageView(getWidth(), getHeight(), imageUrl);
+        setGraphic(imageView);
+    }
+
 }
