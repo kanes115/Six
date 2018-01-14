@@ -14,7 +14,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE));
+        Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE_URL));
         primaryStage.setTitle("Szóstki");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
@@ -23,8 +23,8 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void replaceStage(String fxmlDocName) throws Exception{
-        Parent root = FXMLLoader.load(Main.class.getResource(AppConstants.GUI_PACKAGE_URL + fxmlDocName));
+    public static void replaceStage(String fxmlDocUrl) throws Exception{
+        Parent root = FXMLLoader.load(Main.class.getResource(fxmlDocUrl));
         rootStage.setScene(new Scene(root));
     }
 

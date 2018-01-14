@@ -1,7 +1,6 @@
 package gui;
 
 import game.Board;
-import game.Card;
 import gui.buttons.*;
 import gui.fxcontrollers.GamePaneController;
 import javafx.scene.image.Image;
@@ -9,7 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class GamePane extends Pane {
@@ -22,32 +20,34 @@ public class GamePane extends Pane {
     private static final int CARDS_IN_ROW = 8;
     private static final double PREF_WIDTH = CARDS_IN_ROW * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH);
     private static final double PREF_HEIGHT = CARDS_IN_COLUMN * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH);
+    private static final int  SPACE_BETWEEN_CARDS_AND_STACK = 2;
+    private static final int ROW_FOR_DECK_STACK = 1;
+    private static final int ROW_FOR_REJECTED_CARD_STACK = 2;
+    private static final int ROW_FOR_IMAGE_WITH_TAKEN_CARD = 0;
+
 
     private List<Row> guiRows = new ArrayList<>();
-    private List<GameButton> checkedImageButtons = new LinkedList<>();
+    private ButtonList cardsChosenByUser = new ButtonList();
     private StackButton rejectedCards;
     private StackButton deck;
 
     //a picture card displayed when user clicked deck or rejected cards stack
-    private ImageView cardFromStack;
+    private ImageView takenCardFromStack;
 
-    public GamePane() {
+    public GamePane(ButtonList cardsChosenByUser) {
         super();
+        this.cardsChosenByUser = cardsChosenByUser;
         setPrefSize(PREF_WIDTH, PREF_HEIGHT);
         setStyle("-fx-background-color: green;");
         initImageButtons();
-    }
-
-    public List<GameButton> getCheckedImageButtons() {
-        return checkedImageButtons;
     }
 
     public List<Row> getGuiRows() {
         return guiRows;
     }
 
-    public ImageView getCardFromStack() {
-        return cardFromStack;
+    public ImageView getTakenCardFromStack() {
+        return takenCardFromStack;
     }
 
     public StackButton getRejectedCards() {
@@ -57,8 +57,8 @@ public class GamePane extends Pane {
     public StackButton getDeck(){return deck;}
 
     private void initImageButtons() {
-        cardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
+        takenCardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH ,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
 
         List<game.Row> gameRows = GamePaneController.getGameController().getBoard().getRows();
         for (int y = 0; y < CARDS_IN_COLUMN; y++) {
@@ -70,34 +70,32 @@ public class GamePane extends Pane {
 
 
             for (int x = 0; x < CARDS_IN_ROW; x++) {
-                ImageButton btn = new ImageButton(gameRows.get(y).getPositions().get(x), row,
+                CardButton btn = new CardButton(gameRows.get(y).getPositions().get(x), row,
                         MARGIN_WIDTH + x * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                         MARGIN_WIDTH + y * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH),
                         IMAGE_BUTTON_WIDTH,
                         IMAGE_BUTTON_HEIGHT
                 );
-                btn.setOnAction(e -> checkImageButton(btn));
+                btn.setOnAction(e -> chooseCardButton(btn));
                 row.addCard(btn);
                 getChildren().add(btn);
             }
             guiRows.add(row);
         }
-        initDeckAndRejectedStack();
+        initDeckAndRejectedCardStack();
     }
 
-    private void initDeckAndRejectedStack() {
+    private void initDeckAndRejectedCardStack() {
         Board board = GamePaneController.getGameController().getBoard();
 
-        deck = new DeckStackButton(board.getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT);
+        deck = new DeckStackButton(board.getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + ROW_FOR_DECK_STACK * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT);
         deck.setOnAction(e -> getCardFromStack(deck));
-
         getChildren().add(deck);
 
-        rejectedCards = new RejectedCardsStackButton(board.getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT); //load empty image
-        rejectedCards.setOnAction(e -> checkImageButton(rejectedCards));
-
+        rejectedCards = new RejectedCardsStackButton(board.getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + ROW_FOR_REJECTED_CARD_STACK * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT); //load empty image
+        rejectedCards.setOnAction(e -> chooseCardButton(rejectedCards));
         getChildren().add(rejectedCards);
     }
 
@@ -112,28 +110,27 @@ public class GamePane extends Pane {
         if(!GamePaneController.getGameController().canBeDragged()){
             GuiTools.showAlertDialog("Błąd", "Nie można pociągnąć karty z talii i nie wiem czemu (brak info z modelu)", null);
         }else{
-            checkImageButton(btn);
+            chooseCardButton(btn);
             btn.setChecked(true);
-            String imageURL = ImagePathsFactory.getPathToCardImage(btn.getPosition().getCard());
-            cardFromStack.setImage(new Image(getClass().getResourceAsStream(imageURL)));
+            String imageURL = ImagePathsFactory.getPathToCardImage(btn.getPosition());
+            takenCardFromStack.setImage(new Image(getClass().getResourceAsStream(imageURL)));
         }
 
     }
 
-    private void checkImageButton(GameButton btn) {
-        if (checkedImageButtons.contains(btn)) {
+    private void chooseCardButton(GameButton btn) {
+        if (cardsChosenByUser.contains(btn)) {
             if(btn instanceof  DeckStackButton){
                 return;
             }
-            checkedImageButtons.remove(btn);
-            btn.setChecked(false);
+            cardsChosenByUser.remove(btn);
             return;
         }
-        if (checkedImageButtons.size() == MAX_CARDS_IN_MOVE)
+        if (cardsChosenByUser.size() == MAX_CARDS_IN_MOVE)
             return;
 
-        btn.setChecked(true);
-        checkedImageButtons.add(btn);
+        cardsChosenByUser.add(btn);
+
     }
 
 }

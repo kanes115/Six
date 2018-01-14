@@ -1,6 +1,6 @@
 package gui;
 
-import gui.buttons.ImageButton;
+import gui.buttons.CardButton;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Row {
 
-    private List<ImageButton> cards = new ArrayList<>();
+    private List<CardButton> cards = new ArrayList<>();
     private boolean isColorChoosen;
     private ImageView colorImage;
 
@@ -17,7 +17,7 @@ public class Row {
         this.colorImage = colorImage;
     }
 
-    public List<ImageButton> getCards() {
+    public List<CardButton> getCards() {
         return cards;
     }
 
@@ -29,7 +29,7 @@ public class Row {
         this.colorImage = colorImage;
     }
 
-    public void addCard(ImageButton button) {
+    public void addCard(CardButton button) {
         cards.add(button);
     }
 
