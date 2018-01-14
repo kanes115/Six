@@ -16,6 +16,17 @@ import spock.lang.Specification
 /*
 Integration test.
 Testing different moves here, starting state of controller, board and rows.
+
+These tests are mostly WHITE-BOX. Note that the system is quite
+small and the effort of being black-box is not worth it.
+
+Still we interfere with the internal state of GameController or Board only.
+And not to much. It is only removing cards, putting them in some places -
+to be fully black-box we would need to move them around using different moves
+from Moves package.
+
+TestDeckShuffler is a shuffler that gives a deck that will put cards in such a way
+that the game is won straightaway.
  */
 
 class GameControllerTest extends Specification {
