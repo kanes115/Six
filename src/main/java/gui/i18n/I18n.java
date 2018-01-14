@@ -10,8 +10,8 @@ import java.util.*;
  */
 public class I18n {
 
-    private static final Logger logger = Logger.getLogger(I18n.class);
     private static final List<Locale> supportedLocales = new LinkedList<>();
+    private static final Logger logger = Logger.getLogger(I18n.class);
     private static final Locale defaultLocale = new Locale("pl");
     private static Locale selectedLocale;
     private static ResourceBundle resourceBundle;
@@ -23,6 +23,9 @@ public class I18n {
     private I18n() {
     }
 
+    public static List<Locale> getSupportedLocales() {
+        return supportedLocales;
+    }
 
     public static void setLocale(Locale locale) {
         if (!supportedLocales.contains(locale)) {
