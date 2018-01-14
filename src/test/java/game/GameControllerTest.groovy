@@ -366,6 +366,25 @@ class GameControllerTest extends Specification {
         then:
         MoveResponse mr = gameController.tryMove(m)
         mr.wasOk()
+        cas2.isEmpty()
+    }
+
+    def "DeleteDuplicate: You cannot remove duplicate from matrix if it's in its final position"(){
+        GameController gameController = new GameController(new TestDeckShuffler(), false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        Card card = cas1.getCard()
+        CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
+        cas2.removeCard()
+        cas2.putCard(card)
+
+        when:
+        Move m = new DeleteDuplicate(cas1)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        !mr.wasOk()
+        !cas1.isEmpty()
+        !cas2.isEmpty()
     }
 
     def "DeleteDuplicate: You cannot remove duplicate if the other card is not on its final place"(){
