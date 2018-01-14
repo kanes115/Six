@@ -8,7 +8,7 @@ import game.Row;
 
 import java.util.LinkedList;
 import java.util.List;
-
+//TODO compress duplicated logic checks in all the ifs
 public class Hints {
 
 
