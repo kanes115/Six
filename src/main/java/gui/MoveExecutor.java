@@ -45,7 +45,7 @@ public class MoveExecutor {
 
         if (response.wasOk()) {
             first.reloadImage();
-            assingnRow(first);
+            assignRow(first);
         } else {
             GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
@@ -54,18 +54,11 @@ public class MoveExecutor {
     }
 
     public void performDeleteDuplicateMove() {
-        if (!checkButtonType(StackButton.class, cardsChosenByUser.get(0))) {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), I18n.getString(Codes_18n.SELECTED_CARD_MUST_FROM_STACKS), null);
-            cardsChosenByUser.clearWholeListExceptDeckButton();
-            return;
-        }
-
-
         GameButton button = cardsChosenByUser.get(0);
         Move move = new DeleteDuplicate(button.getPosition());
 
         MoveResponse response = gameController.tryMove(move);
-        handleMoveRelatingToStack(response);
+        handleMoveWhichRequiredRefreshingWholeBoard(response);
     }
 
     public void performDeleteUnnecessaryPairMove() {
@@ -95,9 +88,9 @@ public class MoveExecutor {
 
         MoveResponse response = gameController.tryMove(move);
         if(response.wasOk() && cardsChosenByUser.get(1) instanceof CardButton){
-            assingnRow((CardButton) cardsChosenByUser.get(1));
+            assignRow((CardButton) cardsChosenByUser.get(1));
         }
-        handleMoveRelatingToStack(response);
+        handleMoveWhichRequiredRefreshingWholeBoard(response);
     }
 
     public void performInsideMatrixRelocationMove() {
@@ -117,7 +110,7 @@ public class MoveExecutor {
         if (response.wasOk()) {
             second.reloadImage();
             first.reloadImage();
-            assingnRow(second);
+            assignRow(second);
 
         } else {
             GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
@@ -125,7 +118,7 @@ public class MoveExecutor {
         cardsChosenByUser.clearWholeListExceptDeckButton();
     }
 
-    private void assingnRow(CardButton button) {
+    private void assignRow(CardButton button) {
         game.Row gameRow = button.getPosition().getRow();
         gui.Row guiRow = button.getRow();
         if (!guiRow.isColorChoosen() && gameRow.isColorAssigned()) {
@@ -162,7 +155,7 @@ public class MoveExecutor {
 
     }
 
-    private void handleMoveRelatingToStack(MoveResponse moveResponse) {
+    private void handleMoveWhichRequiredRefreshingWholeBoard(MoveResponse moveResponse) {
         if (moveResponse.wasOk()) {
             reloadAllImages();
             gamePane.getTakenCardFromStack().setImage(null);
