@@ -263,6 +263,22 @@ class GameControllerTest extends Specification {
         mr.wasOk()
     }
 
+    def "FromStack:You can move card from stack to position that's both first free position and final position"(){
+        GameController gameController = new GameController(new TestDeckShuffler(),false)
+        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
+        Card card = cas1.getCard()
+        cas1.removeCard()
+        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        deck.putCard(card)
+
+        when:
+        Move m = new FromStack(deck, cas1)
+
+        then:
+        MoveResponse mr = gameController.tryMove(m)
+        mr.wasOk()
+    }
+
     def "FromStack:You can move card from deck to matrix if it is first free position"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
