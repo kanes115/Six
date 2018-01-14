@@ -27,12 +27,12 @@ public class DeleteUnnecessaryPair implements Move {
     @Override
     public boolean execute() {
         if(pos1.isEmpty() || pos2.isEmpty())
-            return false;
+            return error("Both positions must be empty");
         if(!pos1.getCard().getFace().isUnnecessary() ||
                 !pos2.getCard().getFace().isUnnecessary())
-            return false;
+            return error("Both cards must be unnecessary");
         if(!pos1.getCard().equals(pos2.getCard()))
-            return false;
+            return error("Cards must be the same");
 
         savedPos1 = pos1.getCard();
         savedPos2 = pos2.getCard();
@@ -50,6 +50,12 @@ public class DeleteUnnecessaryPair implements Move {
         pos1.putCard(savedPos1);
         pos2.putCard(savedPos2);
         isMade = false;
+    }
+
+    private boolean error(String msg) {
+        isMade = false;
+        errorMsg = msg;
+        return false;
     }
 
     @Override
