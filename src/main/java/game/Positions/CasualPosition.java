@@ -70,6 +70,12 @@ public class CasualPosition extends Position {
         return !this.isEmpty() && this.targetFace.equals(this.getCard().getFace());
     }
 
+    public boolean cardColorMatchRow(){
+        return !this.isEmpty() && this.getRow().isColorAssigned()
+                && this.getRow().getColor() == this.getCard().getColor();
+    }
+
+
     public Face getTargetFace(){
         return targetFace;
     }

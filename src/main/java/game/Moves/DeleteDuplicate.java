@@ -18,11 +18,6 @@ public class DeleteDuplicate implements Move {
     private String errorMsg = "";
 
 
-    // this move takes a position from deck or rejected
-    // and looks for the duplicate in matrix.
-    // if found and the card is not UNNECESSARY - it removes
-    // a card from deck or rejected (for unnecessary cards use DeleteUnnecessaryPair)
-
     public DeleteDuplicate(Position pos){
         this.pos1 = pos;
         this.board = pos.getBoard();
@@ -32,6 +27,14 @@ public class DeleteDuplicate implements Move {
 
     @Override
     public boolean execute() {
+
+        if(pos1.getClass() == CasualPosition.class){
+            CasualPosition c = (CasualPosition) pos1;
+            if(c.getRow().isColorAssigned() && c.cardFaceMatchPosition() && c.cardColorMatchRow())
+                return error("This card is in its place already");
+
+        }
+
         card1 = pos1.getCard();
         if(card1.getFace().isUnnecessary()){
             isMade = false;
@@ -54,6 +57,12 @@ public class DeleteDuplicate implements Move {
         }
 
         isMade = false;
+        return false;
+    }
+
+    public boolean error(String msg){
+        this.isMade = false;
+        this.errorMsg = msg;
         return false;
     }
 
