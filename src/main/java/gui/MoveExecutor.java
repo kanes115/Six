@@ -45,7 +45,7 @@ public class MoveExecutor {
 
         if (response.wasOk()) {
             first.reloadImage();
-            assingRow(first);
+            assingnRow(first);
         } else {
             GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
@@ -94,6 +94,9 @@ public class MoveExecutor {
         }
 
         MoveResponse response = gameController.tryMove(move);
+        if(response.wasOk() && cardsChosenByUser.get(1) instanceof CardButton){
+            assingnRow((CardButton) cardsChosenByUser.get(1));
+        }
         handleMoveRelatingToStack(response);
     }
 
@@ -114,7 +117,7 @@ public class MoveExecutor {
         if (response.wasOk()) {
             second.reloadImage();
             first.reloadImage();
-            assingRow(second);
+            assingnRow(second);
 
         } else {
             GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
@@ -122,7 +125,7 @@ public class MoveExecutor {
         cardsChosenByUser.clearWholeListExceptDeckButton();
     }
 
-    private void assingRow(CardButton button) {
+    private void assingnRow(CardButton button) {
         game.Row gameRow = button.getPosition().getRow();
         gui.Row guiRow = button.getRow();
         if (!guiRow.isColorChoosen() && gameRow.isColorAssigned()) {
