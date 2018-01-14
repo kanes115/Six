@@ -1,5 +1,8 @@
 package gui;
 
+import gui.dictionary.AppConstants;
+import gui.i18n.Codes_18n;
+import gui.i18n.I18n;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,23 +10,28 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+
 public class Main extends Application {
 
     private static Stage rootStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/gui/introScene.fxml"));
-        primaryStage.setTitle("Szóstki");
+
+        I18n.setLocale(new Locale("pl"));
+
+        Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE_URL));
+        primaryStage.setTitle(I18n.getString(Codes_18n.GAME_TITLE));
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/gui/icon.jpg")));
+        primaryStage.getIcons().add(new Image(AppConstants.APP_ICON_URL));
         rootStage = primaryStage;
         primaryStage.show();
     }
 
-    public static void replaceStage(String fxmlDocName) throws Exception{
-        Parent root = FXMLLoader.load(Main.class.getResource("/gui/" + fxmlDocName));
+    public static void replaceStage(String fxmlDocUrl) throws Exception{
+        Parent root = FXMLLoader.load(Main.class.getResource(fxmlDocUrl));
         rootStage.setScene(new Scene(root));
     }
 
