@@ -8,13 +8,12 @@ import game.Positions.DeckPosition;
 import game.Positions.Position;
 import game.Positions.RejectedPosition;
 import game.State;
-import gui.GamePane;
-import gui.ImagePathsFactory;
-import gui.Main;
-import gui.Row;
+import gui.*;
+import gui.buttons.DeckStackButton;
 import gui.buttons.GameButton;
 import gui.buttons.ImageButton;
 import gui.buttons.StackButton;
+import gui.dictionary.AppConstants;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -50,7 +49,7 @@ public class GamePaneController {
         }
         Move move;
         if ((move = initializeDeckToMatrixMove(checkedImageButtons)) == null) {
-            showAlertDialog("Błędny ruch", "Nie mozna zainicjalizowac ruchu", null);
+            GuiTools.showAlertDialog("Błędny ruch", "Nie mozna zainicjalizowac ruchu", null);
             return;
         }
 
@@ -62,7 +61,7 @@ public class GamePaneController {
             gamePane.getCardFromStack().setImage(null);
             clearWholeList(checkedImageButtons);
         } else {
-            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            GuiTools.showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
             clearList(checkedImageButtons);
         }
         checkFinishGameStatus();
@@ -78,7 +77,7 @@ public class GamePaneController {
         }
 
         if (!checkButtonType(StackButton.class, checkedImageButtons.get(0))) {
-            showAlertDialog("Błędny ruch", "Zaznaczona karta musi byc z talli lub stosu kart odrzuconych", null);
+            GuiTools.showAlertDialog("Błędny ruch", "Zaznaczona karta musi byc z talli  lub stosu kart odrzuconych", null);
             clearList(checkedImageButtons);
             return;
         }
@@ -94,7 +93,7 @@ public class GamePaneController {
             getGamePane().getCardFromStack().setImage(null);
             clearWholeList(checkedImageButtons);
         } else {
-            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            GuiTools.showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
             clearList(checkedImageButtons);
         }
         checkFinishGameStatus();
@@ -117,11 +116,12 @@ public class GamePaneController {
         MoveResponse response = gameController.tryMove(move);
 
         if (response.wasOk()) {
-            reloadImage(second);
-            reloadImage(first);
+            second.reloadImage();
+            first.reloadImage();
+            getGamePane().getCardFromStack().setImage(null);
             clearWholeList(checkedImageButtons);
         } else {
-            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            GuiTools.showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
             clearList(checkedImageButtons);
         }
         checkFinishGameStatus();
@@ -138,7 +138,7 @@ public class GamePaneController {
         }
 
         if (!checkButtonType(ImageButton.class, checkedImageButtons.get(0), checkedImageButtons.get(1))) {
-            showAlertDialog("Błędny ruch", "Zaznaczone karty muszą być brane z planszy", null);
+            GuiTools.showAlertDialog("Błędny ruch", "Zaznaczone karty muszą być brane z planszy", null);
             clearList(checkedImageButtons);
             return;
         }
@@ -162,7 +162,7 @@ public class GamePaneController {
             }
 
         } else {
-            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            GuiTools.showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
         clearList(checkedImageButtons);
         checkFinishGameStatus();
@@ -178,7 +178,7 @@ public class GamePaneController {
         }
 
         if (!checkButtonType(ImageButton.class, checkedImageButtons.get(0))) {
-            showAlertDialog("Błędny ruch", "Zaznaczona karta musi być brana z planszy", null);
+            GuiTools.showAlertDialog("Błędny ruch", "Zaznaczona karta musi być brana z planszy", null);
             clearList(checkedImageButtons);
             return;
         }
@@ -187,7 +187,7 @@ public class GamePaneController {
         MoveResponse response = gameController.tryMove(move);
 
         if (response.wasOk()) {
-            reloadImage(first);
+            first.reloadImage();
 
             game.Row gameRow = first.getPosition().getRow();
             gui.Row guiRow = first.getRow();
@@ -197,7 +197,7 @@ public class GamePaneController {
             }
 
         } else {
-            showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
+            GuiTools.showAlertDialog("Błędny ruch", response.getErrorMessage(), null);
         }
 
         clearList(checkedImageButtons);
@@ -222,28 +222,19 @@ public class GamePaneController {
     @FXML
     public void initialize() {
         gameController = new GameController(false);
-
         borderPane.setCenter(new GamePane());
     }
 
-    public static void showAlertDialog(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-
-        alert.showAndWait();
-    }
 
     public static void checkFinishGameStatus() {
         try {
             if (getGameController().getGameState().equals(State.WON)) {
-                showAlertDialog("Wygrana", "Wygrałeś grę, Ave ty :D", null);
-                Main.replaceStage("introScene.fxml");
+                GuiTools.showAlertDialog("Wygrana", "Wygrałeś grę, Ave ty :D", null);
+                Main.replaceStage(AppConstants.INTRO_STAGE);
 
             } else if (getGameController().getGameState().equals(State.LOST)) {
-                showAlertDialog("Przegrana", "Przegrałeś Grę,", null);
-                Main.replaceStage("introScene.fxml");
+                GuiTools.showAlertDialog("Przegrana", "Przegrałeś Grę,", null);
+                Main.replaceStage(AppConstants.INTRO_STAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,39 +261,36 @@ public class GamePaneController {
 
 
     private void reloadAllImages() {
-        reloadImage(getGamePane().getRejectedCards());
-
-        List<Row> rows = getGamePane().getGuiRows();
-        for (Row row : rows) {
-            List<ImageButton> cards = row.getCards();
-            for (ImageButton card : cards) {
-                reloadImage(card);
-            }
-        }
+        GamePane gamePane= getGamePane();
+        gamePane.getRejectedCards().reloadImage();
+        gamePane.getDeck().reloadImage();
+        getGamePane().getGuiRows().forEach(
+                row -> row.getCards().forEach(btn -> btn.reloadImage())
+        );
     }
 
     private void clearList(List<GameButton> checkedImageButtons) {
-        for (int i = 0; i < checkedImageButtons.size(); i++) {
-            if (checkedImageButtons.get(i) instanceof ImageButton) {
-                checkedImageButtons.get(i).setChecked(false);
-                checkedImageButtons.remove(i);
-            }
-        }
+        checkedImageButtons.stream()
+                .filter(btn -> !(btn instanceof DeckStackButton))
+                .forEach(btn -> btn.setChecked(false));
+        checkedImageButtons.removeIf(btn -> !(btn instanceof DeckStackButton));
+
+
     }
 
     private void clearWholeList(List<GameButton> checkedImageButtons) {
-        for (int i = 0; i < checkedImageButtons.size(); i++) {
-            checkedImageButtons.get(i).setChecked(false);
-        }
+        checkedImageButtons.stream()
+                .forEach(btn -> btn.setChecked(false));
+
         checkedImageButtons.clear();
     }
 
     private boolean checkNumberOfChoosenCards(List<GameButton> buttons, int expectedNumber) {
         if (expectedNumber == buttons.size()) return true;
         if (expectedNumber == 2) {
-            showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart", "Zaznacz dwie karty");
+            GuiTools.showAlertDialog("Błędny ruch", "Nie zaznaczono dwóch kart", "Zaznacz dwie karty");
         } else if (expectedNumber == 1) {
-            showAlertDialog("Błędny ruch", "Nie zaznaczono dokładnie jednej karty", "Zaznacz wyłącznie jedną kartę");
+            GuiTools.showAlertDialog("Błędny ruch", "Nie zaznaczono dokładnie jednej karty", "Zaznacz wyłącznie jedną kartę");
         }
         clearList(buttons);
         return false;
@@ -310,7 +298,7 @@ public class GamePaneController {
 
     private boolean checkButtonType(Class<?> buttonType, GameButton... buttons) {
         for (GameButton button : buttons) {
-            if (button.getClass() != buttonType) {
+            if (!buttonType.isInstance(button)) {
                 return false;
             }
         }

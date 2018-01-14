@@ -2,15 +2,10 @@ package gui;
 
 import game.Board;
 import game.Card;
-import game.GameController;
-import gui.buttons.GameButton;
-import gui.buttons.ImageButton;
-import gui.buttons.StackButton;
+import gui.buttons.*;
 import gui.fxcontrollers.GamePaneController;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -59,6 +54,8 @@ public class GamePane extends Pane {
         return rejectedCards;
     }
 
+    public StackButton getDeck(){return deck;}
+
     private void initImageButtons() {
         cardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                 MARGIN_WIDTH,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
@@ -91,42 +88,43 @@ public class GamePane extends Pane {
     private void initDeckAndRejectedStack() {
         Board board = GamePaneController.getGameController().getBoard();
 
-        deck = new StackButton(board.getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, "/gui/cards/card_reverse.png");
+        deck = new DeckStackButton(board.getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT);
         deck.setOnAction(e -> getCardFromStack(deck));
-        deck.setText("Talia");
+
         getChildren().add(deck);
 
-        rejectedCards = new StackButton(board.getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, ImagePathsFactory.getPathToCardImage((Card) null)); //load empty image
+        rejectedCards = new RejectedCardsStackButton(board.getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + 2) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
+                MARGIN_WIDTH + 2 * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT); //load empty image
         rejectedCards.setOnAction(e -> checkImageButton(rejectedCards));
 
         getChildren().add(rejectedCards);
     }
 
     private ImageView initImageView(double layoutX, double layoutY, double width, double height) {
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
-        imageView.setLayoutX(layoutX);
-        imageView.setLayoutY(layoutY);
+        ImageView imageView = GuiTools.createImageView(layoutX, layoutY, width, height);
         getChildren().add(imageView);
         return imageView;
     }
 
     private void getCardFromStack(StackButton btn) {
 
-        if(checkedImageButtons.isEmpty() && rejectedCards.getStackPosition().isEmpty()){
+        if(!GamePaneController.getGameController().canBeDragged()){
+            GuiTools.showAlertDialog("Błąd", "Nie można pociągnąć karty z talii i nie wiem czemu (brak info z modelu)", null);
+        }else{
             checkImageButton(btn);
+            btn.setChecked(true);
             String imageURL = ImagePathsFactory.getPathToCardImage(btn.getPosition().getCard());
             cardFromStack.setImage(new Image(getClass().getResourceAsStream(imageURL)));
-        }else if(!rejectedCards.getStackPosition().isEmpty()){
-            GamePaneController.showAlertDialog("Błąd", "Nie można pociągnąć karty z talii, kiedy na stosie odrzuconych znajduje się karta", null);
         }
+
     }
 
     private void checkImageButton(GameButton btn) {
         if (checkedImageButtons.contains(btn)) {
+            if(btn instanceof  DeckStackButton){
+                return;
+            }
             checkedImageButtons.remove(btn);
             btn.setChecked(false);
             return;
