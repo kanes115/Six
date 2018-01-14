@@ -3,11 +3,6 @@ package game.Moves;
 import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
-import game.Positions.RejectedPosition;
-import game.Positions.StackPosition;
-
-import java.util.Stack;
-
 
 public class DeleteDuplicate implements Move {
 
@@ -37,13 +32,12 @@ public class DeleteDuplicate implements Move {
 
         card1 = pos1.getCard();
         if(card1.getFace().isUnnecessary()){
-            isMade = false;
-            return false;
+            return error("This card is unnecessary.");
         }
         Color color = card1.getColor();
 
         if(!board.getAssignedColors().contains(color)){
-            return false;
+            return error("There is no duplicate on the board.");
         }
 
         Row row = board.getRowInColor(color);
@@ -55,9 +49,7 @@ public class DeleteDuplicate implements Move {
                 return true;
             }
         }
-
-        isMade = false;
-        return false;
+        return error("There is no duplicate on the board.");
     }
 
     public boolean error(String msg){
