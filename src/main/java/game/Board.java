@@ -19,6 +19,12 @@ public class Board {
     private StackPosition deck = new DeckPosition(this);
     private StackPosition rejected = new RejectedPosition(this);
 
+    private static final int LOWER_ROW = 0;
+    private static final int UPPER_ROW = 3;
+    private static final int LOWER_COLUMN = 0;
+    private static final int UPPER_COLUMN = 5;
+
+
     @Inject
     public Board(CardShuffler shuffler){
         this.shuffler = shuffler;
@@ -40,8 +46,10 @@ public class Board {
         rows.forEach(r -> r.removeCard(two));
     }
 
+
+
     public CasualPosition getPositionAt(int row, int col){
-        if(row < 0 || row > 3 || col < 0 || col > 5)
+        if(row < LOWER_ROW || row > UPPER_ROW || col < LOWER_COLUMN || col > UPPER_COLUMN)
             throw new IllegalArgumentException("Indexes out of bounds");
         return rows.get(row).getPositions().get(col);
     }
