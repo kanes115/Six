@@ -20,15 +20,23 @@ public class Row {
     private List<CasualPosition> positions = new LinkedList<>();
 
     public Row(List<Card> cards, Board board){
-        if(cards.size() != 8)
-            throw new IllegalArgumentException("You have to pass 8 cards to the row");
+        checkCardsSize(cards);
         this.board = board;
+        fillUpPositions(cards);
+        checkIfCompleted();
+    }
+
+    private void fillUpPositions(List<Card> cards){
         Face f = Face.SIX;
         for(Card card: cards){
             this.positions.add(new CasualPosition(card, f, this));
             f = f.next();
         }
-        checkIfCompleted();
+    }
+
+    private void checkCardsSize(List<Card> cards){
+        if(cards.size() != 8)
+            throw new IllegalArgumentException("You have to pass 8 cards to the row");
     }
 
     private void checkIfCompleted() {
