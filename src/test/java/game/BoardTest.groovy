@@ -63,35 +63,17 @@ class BoardTest extends Specification {
         def board = new Board(shuffler)
 
         when:
-        board.getPositionAt(100, 100)
+        board.getPositionAt(row, column)
         then:
         thrown IllegalArgumentException
 
-        when:
-        board.getPositionAt(4, 6)
-        then:
-        thrown IllegalArgumentException
-
-        when:
-        board.getPositionAt(2, 6)
-        then:
-        thrown IllegalArgumentException
-
-        when:
-        board.getPositionAt(4, 2)
-        then:
-        thrown IllegalArgumentException
-
-        when:
-        board.getPositionAt(-1, -1)
-        then:
-        thrown IllegalArgumentException
-
-        when:
-        board.getPositionAt(2, 2)
-        then:
-        notThrown IllegalArgumentException
-
+        where:
+        row | column
+        100 | 100
+        4   | 6
+        2   | 6
+        4   | 2
+        -1  | -1
     }
 
 
