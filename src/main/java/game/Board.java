@@ -16,8 +16,8 @@ public class Board {
 
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
-    private StackPosition deck = new DeckPosition(this);
-    private StackPosition rejected = new RejectedPosition(this);
+    private final StackPosition deck = new DeckPosition(this);
+    private final StackPosition rejected = new RejectedPosition(this);
 
     private static final int LOWER_ROW = 0;
     private static final int UPPER_ROW = 3;

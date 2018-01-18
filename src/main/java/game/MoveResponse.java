@@ -2,21 +2,20 @@ package game;
 
 public class MoveResponse {
 
-    private String msg;
-    private boolean wasOk;
+    private final String errorMessage;
+    private final boolean wasOk;
 
     public MoveResponse(){
         this(null);
-        wasOk = true;
     }
 
-    public MoveResponse(String msg){
-        this.msg = msg;
-        this.wasOk = false;
+    public MoveResponse(String errorMessage){
+        this.errorMessage = errorMessage;
+        this.wasOk = errorMessage == null;
     }
 
     public String getErrorMessage(){
-        return msg;
+        return errorMessage;
     }
 
     public boolean wasOk(){

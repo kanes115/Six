@@ -12,7 +12,7 @@ public class CasualPosition extends Position {
     private Card card;
     private Row row;
     private boolean isEmpty;
-    private Face targetFace;
+    private final Face targetFace;
 
     public CasualPosition(Face targetFace, Row row){
         this(null, targetFace, row);

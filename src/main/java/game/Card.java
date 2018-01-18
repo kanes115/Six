@@ -5,8 +5,8 @@ package game;
  */
 public class Card {
 
-    private Color color;
-    private Face face;
+    private final Color color;
+    private final Face face;
 
     public Card(Color c, Face f){
         this.color = c;

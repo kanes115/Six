@@ -13,16 +13,18 @@ public class GameController {
     private Board board;
     private State state;
     private ITimer timer = new NormalTimer();
-    private boolean isHard;
+    private final boolean isHard;
 
     public GameController(boolean isHard){
         Injector injector = Guice.createInjector(new BoardModule());
         Board someBoard = injector.getInstance(Board.class);
-        initialize(someBoard, isHard);
+        this.isHard = isHard;
+        initialize(someBoard);
     }
 
     public GameController(CardShuffler shuffler, boolean isHard){
-        initialize(new Board(shuffler), isHard);
+        this.isHard = isHard;
+        initialize(new Board(shuffler));
     }
 
     // This method allows to see the card at the top of `deck`
@@ -38,10 +40,9 @@ public class GameController {
         return !getBoard().hasFreePositions() || getBoard().getRejectedPosition().isEmpty();
     }
 
-    private void initialize(Board board, boolean isHard){
+    private void initialize(Board board){
         this.board = board;
         this.state = State.INPROGRESS;
-        this.isHard = isHard;
         if (isHard)
             startHard();
         else
@@ -92,13 +93,11 @@ public class GameController {
 
     private void startEasy(){
         timer.start();
-        isHard = false;
         state = State.INPROGRESS;
     }
 
     private void startHard(){
         timer.start();
-        isHard = true;
         state = State.INPROGRESS;
     }
 
