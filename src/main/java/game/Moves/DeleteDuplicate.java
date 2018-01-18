@@ -24,7 +24,7 @@ public class DeleteDuplicate implements Move {
     @Override
     public boolean execute() {
 
-        if(position.getClass() == CasualPosition.class){
+        if(position instanceof CasualPosition){
             CasualPosition c = (CasualPosition) position;
             if(c.getRow().isColorAssigned() && c.cardFaceMatchPosition() && c.cardColorMatchRow())
                 return error("This card is in its place already");

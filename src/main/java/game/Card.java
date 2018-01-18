@@ -23,7 +23,7 @@ public class Card {
 
     @Override
     public boolean equals(Object other){
-        if(other.getClass() != this.getClass())
+        if(!(other instanceof Card))
             return false;
         Card card = (Card) other;
         return card.getColor() == this.getColor() &&

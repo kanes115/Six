@@ -44,18 +44,18 @@ public class FromStack implements Move {
 
     @Override
     public boolean execute() {
-        if(from.getClass() == DeckPosition.class && to.getClass() == CasualPosition.class){
+        if(from instanceof DeckPosition && to instanceof CasualPosition){
             if(!board.getRejectedPosition().isEmpty())
                 return error("Rejected stack is not empty");
             return moveStackCasual();
         }
 
-        if(from.getClass() == DeckPosition.class && to.getClass() == RejectedPosition.class){
+        if(from instanceof DeckPosition && to instanceof RejectedPosition){
             if(board.hasFreePositions())
                 return error("There are free positions on the board");
             return move(from, to);
         }
-        if(from.getClass() == RejectedPosition.class && to.getClass() == CasualPosition.class){
+        if(from instanceof RejectedPosition && to instanceof CasualPosition){
             return moveStackCasual();
         }
         return error("Wrong positions");
