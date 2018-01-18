@@ -6,17 +6,19 @@ import game.Card;
 import java.util.List;
 import java.util.Stack;
 
-public abstract class StackPosition extends Position {
+public class StackPosition extends Position {
 
     private Stack<Card> cards;
+    private final StackPositionType type;
 
-    public StackPosition(Stack<Card> cards, Board board){
-        super(board);
+    public StackPosition(Stack<Card> cards, Board board, StackPositionType type){
+        this(board, type);
         this.cards = cards;
     }
 
-    public StackPosition(Board board){
+    public StackPosition(Board board, StackPositionType type){
         super(board);
+        this.type = type;
         cards = new Stack<>();
     }
 
@@ -43,5 +45,9 @@ public abstract class StackPosition extends Position {
     @Override
     public boolean isEmpty() {
         return cards.isEmpty();
+    }
+
+    public StackPositionType getType() {
+        return type;
     }
 }
