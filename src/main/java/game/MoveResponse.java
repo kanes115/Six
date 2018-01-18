@@ -6,7 +6,7 @@ public class MoveResponse {
     private boolean wasOk;
 
     public MoveResponse(){
-        msg = null;
+        this(null);
         wasOk = true;
     }
 
