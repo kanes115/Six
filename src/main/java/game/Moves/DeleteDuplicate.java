@@ -3,24 +3,20 @@ package game.Moves;
 import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
-import game.Positions.RejectedPosition;
-import game.Positions.StackPosition;
-
-import java.util.Stack;
 
 
 public class DeleteDuplicate implements Move {
 
-    private final Position pos1;
-    private Card card1;
+    private final Position position;
+    private Card card;
     private Board board;
     private boolean isMade;
     private String errorMsg = "";
 
 
-    public DeleteDuplicate(Position pos){
-        this.pos1 = pos;
-        this.board = pos.getBoard();
+    public DeleteDuplicate(Position position){
+        this.position = position;
+        this.board = position.getBoard();
         isMade = false;
     }
 
@@ -28,19 +24,19 @@ public class DeleteDuplicate implements Move {
     @Override
     public boolean execute() {
 
-        if(pos1.getClass() == CasualPosition.class){
-            CasualPosition c = (CasualPosition) pos1;
+        if(position.getClass() == CasualPosition.class){
+            CasualPosition c = (CasualPosition) position;
             if(c.getRow().isColorAssigned() && c.cardFaceMatchPosition() && c.cardColorMatchRow())
                 return error("This card is in its place already");
 
         }
 
-        card1 = pos1.getCard();
-        if(card1.getFace().isUnnecessary()){
+        card = position.getCard();
+        if(card.getFace().isUnnecessary()){
             isMade = false;
             return false;
         }
-        Color color = card1.getColor();
+        Color color = card.getColor();
 
         if(!board.getAssignedColors().contains(color)){
             return false;
@@ -49,8 +45,8 @@ public class DeleteDuplicate implements Move {
         Row row = board.getRowInColor(color);
 
         for(CasualPosition position : row.getPositions()){
-            if(position.cardFaceMatchPosition() && position.getCard().equals(card1)){
-                pos1.removeCard();
+            if(position.cardFaceMatchPosition() && position.getCard().equals(card)){
+                this.position.removeCard();
                 isMade = true;
                 return true;
             }
@@ -70,7 +66,7 @@ public class DeleteDuplicate implements Move {
     public void revert() {
         if(!isMade)
             return;
-        pos1.putCard(card1);
+        position.putCard(card);
         isMade = false;
     }
 

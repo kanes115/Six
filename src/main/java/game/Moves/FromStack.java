@@ -19,26 +19,26 @@ public class FromStack implements Move {
 
 
     // It moves a card from stack to rejected stack.
-    public FromStack(DeckPosition deck, RejectedPosition rej){
+    public FromStack(DeckPosition deck, RejectedPosition rejected){
         this.from = deck;
-        this.to = rej;
+        this.to = rejected;
         this.board = deck.getBoard();
     }
 
     // It relocates a card from stack top to matrix.
     // It does it only if the card is moved to it's FINAL PLACE
     // or if it's the first free place
-    public FromStack(DeckPosition deck, CasualPosition cas){
+    public FromStack(DeckPosition deck, CasualPosition casual){
         this.from = deck;
-        this.to = cas;
+        this.to = casual;
         this.board = deck.getBoard();
     }
 
     // Moves a card from Rejected Stack to casual position if possible
-    public FromStack(RejectedPosition rej, CasualPosition cas){
-        this.from = rej;
-        this.to = cas;
-        this.board = rej.getBoard();
+    public FromStack(RejectedPosition rejected, CasualPosition casual){
+        this.from = rejected;
+        this.to = casual;
+        this.board = rejected.getBoard();
     }
 
 

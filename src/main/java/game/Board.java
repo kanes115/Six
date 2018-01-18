@@ -41,6 +41,8 @@ public class Board {
         return null;
     }
 
+    // Not used, to be removed
+    // DEPRECATED
     public void removeCards(CasualPosition one, CasualPosition two){
         rows.forEach(r -> r.removeCard(one));
         rows.forEach(r -> r.removeCard(two));

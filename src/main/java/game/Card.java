@@ -8,9 +8,9 @@ public class Card {
     private final Color color;
     private final Face face;
 
-    public Card(Color c, Face f){
-        this.color = c;
-        this.face = f;
+    public Card(Color color, Face face){
+        this.color = color;
+        this.face = face;
     }
 
     public Color getColor(){

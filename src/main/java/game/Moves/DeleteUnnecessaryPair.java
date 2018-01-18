@@ -9,8 +9,8 @@ import game.Positions.Position;
 
 public class DeleteUnnecessaryPair implements Move {
 
-    private final Position pos1;
-    private final Position pos2;
+    private final Position from;
+    private final Position to;
 
     private Card savedPos1;
     private Card savedPos2;
@@ -18,26 +18,26 @@ public class DeleteUnnecessaryPair implements Move {
     private boolean isMade;
     private String errorMsg = "";
 
-    public DeleteUnnecessaryPair(Position pos1, Position pos2){
-        this.pos1 = pos1;
-        this.pos2 = pos2;
+    public DeleteUnnecessaryPair(Position from, Position to){
+        this.from = from;
+        this.to = to;
         this.isMade = false;
     }
 
     @Override
     public boolean execute() {
-        if(pos1.isEmpty() || pos2.isEmpty())
+        if(from.isEmpty() || to.isEmpty())
             return false;
-        if(!pos1.getCard().getFace().isUnnecessary() ||
-                !pos2.getCard().getFace().isUnnecessary())
+        if(!from.getCard().getFace().isUnnecessary() ||
+                !to.getCard().getFace().isUnnecessary())
             return false;
-        if(!pos1.getCard().equals(pos2.getCard()))
+        if(!from.getCard().equals(to.getCard()))
             return false;
 
-        savedPos1 = pos1.getCard();
-        savedPos2 = pos2.getCard();
-        pos1.removeCard();
-        pos2.removeCard();
+        savedPos1 = from.getCard();
+        savedPos2 = to.getCard();
+        from.removeCard();
+        to.removeCard();
 
         isMade = true;
         return true;
@@ -47,8 +47,8 @@ public class DeleteUnnecessaryPair implements Move {
     public void revert() {
         if(!isMade)
             return;
-        pos1.putCard(savedPos1);
-        pos2.putCard(savedPos2);
+        from.putCard(savedPos1);
+        to.putCard(savedPos2);
         isMade = false;
     }
 

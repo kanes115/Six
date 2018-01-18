@@ -68,7 +68,7 @@ public class InsideMatrixRelocation implements Move {
         return errorMsg;
     }
 
-    private void justMove(CasualPosition a, CasualPosition b){
-        b.putCard(a.removeCard());
+    private void justMove(CasualPosition fromPosition, CasualPosition toPosition){
+        toPosition.putCard(fromPosition.removeCard());
     }
 }
