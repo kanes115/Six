@@ -3,7 +3,7 @@ package gui;
 import game.Board;
 import gui.buttons.*;
 import gui.fxcontrollers.GamePaneController;
-import gui.i18n.Codes_18n;
+import gui.i18n.CodesI18n;
 import gui.i18n.I18n;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,7 +60,7 @@ public class GamePane extends Pane {
 
     private void initImageButtons() {
         takenCardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH ,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
+                MARGIN_WIDTH + ROW_FOR_IMAGE_WITH_TAKEN_CARD * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH) ,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
 
         List<game.Row> gameRows = GamePaneController.getGameController().getBoard().getRows();
         for (int y = 0; y < CARDS_IN_COLUMN; y++) {
@@ -110,7 +110,7 @@ public class GamePane extends Pane {
     private void getCardFromStack(StackButton btn) {
 
         if(!GamePaneController.getGameController().canBeDragged()){
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE),  I18n.getString(Codes_18n.CANNOT_TAKE_CARD_FROM_DECK), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE),  I18n.getString(CodesI18n.CANNOT_TAKE_CARD_FROM_DECK), null);
         }else{
             chooseCardButton(btn);
             btn.setChecked(true);

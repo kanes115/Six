@@ -16,4 +16,6 @@ public interface AppConstants {
     public final String REVERSED_CARD_URL = PATH_TO_CARDS_IMAGES + "card_reverse.png";
 
     public final String INTRO_STAGE_URL = GUI_PACKAGE_URL + "introScene.fxml";
+
+    public final String GAME_STAGE_URL = GUI_PACKAGE_URL + "mainScene.fxml";
 }

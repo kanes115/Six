@@ -17,16 +17,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class HighscoresHTTP implements Highscores {
+
+    private String next = "/scores";
+
+
     @Override
-    public List<Score> getHighscores(int page) {
+    public List<Score> getHighscores() {
         HttpClient httpClient = new DefaultHttpClient();
         Gson gson = new Gson();
 
         try {
-            HttpGet request = new HttpGet("http://localhost:8080/scores");
+            HttpGet request = new HttpGet("http://localhost:8080" + next);
             HttpResponse response = httpClient.execute(request);
             System.out.println(response.getStatusLine());
-            return gson.fromJson(EntityUtils.toString(response.getEntity()), ScorePage.class).getScores();
+            ScorePage scorePage =  gson.fromJson(EntityUtils.toString(response.getEntity()), ScorePage.class);
+            this.next = scorePage.getNext();
+            return scorePage.getScores();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         } finally {

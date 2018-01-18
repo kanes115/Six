@@ -35,13 +35,12 @@ public class DeleteDuplicate implements Move {
 
         card = position.getCard();
         if(card.getFace().isUnnecessary()){
-            isMade = false;
-            return false;
+            return error("You cannot remove a card that is necessary");
         }
         Color color = card.getColor();
 
         if(!board.getAssignedColors().contains(color)){
-            return false;
+            return error("There is no duplicate on the board.");
         }
 
         Row row = board.getRowInColor(color);
@@ -53,9 +52,7 @@ public class DeleteDuplicate implements Move {
                 return true;
             }
         }
-
-        isMade = false;
-        return false;
+        return error("There is no duplicate on the board.");
     }
 
     public boolean error(String msg){

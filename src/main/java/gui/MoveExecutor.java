@@ -10,9 +10,8 @@ import game.Positions.RejectedPosition;
 import gui.buttons.ButtonList;
 import gui.buttons.CardButton;
 import gui.buttons.GameButton;
-import gui.buttons.StackButton;
 import gui.dictionary.AppConstants;
-import gui.i18n.Codes_18n;
+import gui.i18n.CodesI18n;
 import gui.i18n.I18n;
 import javafx.scene.image.Image;
 
@@ -35,7 +34,7 @@ public class MoveExecutor {
 
     public void performAssignColorOnRowMove() {
         if (!checkButtonType(CardButton.class, cardsChosenByUser.get(0))) {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), I18n.getString(Codes_18n.CARD_FROM_BOARD_TAKEN_COND), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.CARD_FROM_BOARD_TAKEN_COND), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -47,7 +46,7 @@ public class MoveExecutor {
             first.reloadImage();
             assignRow(first);
         } else {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
 
         cardsChosenByUser.clearWholeListExceptDeckButton();
@@ -74,7 +73,7 @@ public class MoveExecutor {
             gamePane.getTakenCardFromStack().setImage(null);
             cardsChosenByUser.clearWholeList();
         } else {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
         }
     }
@@ -82,7 +81,7 @@ public class MoveExecutor {
     public void performFromStackMove() {
         Move move;
         if ((move = initializeDeckToMatrixMove(cardsChosenByUser)) == null) {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), I18n.getString(Codes_18n.CANNOT_INITIALIZE_MOVE), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.CANNOT_INITIALIZE_MOVE), null);
             return;
         }
 
@@ -95,7 +94,7 @@ public class MoveExecutor {
 
     public void performInsideMatrixRelocationMove() {
         if (!checkButtonType(CardButton.class, cardsChosenByUser.get(0), cardsChosenByUser.get(1))) {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), I18n.getString(Codes_18n.SELECTED_CARDS_MUST_FROM_BOARD), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.SELECTED_CARDS_MUST_FROM_BOARD), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -113,7 +112,7 @@ public class MoveExecutor {
             assignRow(second);
 
         } else {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
         cardsChosenByUser.clearWholeListExceptDeckButton();
     }
@@ -161,7 +160,7 @@ public class MoveExecutor {
             gamePane.getTakenCardFromStack().setImage(null);
             cardsChosenByUser.clearWholeList();
         } else {
-            GuiTools.showAlertDialog(I18n.getString(Codes_18n.INCORRECT_MOVE), moveResponse.getErrorMessage(), null);
+            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), moveResponse.getErrorMessage(), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
         }
     }

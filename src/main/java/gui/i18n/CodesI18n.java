@@ -3,7 +3,7 @@ package gui.i18n;
 /**
  * Created by michaello on 14.01.18.
  */
-public interface Codes_18n {
+public interface CodesI18n {
 
     String INCORRECT_MOVE = "INCORRECT_MOVE";
 

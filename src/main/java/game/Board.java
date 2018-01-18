@@ -16,8 +16,8 @@ public class Board {
 
     private List<Row> rows = new LinkedList<>();
     private CardShuffler shuffler;
-    private final StackPosition deck = new DeckPosition(this);
-    private final StackPosition rejected = new RejectedPosition(this);
+    private final DeckPosition deck = new DeckPosition(this);
+    private final RejectedPosition rejected = new RejectedPosition(this);
 
     private static final int LOWER_ROW = 0;
     private static final int UPPER_ROW = 3;
@@ -56,11 +56,11 @@ public class Board {
         return rows.get(row).getPositions().get(col);
     }
 
-    public StackPosition getDeckPosition(){
+    public DeckPosition getDeckPosition(){
         return deck;
     }
 
-    public StackPosition getRejectedPosition() { return rejected;}
+    public RejectedPosition getRejectedPosition() { return rejected;}
 
     private void fillUpRows() {
         for(int i = 0; i < 4; i++)
