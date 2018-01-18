@@ -15,11 +15,7 @@ public class CasualPosition extends Position {
     private Face targetFace;
 
     public CasualPosition(Face targetFace, Row row){
-        super(row.getBoard());
-        this.card = null;
-        this.isEmpty = true;
-        this.targetFace = targetFace;
-        this.row = row;
+        this(null, targetFace, row);
     }
 
     public CasualPosition(Card card, Face targetFace, Row row){
