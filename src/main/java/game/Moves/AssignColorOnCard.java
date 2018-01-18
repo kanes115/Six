@@ -4,12 +4,14 @@ import game.Board;
 import game.Positions.CasualPosition;
 import game.Row;
 
+import java.util.Optional;
+
 public class AssignColorOnCard implements Move {
 
 
     private final CasualPosition position;
     private final Board board;
-    private String errorMsg;
+    private String errorMsg = null;
     private boolean isMade = false;
 
     public AssignColorOnCard(CasualPosition position){
@@ -27,6 +29,7 @@ public class AssignColorOnCard implements Move {
         if(!position.cardFaceMatchPosition())
             return error("This card's face does not match this column");
         position.getRow().assignColor(position.getCard().getColor());
+        this.isMade = true;
         return true;
     }
 
@@ -41,8 +44,8 @@ public class AssignColorOnCard implements Move {
     }
 
     @Override
-    public String getErrorMessage() {
-        return this.errorMsg;
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(this.errorMsg);
     }
 
     private boolean error(String msg){

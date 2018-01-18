@@ -4,6 +4,8 @@ import game.*;
 import game.Positions.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Optional;
+
 
 // TODO: Change name!!! But do it at the end of the project not to affect GUI team work
 // Note that the name is not relevant right now, it should be something like
@@ -15,7 +17,7 @@ public class FromStack implements Move {
     private Position to;
     private boolean isMade = false;
     private Board board;
-    private String errorMsg = "";
+    private String errorMsg = null;
 
 
     // It moves a card from stack to rejected stack.
@@ -131,8 +133,8 @@ public class FromStack implements Move {
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMsg;
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMsg);
     }
 
 

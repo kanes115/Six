@@ -4,6 +4,8 @@ import game.*;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
 
+import java.util.Optional;
+
 
 public class DeleteDuplicate implements Move {
 
@@ -11,7 +13,7 @@ public class DeleteDuplicate implements Move {
     private Card card;
     private Board board;
     private boolean isMade;
-    private String errorMsg = "";
+    private String errorMsg = null;
 
 
     public DeleteDuplicate(Position position){
@@ -76,8 +78,8 @@ public class DeleteDuplicate implements Move {
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMsg;
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMsg);
     }
 
 }

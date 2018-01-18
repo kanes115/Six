@@ -4,6 +4,8 @@ import game.Board;
 import game.Card;
 import game.Positions.CasualPosition;
 
+import java.util.Optional;
+
 public class InsideMatrixRelocation implements Move {
 
     private final CasualPosition from;
@@ -12,7 +14,7 @@ public class InsideMatrixRelocation implements Move {
     private boolean isMade;
 
     private boolean wasColorAssigned;
-    private String errorMsg = "";
+    private String errorMsg = null;
 
     public InsideMatrixRelocation(CasualPosition from, CasualPosition to){
         this.from = from;
@@ -24,13 +26,13 @@ public class InsideMatrixRelocation implements Move {
     @Override
     public boolean execute() {
         if(from.isEmpty() || !to.isEmpty())
-            return false;
+            return error("One field is empty");
         if(!to.getTargetFace().equals(from.getCard().getFace()))
-            return false;
+            return error("This position has a different target face");
         if(!to.getRow().isColorAssigned()){
             Card savedFrom = from.getCard();
             if(board.getAssignedColors().contains(from.getCard().getColor()))
-                return false;
+                return error("This color is already assigned");
             justMove(from, to);
             to.getRow().assignColor(savedFrom.getColor());
             isMade = true;
@@ -43,7 +45,7 @@ public class InsideMatrixRelocation implements Move {
             wasColorAssigned = true;
             return true;
         }
-        return false;
+        return error("This row has different color assigned");
     }
 
     @Override
@@ -64,8 +66,14 @@ public class InsideMatrixRelocation implements Move {
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMsg;
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMsg);
+    }
+
+    private boolean error(String msg){
+        this.errorMsg = msg;
+        this.isMade = false;
+        return false;
     }
 
     private void justMove(CasualPosition fromPosition, CasualPosition toPosition){

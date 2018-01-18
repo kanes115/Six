@@ -1,6 +1,6 @@
 package game.Moves;
 
-import game.State;
+import java.util.Optional;
 
 /**
  * Created by Kanes on 05.12.2017.
@@ -14,5 +14,5 @@ public interface Move {
 
     boolean isMade();
 
-    String getErrorMessage();
+    Optional<String> getErrorMessage();
 }

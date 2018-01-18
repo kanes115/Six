@@ -58,7 +58,7 @@ public class GameController {
         if (hasGameEnded())
             updateGameState();
         if(!res)
-            return new MoveResponse(move.getErrorMessage());
+            return new MoveResponse(move.getErrorMessage().get());
         return new MoveResponse();
     }
 

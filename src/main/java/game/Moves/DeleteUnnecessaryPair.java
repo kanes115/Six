@@ -4,6 +4,8 @@ package game.Moves;
 import game.Card;
 import game.Positions.Position;
 
+import java.util.Optional;
+
 // Assumptions: it is possible to delete any pair of unnecessary cards (ace - five)
 // laying on any position (but on top)
 
@@ -58,7 +60,7 @@ public class DeleteUnnecessaryPair implements Move {
     }
 
     @Override
-    public String getErrorMessage() {
-        return errorMsg;
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMsg);
     }
 }
