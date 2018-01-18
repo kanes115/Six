@@ -3,6 +3,7 @@ package game;
 import com.google.inject.Inject;
 import game.Positions.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,10 +60,11 @@ public class Board {
 
     @Override
     public String toString(){
-        return rows.get(0).toString() + '\n'
-                + rows.get(1).toString() + '\n'
-                + rows.get(2).toString() + '\n'
-                + rows.get(3).toString();
+        return String.join("\n", Arrays.asList(rows.get(0).toString(),
+                rows.get(1).toString(),
+                rows.get(2).toString(),
+                rows.get(3).toString()
+                ));
     }
 
 
