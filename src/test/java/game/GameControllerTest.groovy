@@ -7,8 +7,7 @@ import game.Moves.FromStack
 import game.Moves.InsideMatrixRelocation
 import game.Moves.Move
 import game.Positions.CasualPosition
-import game.Positions.DeckPosition
-import game.Positions.RejectedPosition
+
 import game.Positions.StackPosition
 import hints.TestDeckShuffler
 import spock.lang.Specification
