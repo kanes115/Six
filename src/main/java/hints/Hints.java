@@ -21,7 +21,7 @@ public class Hints {
     public List<Position[]> getUnnecessaryDups() {
         List<Row> rows = board.getRows();
         List<Position[]> dups = new LinkedList<>();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             Row baseRow = rows.get(i);
             for (CasualPosition position : baseRow.getPositions()) {
                 if (!position.isEmpty()) {
