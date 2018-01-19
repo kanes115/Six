@@ -31,11 +31,11 @@ public class Hints {
             Row baseRow = rows.get(i);
             for (CasualPosition position : baseRow.getPositions()) {
                 if (!position.isEmpty()) {
-                    for (int j = i + 1; j < 4; j++) {
+                    for (int j = i; j < 4; j++) {
                         Row checkRow = rows.get(j);
                         for (CasualPosition position1 : checkRow.getPositions()) {
                             if (!position1.isEmpty()) {
-                                if (checkIfDups(position, position1)) {
+                                if (checkIfDups(position, position1) && !position.equals(position1)) {
                                     dups.add(MoveFactory.getMove(position, position1, true));
                                 }
                             }
@@ -64,12 +64,13 @@ public class Hints {
             Row baseRow = rows.get(i);
             for (CasualPosition position : baseRow.getPositions()) {
                 if (!position.isEmpty()) {
-                    for (int j = i + 1; j < 4; j++) {
+                    for (int j = i; j < 4; j++) {
                         Row compareRow = rows.get(j);
                         for (CasualPosition position1 : compareRow.getPositions()) {
                             if (!position1.isEmpty()) {
                                 if (position.getCard().equals(position1.getCard()) &&
-                                        position.getCard().getFace().isUnnecessary()) {
+                                        position.getCard().getFace().isUnnecessary() &&
+                                        !position.equals(position1)) {
                                     dups.add(new Position[]{position, position1});
                                 }
                             }
