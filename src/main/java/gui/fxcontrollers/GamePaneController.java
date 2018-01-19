@@ -1,26 +1,37 @@
 package gui.fxcontrollers;
 
+import com.sun.javafx.collections.MappingChange;
 import game.GameController;
+import game.Positions.CasualPosition;
+import game.Positions.Position;
 import game.State;
-import gui.GamePane;
-import gui.GuiTools;
-import gui.Main;
-import gui.MoveExecutor;
+import gui.*;
 import gui.buttons.ButtonList;
+import gui.buttons.GameButton;
 import gui.dictionary.AppConstants;
 import gui.i18n.CodesI18n;
 import gui.i18n.I18n;
+import hints.Hints;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+
+import java.util.List;
+import java.util.Map;
+
+import static gui.buttons.GameButton.STYLE_HINTED;
 
 public class GamePaneController {
 
     private static GameController gameController;
     private ButtonList cardsChosenByUser;
     private MoveExecutor moveExecutor;
+    private Hints hints;
+    private GamePane gamePane;
+    private Map<Position, GameButton> positionsToButton;
 
     @FXML
     private BorderPane borderPane;
@@ -102,6 +113,32 @@ public class GamePaneController {
     }
 
     @FXML
+    public void showActionable(ActionEvent actionEvent) {
+        List<Position> positions= hints.showActionable();
+        positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
+
+    }
+
+    @FXML
+    public void showUnnecessaryPair(ActionEvent actionEvent) {
+        List<Position[]> positions= hints.getUnnecessaryDups();
+
+        for (int i = 0; i <  positions.size(); i++) {
+            Position[] possArray = positions.get(i);
+            for (int j = 0; j < possArray.length; j++) {
+                positionsToButton.get(possArray[j]).setStyle(STYLE_HINTED);
+            }
+        }
+    }
+
+    @FXML
+    public void showDuplicates(ActionEvent actionEvent) {
+        List<CasualPosition> positions= hints.deletableDuplicates();
+        positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
+
+    }
+
+    @FXML
     public void btnNewGameOnAction() {
         initialize();
     }
@@ -119,9 +156,12 @@ public class GamePaneController {
     public void initialize() {
         cardsChosenByUser = new ButtonList();
         gameController = new GameController(false);
-        GamePane gamePane = new GamePane(cardsChosenByUser);
+        gamePane = new GamePane(cardsChosenByUser);
+        positionsToButton = gamePane.getPositionsToButtons();
         borderPane.setCenter(gamePane);
+
         moveExecutor = new MoveExecutor(cardsChosenByUser, gamePane, gameController);
+        hints = new Hints(gameController.getBoard());
     }
 
     private boolean checkNumberOfChosenCards(ButtonList buttons, int expectedNumber) {
@@ -135,4 +175,5 @@ public class GamePaneController {
         buttons.clearWholeListExceptDeckButton();
         return false;
     }
+
 }

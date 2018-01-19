@@ -32,7 +32,7 @@ public class ResultFormContoller {
             GuiTools.showAlertDialog("Brak nazwy uzytkownika", "Podaj nazwe uzytkownika", null);
             return;
         }
-        highscoresHTTP.addScore(new Score(txtUsername.getText(), 0 ));
+        highscoresHTTP.addScore(new Score(txtUsername.getText(), gameController.getTime()));
         replaceStage();
     }
 
