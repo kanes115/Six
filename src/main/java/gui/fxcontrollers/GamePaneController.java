@@ -1,11 +1,13 @@
 package gui.fxcontrollers;
 
-import com.sun.javafx.collections.MappingChange;
 import game.GameController;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
 import game.State;
-import gui.*;
+import gui.GamePane;
+import gui.GuiTools;
+import gui.Main;
+import gui.MoveExecutor;
 import gui.buttons.ButtonList;
 import gui.buttons.GameButton;
 import gui.dictionary.AppConstants;
@@ -16,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 import java.util.List;
@@ -114,16 +115,16 @@ public class GamePaneController {
 
     @FXML
     public void showActionable(ActionEvent actionEvent) {
-        List<Position> positions= hints.showActionable();
+        List<Position> positions = hints.showActionable();
         positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
 
     }
 
     @FXML
     public void showUnnecessaryPair(ActionEvent actionEvent) {
-        List<Position[]> positions= hints.getUnnecessaryDups();
+        List<Position[]> positions = hints.getUnnecessaryDups();
 
-        for (int i = 0; i <  positions.size(); i++) {
+        for (int i = 0; i < positions.size(); i++) {
             Position[] possArray = positions.get(i);
             for (int j = 0; j < possArray.length; j++) {
                 positionsToButton.get(possArray[j]).setStyle(STYLE_HINTED);
@@ -133,7 +134,7 @@ public class GamePaneController {
 
     @FXML
     public void showDuplicates(ActionEvent actionEvent) {
-        List<CasualPosition> positions= hints.deletableDuplicates();
+        List<CasualPosition> positions = hints.deletableDuplicates();
         positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
 
     }
