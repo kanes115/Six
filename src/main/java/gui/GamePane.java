@@ -108,9 +108,10 @@ public class GamePane extends Pane {
     }
 
     private void getCardFromStack(StackButton btn) {
+        I18n i18n = I18n.getInstance();
 
         if(!GamePaneController.getGameController().canBeDragged()){
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE),  I18n.getString(CodesI18n.CANNOT_TAKE_CARD_FROM_DECK), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE),  i18n.getString(CodesI18n.CANNOT_TAKE_CARD_FROM_DECK), null);
         }else{
             chooseCardButton(btn);
             btn.setChecked(true);

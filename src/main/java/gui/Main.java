@@ -18,10 +18,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        I18n.setLocale(new Locale("pl"));
+        I18n.getInstance().setLocale(new Locale("pl"));
 
         Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE_URL));
-        primaryStage.setTitle(I18n.getString(CodesI18n.GAME_TITLE));
+        primaryStage.setTitle(I18n.getInstance().getString(CodesI18n.GAME_TITLE));
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image(AppConstants.APP_ICON_URL));

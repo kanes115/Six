@@ -13,6 +13,7 @@ import java.lang.reflect.Modifier
  */
 class I18nLoaderTest extends Specification {
     private Logger logger = Mock(Logger.class);
+    private I18n i18n;
 
     def setup() {
         Field loggerField = I18n.class.getDeclaredField("logger")
@@ -23,18 +24,20 @@ class I18nLoaderTest extends Specification {
         modifiersField.setInt(loggerField, loggerField.getModifiers() & ~Modifier.FINAL);
 
         loggerField.set(null, logger)
-        I18n.setLocale(new Locale("pl"))
+        i18n = I18n.getInstance();
+        i18n.setLocale(new Locale("pl"))
 
     }
 
     def "Check whether all translations for locale = pl are correctly loaded"() {
         given:
-        I18n.setLocale(new Locale("pl"))
+
+        i18n.setLocale(new Locale("pl"))
         Field[] codes = CodesI18n.getFields()
 
         when:
         for (Field field : codes) {
-            I18n.getString(field.get(String))
+            i18n.getString(field.get(String))
         }
         then:
         0 * logger.debug(_ as String)
@@ -42,7 +45,7 @@ class I18nLoaderTest extends Specification {
 
     def "Check whether incorect codes are logged"() {
         when:
-        I18n.getString("CODE_WHICH_DOES_NOT_WORK_!@#%^&*()")
+        i18n.getString("CODE_WHICH_DOES_NOT_WORK_!@#%^&*()")
         then:
         1 * logger.debug(_)
     }

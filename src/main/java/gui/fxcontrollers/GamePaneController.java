@@ -34,12 +34,13 @@ public class GamePaneController {
     }
 
     public static void checkFinishGameStatus() {
+        I18n i18n = I18n.getInstance();
         try {
             if (getGameController().getGameState().equals(State.WON) || (getGameController().getGameState().equals(State.LOST))) {
                 if (getGameController().getGameState().equals(State.LOST)) {
-                    GuiTools.showAlertDialog(I18n.getString(CodesI18n.DEFEAT), I18n.getString(CodesI18n.YOU_LOST_GAME), null);
+                    GuiTools.showAlertDialog(i18n.getString(CodesI18n.DEFEAT), i18n.getString(CodesI18n.YOU_LOST_GAME), null);
                 } else {
-                    GuiTools.showAlertDialog(I18n.getString(CodesI18n.VICTORY), I18n.getString(CodesI18n.YOU_WIN_GAME), null);
+                    GuiTools.showAlertDialog(i18n.getString(CodesI18n.VICTORY), i18n.getString(CodesI18n.YOU_WIN_GAME), null);
                 }
                 Main.replaceStage(AppConstants.INTRO_STAGE_URL);
             }
@@ -124,11 +125,12 @@ public class GamePaneController {
     }
 
     private boolean checkNumberOfChosenCards(ButtonList buttons, int expectedNumber) {
+        I18n i18n = I18n.getInstance();
         if (expectedNumber == buttons.size()) return true;
         if (expectedNumber == 2) {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.REQUIRED_TWO_CARDS), I18n.getString(CodesI18n.SELECT_TWO_CARDS));
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.REQUIRED_TWO_CARDS), i18n.getString(CodesI18n.SELECT_TWO_CARDS));
         } else if (expectedNumber == 1) {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.REQUIRED_EXACTLY_ONE_CARD), I18n.getString(CodesI18n.SELECT_EXACTLY_ONE_CARD));
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.REQUIRED_EXACTLY_ONE_CARD), i18n.getString(CodesI18n.SELECT_EXACTLY_ONE_CARD));
         }
         buttons.clearWholeListExceptDeckButton();
         return false;

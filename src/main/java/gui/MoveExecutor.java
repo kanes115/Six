@@ -33,8 +33,9 @@ public class MoveExecutor {
     }
 
     public void performAssignColorOnRowMove() {
+        I18n i18n = I18n.getInstance();
         if (!checkButtonType(CardButton.class, cardsChosenByUser.get(0))) {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.CARD_FROM_BOARD_TAKEN_COND), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.CARD_FROM_BOARD_TAKEN_COND), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -46,7 +47,7 @@ public class MoveExecutor {
             first.reloadImage();
             assignRow(first);
         } else {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
 
         cardsChosenByUser.clearWholeListExceptDeckButton();
@@ -63,6 +64,7 @@ public class MoveExecutor {
     public void performDeleteUnnecessaryPairMove() {
         GameButton first = cardsChosenByUser.get(0);
         GameButton second = cardsChosenByUser.get(1);
+        I18n i18n = I18n.getInstance();
 
         Move move = new DeleteUnnecessaryPair(second.getPosition(), first.getPosition());
         MoveResponse response = gameController.tryMove(move);
@@ -73,15 +75,16 @@ public class MoveExecutor {
             gamePane.getTakenCardFromStack().setImage(null);
             cardsChosenByUser.clearWholeList();
         } else {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
         }
     }
 
     public void performFromStackMove() {
+        I18n i18n = I18n.getInstance();
         Move move;
         if ((move = initializeDeckToMatrixMove(cardsChosenByUser)) == null) {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.CANNOT_INITIALIZE_MOVE), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.CANNOT_INITIALIZE_MOVE), null);
             return;
         }
 
@@ -93,8 +96,9 @@ public class MoveExecutor {
     }
 
     public void performInsideMatrixRelocationMove() {
+        I18n i18n = I18n.getInstance();
         if (!checkButtonType(CardButton.class, cardsChosenByUser.get(0), cardsChosenByUser.get(1))) {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), I18n.getString(CodesI18n.SELECTED_CARDS_MUST_FROM_BOARD), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.SELECTED_CARDS_MUST_FROM_BOARD), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
             return;
         }
@@ -112,7 +116,7 @@ public class MoveExecutor {
             assignRow(second);
 
         } else {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
         cardsChosenByUser.clearWholeListExceptDeckButton();
     }
@@ -155,12 +159,13 @@ public class MoveExecutor {
     }
 
     private void handleMoveWhichRequiredRefreshingWholeBoard(MoveResponse moveResponse) {
+        I18n i18n = I18n.getInstance();
         if (moveResponse.wasOk()) {
             reloadAllImages();
             gamePane.getTakenCardFromStack().setImage(null);
             cardsChosenByUser.clearWholeList();
         } else {
-            GuiTools.showAlertDialog(I18n.getString(CodesI18n.INCORRECT_MOVE), moveResponse.getErrorMessage(), null);
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), moveResponse.getErrorMessage(), null);
             cardsChosenByUser.clearWholeListExceptDeckButton();
         }
     }
