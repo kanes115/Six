@@ -44,4 +44,19 @@ public abstract class StackPosition extends Position {
     public boolean isEmpty() {
         return cards.isEmpty();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StackPosition)) return false;
+
+        StackPosition that = (StackPosition) o;
+
+        return cards.equals(that.cards);
+    }
+
+    @Override
+    public int hashCode() {
+        return cards.hashCode();
+    }
 }
