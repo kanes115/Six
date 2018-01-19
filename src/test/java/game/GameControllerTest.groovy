@@ -243,8 +243,8 @@ class GameControllerTest extends Specification {
         given:
         GameController gameController = new GameController(new RandomShuffler(), false)
         CasualPosition cas = gameController.getBoard().getPositionAt(0, 0)
-        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition rej = gameController.getBoard().getRejectedPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
 
         when:
         rej.putCard(new Card(Color.CLUBS, Face.EIGHT))
@@ -261,7 +261,7 @@ class GameControllerTest extends Specification {
         CasualPosition cas1 = gameController.getBoard().getPositionAt(0, 0)
         CasualPosition cas2 = gameController.getBoard().getPositionAt(0,1)
         Card card = cas2.getCard()
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
 
         when:
         cas2.removeCard()
@@ -278,7 +278,7 @@ class GameControllerTest extends Specification {
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         Card card = cas1.getCard()
         cas1.removeCard()
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
         deck.putCard(card)
 
         when:
@@ -294,7 +294,7 @@ class GameControllerTest extends Specification {
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
         CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
 
         when:
         cas1.removeCard()
@@ -310,7 +310,7 @@ class GameControllerTest extends Specification {
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
         CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
         Card card = cas1.getCard()
         cas1.removeCard()
         cas2.removeCard()
@@ -325,8 +325,8 @@ class GameControllerTest extends Specification {
 
     def "FromStack: You can move from deck to rejected only if board doesn't have free positions"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
-        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition rej = gameController.getBoard().getRejectedPosition()
 
         when:
         Move m = new FromStack(deck, rej)
@@ -338,8 +338,8 @@ class GameControllerTest extends Specification {
 
     def "FromStack: You cannot move from deck to rejected if board have free positions"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
-        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition rej = gameController.getBoard().getRejectedPosition()
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         cas1.removeCard()
 
@@ -412,7 +412,7 @@ class GameControllerTest extends Specification {
         GameController gameController = new GameController(new TestDeckShuffler(), false)
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         Card card = cas1.getCard()
-        DeckPosition deck = gameController.getBoard().getDeckPosition()
+        StackPosition deck = gameController.getBoard().getDeckPosition()
         deck.putCard(card)
 
         when:
@@ -427,7 +427,7 @@ class GameControllerTest extends Specification {
         GameController gameController = new GameController(new TestDeckShuffler(), false)
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         Card card = cas1.getCard()
-        RejectedPosition rej = gameController.getBoard().getRejectedPosition()
+        StackPosition rej = gameController.getBoard().getRejectedPosition()
         rej.putCard(card)
 
         when:
