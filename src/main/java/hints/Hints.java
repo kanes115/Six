@@ -1,13 +1,13 @@
 package hints;
 
 import game.Board;
-import game.GameController;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
 import game.Row;
 
 import java.util.LinkedList;
 import java.util.List;
+
 //TODO compress duplicated logic checks in all the ifs
 public class Hints {
 
@@ -21,20 +21,31 @@ public class Hints {
     public List<Position[]> getUnnecessaryDups() {
         List<Row> rows = board.getRows();
         List<Position[]> dups = new LinkedList<>();
-        Row row = rows.get(0);
-        for (CasualPosition position : row.getPositions()) {
-            for (int i = 1; i < 4; i++) {
-                Row checkRow = rows.get(i);
-                for(CasualPosition position1 : checkRow.getPositions()) {
-                    if (position.getCard().equals(position1.getCard()) && position.getCard().getFace().isUnnecessary()) {
-                        dups.add(new Position[] {position, position1});
+        for (int i = 0; i < 3; i++) {
+            Row baseRow = rows.get(i);
+            for (CasualPosition position : baseRow.getPositions()) {
+                if (!position.isEmpty()) {
+                    for (int j = i + 1; j < 4; j++) {
+                        Row compareRow = rows.get(j);
+                        for (CasualPosition position1 : compareRow.getPositions()) {
+                            if (!position1.isEmpty()) {
+                                if (position.getCard().equals(position1.getCard()) &&
+                                        position.getCard().getFace().isUnnecessary()) {
+                                    dups.add(new Position[]{position, position1});
+                                }
+                            }
+                        }
+                    }
+                    if (!board.getRejectedPosition().isEmpty() &&
+                            position.getCard().getFace().isUnnecessary() &&
+                            board.getRejectedPosition().getCard().equals(position.getCard())) {
+                        dups.add(new Position[]{position, board.getRejectedPosition()});
+                    } else if (!board.getDeckPosition().isEmpty() &&
+                            position.getCard().getFace().isUnnecessary() &&
+                            board.getDeckPosition().getCard().equals(position.getCard())) {
+                        dups.add(new Position[]{position, board.getDeckPosition()});
                     }
                 }
-            }
-            if(!board.getRejectedPosition().isEmpty() && position.getCard().getFace().isUnnecessary() && board.getRejectedPosition().getCard().equals(position.getCard())) {
-                dups.add(new Position[] {position, board.getRejectedPosition()});
-            } else if (position.getCard().getFace().isUnnecessary() && board.getDeckPosition().getCard().equals(position.getCard())) {
-                dups.add(new Position[] {position, board.getDeckPosition()});
             }
         }
         return dups;
@@ -47,7 +58,7 @@ public class Hints {
                 if (casualPosition.isEmpty()) {
                     board.getRows().forEach(row1 -> {
                         row1.getPositions().forEach(casualPosition1 -> {
-                            if(!casualPosition1.isEmpty() && casualPosition.getTargetFace() == casualPosition1.getCard().getFace() && (!row.isColorAssigned() || row.getColor() == casualPosition1.getCard().getColor())) {
+                            if (!casualPosition1.isEmpty() && casualPosition.getTargetFace() == casualPosition1.getCard().getFace() && (!row.isColorAssigned() || row.getColor() == casualPosition1.getCard().getColor())) {
                                 actionable.add(casualPosition1);
                             }
                         });
@@ -68,10 +79,10 @@ public class Hints {
         List<CasualPosition> actionable = new LinkedList<>();
         rows.forEach(row -> {
             row.getPositions().forEach(casualPosition -> {
-                if(row.isColorAssigned() && !casualPosition.isEmpty() && row.getColor() == casualPosition.getCard().getColor() && casualPosition.cardFaceMatchPosition()) {
+                if (row.isColorAssigned() && !casualPosition.isEmpty() && row.getColor() == casualPosition.getCard().getColor() && casualPosition.cardFaceMatchPosition()) {
                     rows.forEach(row1 -> {
                         row1.getPositions().forEach(casualPosition1 -> {
-                            if(!casualPosition.equals(casualPosition1) && !casualPosition1.isEmpty() && casualPosition.getCard().equals(casualPosition1.getCard())) {
+                            if (!casualPosition.equals(casualPosition1) && !casualPosition1.isEmpty() && casualPosition.getCard().equals(casualPosition1.getCard())) {
                                 actionable.add(casualPosition1);
                             }
                         });
