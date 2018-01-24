@@ -3,9 +3,10 @@ package game
 import game.Moves.AssignColorOnCard
 import game.Moves.DeleteDuplicate
 import game.Moves.DeleteUnnecessaryPair
-import game.Moves.FromStack
+import game.Moves.DeckToRejected
 import game.Moves.InsideMatrixRelocation
 import game.Moves.Move
+import game.Moves.StackToCasual
 import game.Positions.CasualPosition
 
 import game.Positions.StackPosition
@@ -239,7 +240,7 @@ class GameControllerTest extends Specification {
         !pos1.getRow().isColorAssigned()
     }
 
-    def "FromStack:You cannot move card from deck to matrix if rejected stack is not empty"(){
+    def "StackToCasual: You cannot move card from deck to matrix if rejected stack is not empty"(){
         given:
         GameController gameController = new GameController(new RandomShuffler(), false)
         CasualPosition cas = gameController.getBoard().getPositionAt(0, 0)
@@ -248,7 +249,7 @@ class GameControllerTest extends Specification {
 
         when:
         rej.putCard(new Card(Color.CLUBS, Face.EIGHT))
-        Move m = new FromStack(deck, cas)
+        Move m = new StackToCasual(deck, cas)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
@@ -256,24 +257,23 @@ class GameControllerTest extends Specification {
 
     }
 
-    def "FromStack:You can move card from deck to matrix if it is its final place"(){
+    def "StackToCasual: You can move card from deck to matrix if it is its final place"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
-        CasualPosition cas1 = gameController.getBoard().getPositionAt(0, 0)
-        CasualPosition cas2 = gameController.getBoard().getPositionAt(0,1)
-        Card card = cas2.getCard()
+        CasualPosition cas = gameController.getBoard().getPositionAt(0,1)
+        Card card = cas.getCard()
         StackPosition deck = gameController.getBoard().getDeckPosition()
 
         when:
-        cas2.removeCard()
+        cas.removeCard()
         deck.putCard(card)
-        Move m = new FromStack(deck, cas2)
+        Move m = new StackToCasual(deck, cas)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
         mr.wasOk()
     }
 
-    def "FromStack:You can move card from stack to position that's both first free position and final position"(){
+    def "StackToCasual: You can move card from stack to position that's both first free position and final position"(){
         GameController gameController = new GameController(new TestDeckShuffler(),false)
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         Card card = cas1.getCard()
@@ -282,61 +282,57 @@ class GameControllerTest extends Specification {
         deck.putCard(card)
 
         when:
-        Move m = new FromStack(deck, cas1)
+        Move m = new StackToCasual(deck, cas1)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
         mr.wasOk()
     }
 
-    def "FromStack:You can move card from deck to matrix if it is first free position"(){
+    def "StackToCasual:You can move card from deck to matrix if it is first free position"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
-        CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
-        CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
-        CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
+        CasualPosition cas = gameController.getBoard().getPositionAt(1,1)
         StackPosition deck = gameController.getBoard().getDeckPosition()
 
         when:
-        cas1.removeCard()
-        Move m = new FromStack(deck, cas1)
+        cas.removeCard()
+        Move m = new StackToCasual(deck, cas)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
         mr.wasOk()
     }
 
-    def "FromStack: You cannot move card from deck to martrix if its not first free position and its not card's final place"(){
+    def "StackToCasual: You cannot move card from deck to martrix if its not first free position and its not card's final place"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
         CasualPosition cas1 = gameController.getBoard().getPositionAt(1,1)
         CasualPosition cas2 = gameController.getBoard().getPositionAt(1,2)
-        CasualPosition cas3 = gameController.getBoard().getPositionAt(1,3)
         StackPosition deck = gameController.getBoard().getDeckPosition()
-        Card card = cas1.getCard()
         cas1.removeCard()
         cas2.removeCard()
 
         when:
-        Move m = new FromStack(deck, cas2)
+        Move m = new StackToCasual(deck, cas2)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
         !mr.wasOk()
     }
 
-    def "FromStack: You can move from deck to rejected only if board doesn't have free positions"(){
+    def "DeckToRejected: You can move from deck to rejected only if board doesn't have free positions"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
         StackPosition deck = gameController.getBoard().getDeckPosition()
         StackPosition rej = gameController.getBoard().getRejectedPosition()
 
         when:
-        Move m = new FromStack(deck, rej)
+        Move m = new DeckToRejected(deck, rej)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
         mr.wasOk()
     }
 
-    def "FromStack: You cannot move from deck to rejected if board have free positions"(){
+    def "DeckToRejected: You cannot move from deck to rejected if board have free positions"(){
         GameController gameController = new GameController(new TestDeckShuffler(), false)
         StackPosition deck = gameController.getBoard().getDeckPosition()
         StackPosition rej = gameController.getBoard().getRejectedPosition()
@@ -344,7 +340,7 @@ class GameControllerTest extends Specification {
         cas1.removeCard()
 
         when:
-        Move m = new FromStack(deck, rej)
+        Move m = new DeckToRejected(deck, rej)
 
         then:
         MoveResponse mr = gameController.tryMove(m)
