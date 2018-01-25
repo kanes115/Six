@@ -10,9 +10,6 @@ import game.Row;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by jkret on 25/01/2018.
- */
 public class HintsMoves {
     private Board board;
 
@@ -20,14 +17,10 @@ public class HintsMoves {
         this.board = board;
     }
 
-    private void addUnnecessaryPair(List<Move> unnecessaryPairs, Position position1, Position position2) {
-        unnecessaryPairs.add(MoveFactory.getMove(position1, position2, true));
-    }
-
     private void decideIfUnnecessary(List<Move> unnecessaryPairs, Position position1, Position position2) {
         if (HintsUtils.checkIfPositionsAreTaken(position1, position2)) {
             if (HintsUtils.checkIfPairIsUnnecessary(position1, position2)) {
-                addUnnecessaryPair(unnecessaryPairs, position1, position2);
+                unnecessaryPairs.add(MoveFactory.getMove(position1, position2, true));
             }
         }
     }

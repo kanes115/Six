@@ -4,9 +4,6 @@ import game.Positions.CasualPosition;
 import game.Positions.Position;
 import game.Row;
 
-/**
- * Created by jkret on 25/01/2018.
- */
 public class HintsUtils {
     public static boolean checkIfPairIsUnnecessary(Position position, Position position1) {
         return position.getCard().equals(position1.getCard()) &&
@@ -21,7 +18,7 @@ public class HintsUtils {
     public static boolean cardCanGo(Row row, CasualPosition position, Position position1) {
         return !position1.isEmpty() &&
                 position.getTargetFace() == position1.getCard().getFace() &&
-                (!row.isColorAssigned() || row.getColor() == position.getCard().getColor());
+                (!row.isColorAssigned() || row.getColor() == position1.getCard().getColor());
     }
 
     public static boolean checkIfCardInPlace(CasualPosition position, Row row) {
@@ -32,8 +29,9 @@ public class HintsUtils {
     }
 
     public static boolean checkIfDuplicate(Position position, Position position1) {
-        return !position.equals(position1) &&
+        return !position.isEmpty() &&
                 !position1.isEmpty() &&
+                !position.equals(position1) &&
                 position.getCard().equals(position1.getCard());
     }
 }
