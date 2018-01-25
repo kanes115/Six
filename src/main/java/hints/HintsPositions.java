@@ -69,13 +69,29 @@ public class HintsPositions {
         }
     }
 
+    private void checkStacksForCardsToRelocate(List<Position> actionables,
+                                               int baseRowIndex,
+                                               CasualPosition availablePosition) {
+        List<Row> rows = board.getRows();
+        Row baseRow = rows.get(baseRowIndex);
+        Position rejectedPosition = board.getRejectedPosition();
+        Position deckPosition = board.getDeckPosition();
+        if (HintsUtils.cardCanGo(baseRow, availablePosition, rejectedPosition)) {
+            actionables.add(rejectedPosition);
+        }
+        if (HintsUtils.cardCanGo(baseRow, availablePosition, deckPosition)) {
+            actionables.add(deckPosition);
+        }
+    }
+
     private void lookForCardsToRelocate(List<Position> actionables, int baseRowIndex, CasualPosition availablePosition) {
         for (int compareRowIndex = 0; compareRowIndex < 4; compareRowIndex++) {
             checkRowForCardsToRelocate(actionables, baseRowIndex, compareRowIndex, availablePosition);
         }
+        checkStacksForCardsToRelocate(actionables, baseRowIndex, availablePosition);
     }
 
-    private void checkRowForActionables(List<Position> actionables, int baseRowIndex) {
+    private void checkRowForCardsToRelocate(List<Position> actionables, int baseRowIndex) {
         List<Row> rows = board.getRows();
         Row baseRow = rows.get(baseRowIndex);
         for (CasualPosition casualPosition : baseRow.getPositions()) {
@@ -85,10 +101,10 @@ public class HintsPositions {
         }
     }
 
-    public List<Position> showActionable() {
+    public List<Position> getActionables() {
         List<Position> actionables = new LinkedList<>();
         for (int baseRowIndex = 0; baseRowIndex < 4; baseRowIndex++) {
-            checkRowForActionables(actionables, baseRowIndex);
+            checkRowForCardsToRelocate(actionables, baseRowIndex);
         }
         return actionables;
     }
@@ -111,6 +127,19 @@ public class HintsPositions {
         }
     }
 
+//    private void checkIfHasDuplicatesOnStacks(List<CasualPosition> duplicates,
+//                                              CasualPosition checkedPosition) {
+//        Position rejectedPosition = board.getRejectedPosition();
+//        Position deckPosition = board.getDeckPosition();
+//
+//        if (HintsUtils.checkIfDuplicate(checkedPosition, rejectedPosition)) {
+//            duplicates.add(rejectedPosition);
+//        }
+//        if (HintsUtils.checkIfDuplicate(checkedPosition, deckPosition)) {
+//            duplicates.add(deckPosition);
+//        }
+//    }
+
     private void checkRowForCardsInPlace(List<CasualPosition> duplicates, int baseRowIndex) {
         List<Row> rows = board.getRows();
         Row baseRow = rows.get(baseRowIndex);
@@ -127,5 +156,13 @@ public class HintsPositions {
             checkRowForCardsInPlace(duplicates, baseRowIndex);
         }
         return duplicates;
+    }
+
+    public boolean checkIfAnyMovesLeft() {
+        List<Position[]> unnecessaryPairs = getUnnecessaryPairs();
+        List<Position> actionables = getActionables();
+        List<CasualPosition> duplicates = getDeletableDuplicates();
+
+        return unnecessaryPairs.size() + actionables.size() + duplicates.size() > 0;
     }
 }

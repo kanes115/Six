@@ -115,7 +115,7 @@ public class GamePaneController {
 
     @FXML
     public void showActionable(ActionEvent actionEvent) {
-        List<Position> positions = hints.showActionable();
+        List<Position> positions = hints.getActionables();
         positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
 
     }
