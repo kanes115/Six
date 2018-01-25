@@ -9,6 +9,6 @@ public class main {
         RandomShuffler randomShuffler = new RandomShuffler();
         GameController gameController = new GameController(randomShuffler, true);
         System.out.println(gameController.getBoard().toString());
-        Hints hints = new Hints(gameController.getBoard());
+//        Hints hints = new Hints(gameController.getBoard());
     }
 }

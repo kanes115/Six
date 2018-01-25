@@ -13,7 +13,7 @@ import gui.buttons.GameButton;
 import gui.dictionary.AppConstants;
 import gui.i18n.CodesI18n;
 import gui.i18n.I18n;
-import hints.Hints;
+import hints.HintsPositions;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -30,7 +30,7 @@ public class GamePaneController {
     private static GameController gameController;
     private ButtonList cardsChosenByUser;
     private MoveExecutor moveExecutor;
-    private Hints hints;
+    private HintsPositions hints;
     private GamePane gamePane;
     private Map<Position, GameButton> positionsToButton;
 
@@ -115,14 +115,14 @@ public class GamePaneController {
 
     @FXML
     public void showActionable(ActionEvent actionEvent) {
-        List<Position> positions = hints.showActionablePositions();
+        List<Position> positions = hints.showActionable();
         positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
 
     }
 
     @FXML
     public void showUnnecessaryPair(ActionEvent actionEvent) {
-        List<Position[]> positions = hints.getUnnecessaryDupsPositions();
+        List<Position[]> positions = hints.getUnnecessaryPairs();
 
         for (int i = 0; i < positions.size(); i++) {
             Position[] possArray = positions.get(i);
@@ -134,7 +134,7 @@ public class GamePaneController {
 
     @FXML
     public void showDuplicates(ActionEvent actionEvent) {
-        List<CasualPosition> positions = hints.deletableDuplicatesPositions();
+        List<CasualPosition> positions = hints.getDeletableDuplicates();
         positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
 
     }
@@ -162,7 +162,7 @@ public class GamePaneController {
         borderPane.setCenter(gamePane);
 
         moveExecutor = new MoveExecutor(cardsChosenByUser, gamePane, gameController);
-        hints = new Hints(gameController.getBoard());
+        hints = new HintsPositions(gameController.getBoard());
     }
 
     private boolean checkNumberOfChosenCards(ButtonList buttons, int expectedNumber) {
