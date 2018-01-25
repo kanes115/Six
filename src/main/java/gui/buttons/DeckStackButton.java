@@ -1,12 +1,10 @@
 package gui.buttons;
 
-import game.Positions.Position;
 import game.Positions.StackPosition;
 import gui.GamePane;
 import gui.GuiTools;
 import gui.ImagePathsFactory;
 import gui.dictionary.AppConstants;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -28,11 +26,12 @@ public class DeckStackButton extends StackButton {
 
         if (getStackPosition().isEmpty()) {
             imageUrl = ImagePathsFactory.getPathToCardImage(getStackPosition());
-        }else{
+        } else {
             imageUrl = AppConstants.REVERSED_CARD_URL;
         }
 
         ImageView imageView = GuiTools.createImageView(getWidth(), getHeight(), imageUrl);
         setGraphic(imageView);
+        gamePane.getTakenCardFromStack().setImage(null);
     }
 }

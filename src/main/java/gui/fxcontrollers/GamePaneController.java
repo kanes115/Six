@@ -33,7 +33,7 @@ public class GamePaneController {
 
     private static GameController gameController;
     private static ButtonList cardsChosenByUser;
-    private MoveExecutor moveExecutor;
+    private static MoveExecutor moveExecutor;
     private Hints hints;
     private GamePane gamePane;
     private Map<Position, GameButton> positionsToButton;
@@ -66,7 +66,7 @@ public class GamePaneController {
         }
     }
 
-    public static void makeMove(Move move){
+    public static boolean makeDeletePairOrInsideMatrixRelocationMove(Move move) {
         MoveResponse response = gameController.tryMove(move);
 
         if (response.wasOk()) {
@@ -75,9 +75,10 @@ public class GamePaneController {
             assignRow((CardButton) cardsChosenByUser.get(1));
 
         } else {
-            GuiTools.showAlertDialog(I18n.getInstance() .getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+            GuiTools.showAlertDialog(I18n.getInstance().getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
         }
         cardsChosenByUser.clearWholeListExceptDeckButton();
+        return response.wasOk();
     }
 
     private static void assignRow(CardButton button) {
