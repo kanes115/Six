@@ -20,7 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         I18n.getInstance().setLocale(new Locale("pl"));
 
-        Parent root = FXMLLoader.load(getClass().getResource(AppConstants.INTRO_STAGE_URL));
+        Parent root = FXMLLoader.load(getClass().getResource(AppConstants.GAME_STAGE_URL));
         primaryStage.setTitle(I18n.getInstance().getString(CodesI18n.GAME_TITLE));
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
