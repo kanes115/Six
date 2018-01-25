@@ -144,14 +144,7 @@ public class MoveExecutor {
         Position firstPosition = first.getPosition();
         Position secondPosition = second.getPosition();
 
-        Move move = null;
-        if (firstPosition instanceof DeckPosition && secondPosition instanceof RejectedPosition) {
-            move = new FromStack((DeckPosition) firstPosition, (RejectedPosition) secondPosition);
-        } else if (firstPosition instanceof DeckPosition && secondPosition instanceof CasualPosition) {
-            move = new FromStack((DeckPosition) firstPosition, (CasualPosition) secondPosition);
-        } else if (firstPosition instanceof RejectedPosition && secondPosition instanceof CasualPosition) {
-            move = new FromStack((RejectedPosition) firstPosition, (CasualPosition) secondPosition);
-        }
+        Move move = MoveFactory.getMove(firstPosition, secondPosition, false);
         return move;
 
     }

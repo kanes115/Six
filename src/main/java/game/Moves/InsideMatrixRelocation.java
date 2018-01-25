@@ -8,18 +8,17 @@ import java.util.Optional;
 
 public class InsideMatrixRelocation implements Move {
 
-    private final CasualPosition from;
-    private final CasualPosition to;
+    private CasualPosition from;
+    private CasualPosition to;
     private Board board;
     private boolean isMade;
 
     private boolean wasColorAssigned;
     private String errorMsg = null;
 
-    public InsideMatrixRelocation(CasualPosition from, CasualPosition to){
-        this.from = from;
-        this.to = to;
-        this.board = from.getBoard();
+    public InsideMatrixRelocation(CasualPosition position1, CasualPosition position2){
+        assignFromAndTo(position1, position2);
+        this.board = this.from.getBoard();
         this.isMade = false;
     }
 
@@ -68,6 +67,16 @@ public class InsideMatrixRelocation implements Move {
     @Override
     public Optional<String> getErrorMessage() {
         return Optional.ofNullable(errorMsg);
+    }
+
+    private void assignFromAndTo(CasualPosition position1, CasualPosition position2){
+        if(position2.isEmpty()) {
+            this.from = position1;
+            this.to = position2;
+        }else{
+            this.from = position2;
+            this.to = position1;
+        }
     }
 
     private boolean error(String msg){

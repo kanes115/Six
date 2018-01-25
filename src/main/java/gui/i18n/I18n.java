@@ -31,6 +31,7 @@ public class I18n {
 
     public void setLocale(Locale locale) {
         if (!supportedLocales.contains(locale)) {
+            logger.warn(String.format("Chosen not supported locale: %s, loaded default local %s:", locale.toString(), defaultLocale.toString()));
             resourceBundle = ResourceBundle.getBundle(I18n.class.getName(), defaultLocale, new UTF8Control());
             selectedLocale = defaultLocale;
         } else {

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<GridPane fx:controller="gui.fxcontrollers.ResultFormContoller"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+    <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
+    <Text text="Win"
+          GridPane.columnIndex="0" GridPane.rowIndex="0"
+          GridPane.columnSpan="2"/>
+
+    <Label fx:id="resultLabel" text="Result:"
+           GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+    <Label fx:id="resultContent" text="Result:"
+           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label fx:id="timeLabel" text="Result:"
+           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label fx:id="timeContent" text="Result:"
+           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+
+    <Label  text="User name"
+           GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+
+    <TextField fx:id="txtUsername"
+            GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    <HBox spacing="10" alignment="bottom_right"
+          GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <Button text="Send"
+                onAction="#handleSendButtonAction"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="bottom_left"
+          GridPane.columnIndex="0" GridPane.rowIndex="5">
+        <Button text="Abort"
+                onAction="#handleAbortButtonAction"/>
+    </HBox>
+
+</GridPane>

@@ -50,4 +50,9 @@ public class StackPosition extends Position {
     public StackPositionType getType() {
         return type;
     }
+
+    @Override
+    public int hashCode() {
+        return cards.hashCode();
+    }
 }

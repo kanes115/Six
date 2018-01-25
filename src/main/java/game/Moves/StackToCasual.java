@@ -7,64 +7,37 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.Optional;
 
 
-/*
- ------------- POSSIBLE MOVES ------------
-    // deck -> rejected     (It moves a card from deck to rejected)
-    // deck -> casual *
-    // rejected -> casual   (Moves a card from Rejected Stack to casual position if possible)
-
-
-    // * It relocates a card from stack top to matrix.
-    // It does it only if the card is moved to it's FINAL PLACE
-    // or if it's the first free place
-*/
-
-public class FromStack implements Move {
+public class StackToCasual implements Move {
 
     private StackPosition from;
-    private Position to;
+    private CasualPosition to;
     private boolean isMade = false;
     private Board board;
     private String errorMsg = null;
 
 
-    public FromStack(StackPosition deck, StackPosition rejected){
-        checkIfDeckToRejected(deck, rejected);
-        this.from = deck;
-        this.to = rejected;
-        this.board = deck.getBoard();
-    }
-
-
-    public FromStack(StackPosition deck, CasualPosition casual){
-        this.from = deck;
+    public StackToCasual(StackPosition deckOrRejected, CasualPosition casual){
+        this.from = deckOrRejected;
         this.to = casual;
-        this.board = deck.getBoard();
+        this.board = deckOrRejected.getBoard();
     }
 
 
     @Override
     public boolean execute() {
-        if(from.getType() == StackPositionType.DECK && to instanceof CasualPosition){
+        if(from.getType() == StackPositionType.DECK){
             if(!board.getRejectedPosition().isEmpty())
                 return error("Rejected stack is not empty");
             return moveStackCasual();
         }
 
-        if(from.getType() == StackPositionType.DECK && to instanceof StackPosition){ //already checked if rejected in constructor
-            if(board.hasFreePositions())
-                return error("There are free positions on the board");
-            return move(from, to);
-        }
-        if(from.getType() == StackPositionType.REJECTED && to instanceof CasualPosition){
+        if(from.getType() == StackPositionType.REJECTED){
             return moveStackCasual();
         }
         return error("Wrong positions");
     }
 
     private boolean moveStackCasual(){
-        CasualPosition to = (CasualPosition) this.to;
-
         if(!to.isEmpty())
             return error("Destination position is occupied");
 
@@ -120,13 +93,6 @@ public class FromStack implements Move {
         return false;
     }
 
-    private void checkIfDeckToRejected(StackPosition deck, StackPosition rejected) {
-        if(deck.getType() == StackPositionType.DECK
-                && rejected.getType() == StackPositionType.REJECTED)
-            return;
-        throw new IllegalArgumentException("First argument must be a deck" +
-                "and the second one a rejected position");
-    }
 
     @Override
     public void revert() {
@@ -143,6 +109,5 @@ public class FromStack implements Move {
         return Optional.ofNullable(errorMsg);
     }
 
-
-
 }
+

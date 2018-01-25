@@ -11,8 +11,9 @@ import javafx.util.Duration;
  * Created by michaello on 10.01.18.
  */
 public abstract class GameButton extends Button {
-    static final String STYLE_NORMAL = "-fx-background-color: white; -fx-padding: 0;";
-    static final String STYLE_PRESSED = "-fx-background-color: grey; -fx-padding: 0;";
+    public static final String STYLE_NORMAL = "-fx-background-color: white; -fx-padding: 0;";
+    public static final String STYLE_PRESSED = "-fx-background-color: grey; -fx-padding: 0;";
+    public static final String STYLE_HINTED = "-fx-background-color: yellow; -fx-padding: 0;";
 
     private Position position;
 
