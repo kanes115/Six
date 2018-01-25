@@ -1,10 +1,15 @@
 package gui.buttons;
 
+import game.Moves.DeleteUnnecessaryPair;
+import game.Moves.Move;
 import game.Positions.Position;
+import gui.GamePane;
 import gui.GuiTools;
+import gui.fxcontrollers.GamePaneController;
 import javafx.animation.ScaleTransition;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+
 import javafx.util.Duration;
 
 /**
@@ -13,13 +18,20 @@ import javafx.util.Duration;
 public abstract class GameButton extends Button {
     public static final String STYLE_NORMAL = "-fx-background-color: white; -fx-padding: 0;";
     public static final String STYLE_PRESSED = "-fx-background-color: grey; -fx-padding: 0;";
-    public static final String STYLE_HINTED = "-fx-background-color: yellow; -fx-padding: 0;";
+    public static final String STYLE_HINTED = "-fx-background-color: yellow; -fx-border-color:yellow; -fx-padding: 0;";
 
-    private Position position;
+    final GamePane gamePane;
+    final ButtonList cardChosenByUser;
+    final Position position;
+    ImageView cardImageView;
 
-    public GameButton(Position position, double layoutX, double layoutY, double width, double height, String imageUrl) {
+    double x,y;
+
+    public GameButton(Position position, double layoutX, double layoutY, double width, double height, String imageUrl, GamePane gamePane) {
         this.position = position;
         ImageView imageView = GuiTools.createImageView(width, height, imageUrl);
+        this.gamePane = gamePane;
+        this.cardChosenByUser = gamePane.getCardsChosenByUser();
 
         setGraphic(imageView);
         setStyle(STYLE_NORMAL);
@@ -28,6 +40,7 @@ public abstract class GameButton extends Button {
         setOnMouseReleased(e -> setStyle(STYLE_NORMAL));
         setLayoutX(layoutX);
         setLayoutY(layoutY);
+
     }
 
     public Position getPosition() {
@@ -41,6 +54,8 @@ public abstract class GameButton extends Button {
         transition.setToY(scale);
         transition.play();
     }
+
+
 
     abstract public void reloadImage();
 }

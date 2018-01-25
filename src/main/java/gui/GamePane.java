@@ -13,8 +13,8 @@ import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class GamePane extends Pane {
 
@@ -33,7 +33,7 @@ public class GamePane extends Pane {
     private final Map <Position, GameButton> positionsToButtons = new HashMap<>();
 
     private List<Row> guiRows = new ArrayList<>();
-    private ButtonList cardsChosenByUser = new ButtonList();
+    private ButtonList cardsChosenByUser;
     private StackButton rejectedCards;
     private StackButton deck;
 
@@ -66,6 +66,10 @@ public class GamePane extends Pane {
         return positionsToButtons;
     }
 
+    public ButtonList getCardsChosenByUser() {
+        return cardsChosenByUser;
+    }
+
     private void initImageButtons() {
         takenCardFromStack =  initImageView(MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                 MARGIN_WIDTH + ROW_FOR_IMAGE_WITH_TAKEN_CARD * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH) ,IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
@@ -85,10 +89,11 @@ public class GamePane extends Pane {
                         MARGIN_WIDTH + x * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
                         MARGIN_WIDTH + y * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH),
                         IMAGE_BUTTON_WIDTH,
-                        IMAGE_BUTTON_HEIGHT
+                        IMAGE_BUTTON_HEIGHT,
+                        this
                 );
                 positionsToButtons.put(casualPosition, btn);
-                btn.setOnAction(e -> chooseCardButton(btn));
+//                btn.setOnAction(e -> chooseCardButton(btn));
                 row.addCard(btn);
                 getChildren().add(btn);
             }
@@ -97,17 +102,34 @@ public class GamePane extends Pane {
         initDeckAndRejectedCardStack();
     }
 
+    public CardButton getCardButtonByCordinates(double x, double y){
+        for (int i =0; i<CARDS_IN_COLUMN; i++){
+            double ya = MARGIN_WIDTH + i*(IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH);
+            double yb = MARGIN_WIDTH + (i+1)*(IMAGE_BUTTON_HEIGHT +  MARGIN_WIDTH);
+            if (ya<=y && y <= yb){
+                for (int j=0; j<CARDS_IN_ROW; j++){
+                    double xa = MARGIN_WIDTH + j*(IMAGE_BUTTON_WIDTH + MARGIN_WIDTH);
+                    double xb = MARGIN_WIDTH + (j+1)*(IMAGE_BUTTON_WIDTH + MARGIN_WIDTH);
+                    if(xa<=x && x <= xb){
+                        return guiRows.get(i).getCards().get(j);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     private void initDeckAndRejectedCardStack() {
         Board board = GamePaneController.getGameController().getBoard();
 
         deck = new DeckStackButton(board.getDeckPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + ROW_FOR_DECK_STACK * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT);
+                MARGIN_WIDTH + ROW_FOR_DECK_STACK * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, this);
         deck.setOnAction(e -> getCardFromStack(deck));
         positionsToButtons.put(board.getDeckPosition(), deck);
         getChildren().add(deck);
 
         rejectedCards = new RejectedCardsStackButton(board.getRejectedPosition(), MARGIN_WIDTH + (CARDS_IN_ROW + SPACE_BETWEEN_CARDS_AND_STACK) * (IMAGE_BUTTON_WIDTH + MARGIN_WIDTH),
-                MARGIN_WIDTH + ROW_FOR_REJECTED_CARD_STACK * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT); //load empty image
+                MARGIN_WIDTH + ROW_FOR_REJECTED_CARD_STACK * (IMAGE_BUTTON_HEIGHT + MARGIN_WIDTH), IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT, this); //load empty image
         rejectedCards.setOnAction(e -> chooseCardButton(rejectedCards));
         positionsToButtons.put(board.getRejectedPosition(), rejectedCards);
         getChildren().add(rejectedCards);
@@ -125,7 +147,7 @@ public class GamePane extends Pane {
         if(!GamePaneController.getGameController().canBeDragged()){
             GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE),  i18n.getString(CodesI18n.CANNOT_TAKE_CARD_FROM_DECK), null);
         }else{
-            chooseCardButton(btn);
+          //  chooseCardButton(btn);
             btn.setChecked(true);
             String imageURL = ImagePathsFactory.getPathToCardImage(btn.getPosition());
             takenCardFromStack.setImage(new Image(getClass().getResourceAsStream(imageURL)));
@@ -147,5 +169,7 @@ public class GamePane extends Pane {
         cardsChosenByUser.add(btn);
 
     }
+
+
 
 }

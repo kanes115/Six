@@ -1,6 +1,8 @@
 package gui.fxcontrollers;
 
 import game.GameController;
+import game.MoveResponse;
+import game.Moves.Move;
 import game.Positions.CasualPosition;
 import game.Positions.Position;
 import game.State;
@@ -9,6 +11,7 @@ import gui.GuiTools;
 import gui.Main;
 import gui.MoveExecutor;
 import gui.buttons.ButtonList;
+import gui.buttons.CardButton;
 import gui.buttons.GameButton;
 import gui.dictionary.AppConstants;
 import gui.i18n.CodesI18n;
@@ -18,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
 import java.util.List;
@@ -28,7 +32,7 @@ import static gui.buttons.GameButton.STYLE_HINTED;
 public class GamePaneController {
 
     private static GameController gameController;
-    private ButtonList cardsChosenByUser;
+    private static ButtonList cardsChosenByUser;
     private MoveExecutor moveExecutor;
     private Hints hints;
     private GamePane gamePane;
@@ -59,6 +63,29 @@ public class GamePaneController {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void makeMove(Move move){
+        MoveResponse response = gameController.tryMove(move);
+
+        if (response.wasOk()) {
+            cardsChosenByUser.get(0).reloadImage();
+            cardsChosenByUser.get(1).reloadImage();
+            assignRow((CardButton) cardsChosenByUser.get(1));
+
+        } else {
+            GuiTools.showAlertDialog(I18n.getInstance() .getString(CodesI18n.INCORRECT_MOVE), response.getErrorMessage(), null);
+        }
+        cardsChosenByUser.clearWholeListExceptDeckButton();
+    }
+
+    private static void assignRow(CardButton button) {
+        game.Row gameRow = button.getPosition().getRow();
+        gui.Row guiRow = button.getRow();
+        if (!guiRow.isColorChoosen() && gameRow.isColorAssigned()) {
+            guiRow.getColorImage().setImage(new Image(AppConstants.PATH_TO_CARDS_IMAGES + gameRow.getColor().name().toLowerCase() + ".png"));
+            guiRow.setColorChoosen(true);
         }
     }
 
