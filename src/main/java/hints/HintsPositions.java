@@ -163,6 +163,7 @@ public class HintsPositions {
         List<Position> actionables = getActionables();
         List<CasualPosition> duplicates = getDeletableDuplicates();
 
-        return unnecessaryPairs.size() + actionables.size() + duplicates.size() > 0;
+        return unnecessaryPairs.size() + actionables.size() + duplicates.size() > 0 && board.hasFreePositions() &&
+                (!board.getDeckPosition().isEmpty() || !board.getRejectedPosition().isEmpty());
     }
 }

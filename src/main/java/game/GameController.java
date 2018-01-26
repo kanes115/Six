@@ -73,6 +73,7 @@ public class GameController {
     }
 
     private void updateGameState(){
+        hints = new HintsPositions(this.board);
         if(isWon())
             state = State.WON;
         else if(isLost())
@@ -87,7 +88,7 @@ public class GameController {
 
     private boolean isLost(){
         if(!isHard)
-            return hints.checkIfAnyMovesLeft();
+            return !hints.checkIfAnyMovesLeft();
         return !board.areAllCardsInPlace() || !board.getDeckPosition().isEmpty();
     }
 
