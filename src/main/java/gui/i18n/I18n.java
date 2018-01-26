@@ -23,6 +23,7 @@ public class I18n {
 
     private I18n() {
         supportedLocales.add(defaultLocale);
+        supportedLocales.add(new Locale("en"));
     }
 
     public List<Locale> getSupportedLocales() {

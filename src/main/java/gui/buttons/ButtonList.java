@@ -52,8 +52,10 @@ public class ButtonList {
                 .forEach(btn -> {
                     btn.setChecked(false);
                     btn.reloadImage();
+                    btn.setStyle(GameButton.STYLE_NORMAL);
                 });
         gameButtons.clear();
+        gameButtons.forEach(btn -> btn.setStyle(GameButton.STYLE_NORMAL));
     }
 
     public void clearWholeListExceptDeckButton() {
@@ -62,9 +64,11 @@ public class ButtonList {
                 .forEach(btn -> {
                             btn.setChecked(false);
                             btn.reloadImage();
+                            btn.setStyle(GameButton.STYLE_NORMAL);
                         }
                 );
         gameButtons.removeIf(btn -> !(btn instanceof DeckStackButton));
+
     }
 
 }
