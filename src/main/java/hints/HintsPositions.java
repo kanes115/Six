@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class HintsPositions {
+    private final int ROW_COUNT = 4;
     private Board board;
 
     public HintsPositions(Board board) {
@@ -49,7 +50,7 @@ public class HintsPositions {
 
     public List<Position[]> getUnnecessaryPairs() {
         List<Position[]> unnecessaryPairs = new LinkedList<>();
-        for (int rowIndex = 0; rowIndex < 4; rowIndex++) {
+        for (int rowIndex = 0; rowIndex < ROW_COUNT; rowIndex++) {
             checkRowForUnnecessaryPairs(unnecessaryPairs, rowIndex);
         }
         return unnecessaryPairs;
@@ -85,7 +86,7 @@ public class HintsPositions {
     }
 
     private void lookForCardsToRelocate(List<Position> actionables, int baseRowIndex, CasualPosition availablePosition) {
-        for (int compareRowIndex = 0; compareRowIndex < 4; compareRowIndex++) {
+        for (int compareRowIndex = 0; compareRowIndex < ROW_COUNT; compareRowIndex++) {
             checkRowForCardsToRelocate(actionables, baseRowIndex, compareRowIndex, availablePosition);
         }
         checkStacksForCardsToRelocate(actionables, baseRowIndex, availablePosition);
@@ -103,7 +104,7 @@ public class HintsPositions {
 
     public List<Position> getActionables() {
         List<Position> actionables = new LinkedList<>();
-        for (int baseRowIndex = 0; baseRowIndex < 4; baseRowIndex++) {
+        for (int baseRowIndex = 0; baseRowIndex < ROW_COUNT; baseRowIndex++) {
             checkRowForCardsToRelocate(actionables, baseRowIndex);
         }
         return actionables;
@@ -122,7 +123,7 @@ public class HintsPositions {
     }
 
     private void checkIfHasDuplicatesOnBoard(List<CasualPosition> duplicates, CasualPosition checkedPosition) {
-        for (int compareRowIndex = 0; compareRowIndex < 4; compareRowIndex++) {
+        for (int compareRowIndex = 0; compareRowIndex < ROW_COUNT; compareRowIndex++) {
             checkIfHasDuplicatesInRow(duplicates, checkedPosition, compareRowIndex);
         }
     }
@@ -152,7 +153,7 @@ public class HintsPositions {
 
     public List<CasualPosition> getDeletableDuplicates() {
         List<CasualPosition> duplicates = new LinkedList<>();
-        for (int baseRowIndex = 0; baseRowIndex < 4; baseRowIndex++) {
+        for (int baseRowIndex = 0; baseRowIndex < ROW_COUNT; baseRowIndex++) {
             checkRowForCardsInPlace(duplicates, baseRowIndex);
         }
         return duplicates;
