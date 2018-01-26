@@ -5,6 +5,8 @@ import game.Positions.CasualPosition;
 import game.Positions.Position;
 import gui.buttons.*;
 import gui.fxcontrollers.GamePaneController;
+import gui.i18n.CodesI18n;
+import gui.i18n.I18n;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
@@ -162,9 +164,16 @@ public class GamePane extends Pane {
     }
 
     private void getCardFromStack(StackButton btn) {
-        chooseCardButton(btn);
-        btn.setChecked(true);
-        takenCardFromStack.reloadImage();
+
+        if (!GamePaneController.getGameController().canBeDragged()) {
+            I18n i18n = I18n.getInstance();
+            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.CANNOT_TAKE_CARD_FROM_DECK), null);
+            deck.setChecked(false);
+        } else {
+            chooseCardButton(btn);
+            btn.setChecked(true);
+            takenCardFromStack.reloadImage();
+        }
     }
 
     private void chooseCardButton(GameButton btn) {

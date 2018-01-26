@@ -72,17 +72,12 @@ public class TakenCardFromStackButton extends GameButton {
 
         I18n i18n = I18n.getInstance();
 
-        if (deck.isChecked() && !GamePaneController.getGameController().canBeDragged()) {
-            GuiTools.showAlertDialog(i18n.getString(CodesI18n.INCORRECT_MOVE), i18n.getString(CodesI18n.CANNOT_TAKE_CARD_FROM_DECK), null);
-            deck.setChecked(false);
-        } else {
-            //  chooseCardButton(btn);
-            this.setChecked(true);
-            String imageURL = ImagePathsFactory.getPathToCardImage(deck.getPosition());
-            ImageView imageView = GuiTools.createImageView(getWidth(), getHeight(), imageURL);
-            setGraphic(imageView);
+        this.setChecked(true);
+        String imageURL = ImagePathsFactory.getPathToCardImage(deck.getPosition());
+        ImageView imageView = GuiTools.createImageView(getWidth(), getHeight(), imageURL);
+        setGraphic(imageView);
 
-        }
+
     }
 
     public void setImage(Card card) {
