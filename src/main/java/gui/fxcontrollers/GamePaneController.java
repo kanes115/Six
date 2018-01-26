@@ -19,8 +19,7 @@ import gui.i18n.I18n;
 import hints.HintsPositions;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
@@ -32,9 +31,38 @@ import static gui.buttons.GameButton.STYLE_HINTED;
 public class GamePaneController {
 
     private static GameController gameController;
-    private HintsPositions hints;
     private static ButtonList cardsChosenByUser;
     private static MoveExecutor moveExecutor;
+
+    @FXML
+    private Label currentResult = new Label();
+    @FXML
+    private Button btnAssignColorToRow = new Button();
+    @FXML
+    private Button btnInsideMatrixRelocation = new Button();
+    @FXML
+    private Button btnDeleteUnnecessaryPair = new Button();
+    @FXML
+    private Button btnDeleteDuplicate = new Button();
+    @FXML
+    private Button btnDeckToMatrix = new Button();
+
+    @FXML
+    private MenuButton hintsMenu = new MenuButton();
+    @FXML
+    private MenuItem hintsDuplicate = new MenuItem();
+    @FXML
+    private MenuItem hintsUnnecessaryPair = new MenuItem();
+    @FXML
+    private MenuItem hintsActionable = new MenuItem();
+    @FXML
+    private Button btnNewGame = new Button();
+    @FXML
+    private Button btnRevertMove = new Button();
+    @FXML
+    private Label userNickname = new Label();
+
+    private HintsPositions hints;
     private GamePane gamePane;
     private Map<Position, GameButton> positionsToButton;
 
@@ -183,6 +211,7 @@ public class GamePaneController {
 
     @FXML
     public void initialize() {
+        loadI18n();
         cardsChosenByUser = new ButtonList();
         gameController = new GameController(false);
         gamePane = new GamePane(cardsChosenByUser);
@@ -191,6 +220,24 @@ public class GamePaneController {
 
         moveExecutor = new MoveExecutor(cardsChosenByUser, gamePane, gameController);
         hints = new HintsPositions(gameController.getBoard());
+    }
+
+    private void loadI18n() {
+        I18n i18n = I18n.getInstance();
+        currentResult.setText(i18n.getString(CodesI18n.CURRENT_RESULT));
+        btnInsideMatrixRelocation.setText(i18n.getString(CodesI18n.BTN_INSIDE_MATRIX_RELOCATION));
+        btnDeleteUnnecessaryPair.setText(i18n.getString(CodesI18n.BTN_DELETE_UNNECESSARY_PAIRS));
+        btnDeleteDuplicate.setText(i18n.getString(CodesI18n.BTN_DELETE_DUPLICATE));
+        btnDeckToMatrix.setText(i18n.getString(CodesI18n.BTN_DECK_TO_MATRIX));
+
+        hintsMenu.setText(i18n.getString(CodesI18n.HINTS_MENU));
+        hintsDuplicate.setText(i18n.getString(CodesI18n.HINTS_DUPLICATES));
+        hintsUnnecessaryPair.setText(i18n.getString(CodesI18n.HINTS_UNNECESSARY_PAIRS));
+        hintsActionable.setText(i18n.getString(CodesI18n.HINTS_ACTIONABLE));
+        btnNewGame.setText(i18n.getString(CodesI18n.BTN_NEWGAME));
+        btnRevertMove.setText(i18n.getString(CodesI18n.BTN_REVERT_MOVE));
+        userNickname.setText(i18n.getString(CodesI18n.USER_NICKNAME));
+        btnAssignColorToRow.setText(i18n.getString(CodesI18n.ASSIGN_COLOR_TO_ROW));
     }
 
     private boolean checkNumberOfChosenCards(ButtonList buttons, int expectedNumber) {

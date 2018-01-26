@@ -15,48 +15,48 @@
    <top>
       <ToolBar prefHeight="40.0" BorderPane.alignment="CENTER">
         <items>
-            <Button mnemonicParsing="false" onAction="#btnNewGameOnAction" text="Nowa gra" />
-            <Button mnemonicParsing="false" onAction="#btnRevertMoveOnAction" text="Cofnij ruch" />
-            <MenuButton mnemonicParsing="false" onAction="#btnHintOnAction" text="Podpowiedź" >
+            <Button fx:id="btnNewGame" mnemonicParsing="false" onAction="#btnNewGameOnAction" text="Nowa gra" />
+            <Button fx:id="btnRevertMove" mnemonicParsing="false" onAction="#btnRevertMoveOnAction" text="Cofnij ruch" />
+            <MenuButton fx:id="hintsMenu" mnemonicParsing="false" onAction="#btnHintOnAction" text="Podpowiedź" >
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#showDuplicates" text="Pokaż duplikaty do usunięcia" />
-                    <MenuItem mnemonicParsing="false" onAction="#showUnnecessaryPair" text="Pokaż pary do usunięcia" />
-                    <MenuItem mnemonicParsing="false" onAction="#showActionable" text="showActionable" />
+                    <MenuItem fx:id="hintsDuplicate" mnemonicParsing="false" onAction="#showDuplicates" text="Pokaż duplikaty do usunięcia" />
+                    <MenuItem fx:id="hintsUnnecessaryPair" mnemonicParsing="false" onAction="#showUnnecessaryPair" text="Pokaż pary do usunięcia" />
+                    <MenuItem fx:id="hintsActionable" mnemonicParsing="false" onAction="#showActionable" text="showActionable" />
                 </items>
             </MenuButton>
-            <Button mnemonicParsing="false" onAction="#btnDeckToMatrixOnAction" text="FromStack">
+            <Button fx:id="btnDeckToMatrix" mnemonicParsing="false" onAction="#btnDeckToMatrixOnAction" text="FromStack">
                 <font>
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#btnDeleteDuplicateOnAction" text="DeleteDuplicate">
+            <Button fx:id="btnDeleteDuplicate" mnemonicParsing="false" onAction="#btnDeleteDuplicateOnAction" text="DeleteDuplicate">
                 <font>
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#btnDeleteUnnecessaryPairOnAction" text="DeleteUnnecessaryPair">
+            <Button fx:id="btnDeleteUnnecessaryPair" mnemonicParsing="false" onAction="#btnDeleteUnnecessaryPairOnAction" text="DeleteUnnecessaryPair">
                 <font>
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#btnInsideMatrixRelocationOnAction" text="InsideMatrixRelocation">
+            <Button fx:id="btnInsideMatrixRelocation" mnemonicParsing="false" onAction="#btnInsideMatrixRelocationOnAction" text="InsideMatrixRelocation">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#btnAssignColorOnCard" text="AssignColorOnCard">
+            <Button fx:id="btnAssignColorToRow" mnemonicParsing="false" onAction="#btnAssignColorOnCard" text="AssignColorOnCard">
                 <font>
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Button>
             <Separator orientation="VERTICAL" />
-            <Label text="Twój nick:" />
+            <Label fx:id="userNickname" text="Twój nick:" />
             <TextField fx:id="txtUsername" text="sample_user" />
             <Separator layoutX="246.0" layoutY="10.0" orientation="VERTICAL" />
-            <Label layoutX="256.0" layoutY="17.0" text="Bieżący wynik:" />
+            <Label fx:id="currentResult" layoutX="256.0" layoutY="17.0" text="Bieżący wynik:" />
             <Label layoutX="475.0" layoutY="17.0" text="0 pt" textFill="BLUE" />
             <Separator layoutX="564.0" layoutY="10.0" orientation="VERTICAL" />
-            <Label fx:id="lblInfo" layoutX="574.0" layoutY="17.0" text="&lt;informacje&gt;" />
+            <!--<Label fx:id="lblInfo" layoutX="574.0" layoutY="17.0" text="informacje" />-->
         </items>
       </ToolBar>
    </top>
