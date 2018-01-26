@@ -35,7 +35,7 @@ public class DeleteDuplicate implements Move {
 
         card = position.getCard();
         if(card.getFace().isUnnecessary()){
-            return error("You cannot remove a card that is necessary");
+            return error("You cannot remove a card that is unnecessary without its pair");
         }
         Color color = card.getColor();
 

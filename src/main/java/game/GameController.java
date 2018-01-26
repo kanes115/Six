@@ -4,6 +4,7 @@ package game;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import game.Moves.Move;
+import hints.HintsPositions;
 import hints.ITimer;
 import hints.NormalTimer;
 
@@ -14,6 +15,7 @@ public class GameController {
     private State state;
     private ITimer timer = new NormalTimer();
     private final boolean isHard;
+    private HintsPositions hints;
 
     public GameController(boolean isHard){
         Injector injector = Guice.createInjector(new BoardModule());
@@ -42,6 +44,7 @@ public class GameController {
 
     private void initialize(Board board){
         this.board = board;
+        hints = new HintsPositions(this.board);
         this.state = State.INPROGRESS;
         if (isHard)
             startHard();
@@ -55,8 +58,7 @@ public class GameController {
 
     public MoveResponse tryMove(Move move){
         boolean res = move.execute();
-        if (hasGameEnded())
-            updateGameState();
+        updateGameState();
         if(!res)
             return new MoveResponse(move.getErrorMessage().get());
         return new MoveResponse();
@@ -70,25 +72,23 @@ public class GameController {
         return this.state;
     }
 
-    private boolean hasGameEnded(){
-        if(!isHard){
-            timer.stop();
-            return board.areAllCardsInPlace();
-        }
-        timer.stop();
-        return false;
-//        return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
+    private void updateGameState(){
+        if(isWon())
+            state = State.WON;
+        else if(isLost())
+            state = State.LOST;
     }
 
-    private void updateGameState(){
-        if(!isHard){
-            if(board.areAllCardsInPlace()) state = State.WON;
-            else state = State.LOST;
-        }
-        else{
-            if(board.getDeckPosition().isEmpty() && board.areAllCardsInPlace()) state = State.WON;
-            else state = State.LOST;
-        }
+    private boolean isWon(){
+        if(!isHard)
+            return board.areAllCardsInPlace();
+        return board.getDeckPosition().isEmpty() && board.areAllCardsInPlace();
+    }
+
+    private boolean isLost(){
+        if(!isHard)
+            return hints.checkIfAnyMovesLeft();
+        return !board.areAllCardsInPlace() || !board.getDeckPosition().isEmpty();
     }
 
     private void startEasy(){
