@@ -37,4 +37,9 @@ public class Card {
         result = 31 * result + face.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return this.getFace() + " of " +  this.getColor();
+    }
 }
