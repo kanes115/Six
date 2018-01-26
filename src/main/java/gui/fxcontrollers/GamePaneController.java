@@ -190,7 +190,7 @@ public class GamePaneController {
 
     @FXML
     public void showDuplicates(ActionEvent actionEvent) {
-        List<CasualPosition> positions = hints.getDeletableDuplicates();
+        List<Position> positions = hints.getDeletableDuplicates();
         positions.forEach(pos -> positionsToButton.get(pos).setStyle(STYLE_HINTED));
 
     }
