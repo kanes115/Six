@@ -40,13 +40,17 @@ public class DeleteDuplicate implements Move {
         Color color = card.getColor();
 
         if(!board.getAssignedColors().contains(color)){
-            return error("There is no duplicate on the board.");
+            return error("This color is not even assigned.");
         }
 
         Row row = board.getRowInColor(color);
 
+        log(row.toString());
+
         for(CasualPosition position : row.getPositions()){
+            log("Checking position with card: " + position.getCard());
             if(position.cardFaceMatchPosition() && position.getCard().equals(card)){
+                log("This will be reomved");
                 this.position.removeCard();
                 isMade = true;
                 return true;
@@ -59,6 +63,10 @@ public class DeleteDuplicate implements Move {
         this.isMade = false;
         this.errorMsg = msg;
         return false;
+    }
+
+    public void log(String str){
+        System.out.println("[DeleteDuplicate] " + str);
     }
 
     @Override
