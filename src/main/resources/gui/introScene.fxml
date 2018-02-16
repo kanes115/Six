@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane fx:id="borderPane" style="-fx-background-color: green;" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="600" minWidth="600" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.fxcontrollers.IntroController">
+    <top>
+        <Button BorderPane.alignment="CENTER" mnemonicParsing="false" onAction="#btnRunGameOnAction" text="Nowa gra"/>
+    </top>
+</BorderPane>
